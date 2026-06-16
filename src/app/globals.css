@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  /* Marca neventia */
+  --color-forest-950: #0a241b;
+  --color-forest-900: #0f3528;
+  --color-forest-800: #154132;
+  --color-forest-700: #1d5440;
+  --color-forest-600: #266b51;
+  --color-mint-500: #6fbf95;
+  --color-mint-400: #8ed0ab;
+  --color-mint-300: #b4e1c6;
+  --color-mint-200: #d6f0e0;
+  --color-cream: #f6f4ec;
+  --color-sand: #efece1;
+
+  --color-background: #ffffff;
+  --color-foreground: var(--color-forest-950);
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+
+  --shadow-soft: 0 18px 50px -20px rgba(15, 53, 40, 0.35);
+  --shadow-card: 0 12px 40px -24px rgba(15, 53, 40, 0.45);
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Utilidades de marca */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
