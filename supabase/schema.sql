@@ -19,6 +19,9 @@ create table if not exists public.landings (
   name          text not null,
   status        text not null default 'draft'
                   check (status in ('draft', 'published', 'archived')),
+  city          text,
+  region        text,
+  event_date    timestamptz,
   content       jsonb not null default '{}'::jsonb,
   meta_pixel_id text,
   created_at    timestamptz not null default now(),
@@ -26,6 +29,7 @@ create table if not exists public.landings (
 );
 
 create index if not exists landings_status_idx on public.landings (status);
+create index if not exists landings_event_date_idx on public.landings (event_date);
 
 -- ------------------------------------------------------------
 -- Tabla: leads
@@ -34,10 +38,12 @@ create index if not exists landings_status_idx on public.landings (status);
 create table if not exists public.leads (
   id           uuid primary key default gen_random_uuid(),
   landing_id   uuid references public.landings (id) on delete set null,
-  full_name    text not null,
-  email        text,
-  phone        text,
-  guests       integer not null default 1 check (guests >= 1),
+  full_name      text not null,
+  email          text,
+  phone          text,
+  guests         integer not null default 1 check (guests >= 1),
+  preferred_date text,
+  party_type     text check (party_type in ('pareja', 'solo', 'amigos')),
   source       text not null default 'landing'
                  check (source in ('landing', 'meta_ads', 'manual')),
   status       text not null default 'new'

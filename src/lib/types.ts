@@ -10,14 +10,34 @@ export type LeadStatus =
   | "no_show"
   | "discarded";
 
-export type LandingHighlight = {
+export type PartyType = "pareja" | "solo" | "amigos";
+
+export type EventDate = {
+  /** Valor único de la fecha, p. ej. "2026-06-28" */
+  value: string;
+  /** Etiqueta visible, p. ej. "Sábado, 28 de junio" */
+  label: string;
+  time?: string;
+  /** Texto de disponibilidad, p. ej. "quedan 12 plazas" */
+  slotsLabel?: string;
+  status?: "available" | "low" | "full";
+};
+
+export type LandingStep = {
   title: string;
   description: string;
 };
 
-export type LandingAgendaItem = {
-  time: string;
+export type Dish = {
+  course: string;
+  name: string;
+  description?: string;
+  image?: string;
+};
+
+export type WhyPoint = {
   title: string;
+  description: string;
 };
 
 export type LandingTestimonial = {
@@ -40,21 +60,40 @@ export type LandingForm = {
 };
 
 export type LandingContent = {
-  eventName?: string;
+  // Cabecera / hero
   badge?: string;
   headline?: string;
+  freePrice?: string;
   subheadline?: string;
   heroImage?: string;
-  eventDateLabel?: string;
-  eventTime?: string;
-  doorsTime?: string;
-  venueName?: string;
-  address?: string;
-  mapsUrl?: string;
-  scarcity?: string;
-  highlights?: LandingHighlight[];
-  includes?: string[];
-  agenda?: LandingAgendaItem[];
+  region?: string;
+
+  // Tira de beneficios
+  strip?: string[];
+
+  // Cómo funciona
+  stepsIntro?: string;
+  steps?: LandingStep[];
+
+  // Menú
+  menuTitle?: string;
+  menuIntro?: string;
+  menu?: Dish[];
+  menuIncludes?: string[];
+
+  // Por qué es gratis
+  whyTitle?: string;
+  whyIntro?: string;
+  whyImage?: string;
+  whyPoints?: WhyPoint[];
+
+  // Fechas y lugar
+  venueTitle?: string;
+  venueNote?: string;
+  venueImage?: string;
+  dates?: EventDate[];
+
+  // Pruebas sociales y cierre
   gallery?: string[];
   testimonials?: LandingTestimonial[];
   faqs?: LandingFaq[];
@@ -68,6 +107,9 @@ export type Landing = {
   slug: string;
   name: string;
   status: LandingStatus;
+  city: string | null;
+  region: string | null;
+  event_date: string | null;
   content: LandingContent;
   meta_pixel_id: string | null;
   created_at: string;
@@ -81,6 +123,8 @@ export type Lead = {
   email: string | null;
   phone: string | null;
   guests: number;
+  preferred_date: string | null;
+  party_type: PartyType | null;
   source: LeadSource;
   status: LeadStatus;
   utm: Record<string, string>;

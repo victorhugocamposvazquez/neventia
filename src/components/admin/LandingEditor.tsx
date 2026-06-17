@@ -80,6 +80,41 @@ export function LandingEditor({ landing }: { landing: Landing }) {
             className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
           />
         </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-semibold text-forest-900">Ciudad</span>
+          <input
+            name="city"
+            defaultValue={landing.city ?? ""}
+            placeholder="A Coruña"
+            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-semibold text-forest-900">
+            Región · opcional
+          </span>
+          <input
+            name="region"
+            defaultValue={landing.region ?? ""}
+            placeholder="Galicia"
+            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-semibold text-forest-900">
+            Fecha principal (para ordenar y mostrar en la home)
+          </span>
+          <input
+            name="event_date"
+            type="datetime-local"
+            defaultValue={
+              landing.event_date
+                ? new Date(landing.event_date).toISOString().slice(0, 16)
+                : ""
+            }
+            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
+          />
+        </label>
       </div>
 
       <div className="rounded-2xl border border-forest-900/10 bg-white p-6 shadow-card">

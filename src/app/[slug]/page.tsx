@@ -31,11 +31,14 @@ export async function generateMetadata({
   if (!landing) return { title: "Evento no encontrado" };
 
   const c = landing.content ?? {};
+  const title = landing.city
+    ? `Comida de autor a ${c.freePrice ?? "0€"} en ${landing.city}`
+    : landing.name;
   return {
-    title: c.eventName ?? landing.name,
+    title,
     description: c.subheadline ?? c.headline,
     openGraph: {
-      title: c.headline ?? landing.name,
+      title,
       description: c.subheadline,
       images: c.heroImage ? [c.heroImage] : undefined,
       type: "website",

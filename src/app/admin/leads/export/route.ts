@@ -49,13 +49,15 @@ export async function GET(request: NextRequest) {
     "Nombre",
     "Telefono",
     "Email",
+    "Fecha preferida",
+    "Como viene",
     "Personas",
     "Evento",
     "Origen",
     "Estado",
     "UTM Source",
     "UTM Campaign",
-    "Fecha",
+    "Creado",
   ];
 
   const rows = leads.map((l) =>
@@ -63,6 +65,8 @@ export async function GET(request: NextRequest) {
       l.full_name,
       l.phone,
       l.email,
+      l.preferred_date ?? "",
+      l.party_type ?? "",
       l.guests,
       l.landing_id ? (landingMap.get(l.landing_id) ?? "") : "",
       l.source,

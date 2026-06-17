@@ -1,128 +1,389 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { createClient } from "@/lib/supabase/server";
+import type { Landing } from "@/lib/types";
 
-const features = [
+const STEPS = [
   {
-    title: "Landings por evento",
+    title: "Elige tu ciudad",
     description:
-      "Crea una página de alta conversión para cada evento, con su propia URL gestionable desde el backoffice.",
+      "Consulta el próximo evento en tu zona y reserva tu plaza en menos de un minuto. Las plazas son limitadas.",
   },
   {
-    title: "Captación de asistentes",
+    title: "Asiste a la presentación",
     description:
-      "Formularios optimizados para convertir visitas en reservas confirmadas, sin fricción.",
+      "Una charla breve y amena de nuestras marcas colaboradoras antes de comer. Sin ninguna obligación de comprar.",
   },
   {
-    title: "Leads centralizados",
+    title: "Disfruta la comida",
     description:
-      "Reúne en un solo lugar los leads de tus landings y de tus campañas de Meta Ads.",
-  },
-  {
-    title: "Seguimiento real",
-    description:
-      "Estados de cada lead, filtros y exportación a CSV para que tu equipo no pierda ninguna oportunidad.",
+      "Un menú completo de autor, totalmente gratis, con tiempo para disfrutar sin prisas. La mejor parte del plan.",
   },
 ];
 
-export default function Home() {
+const STATS = [
+  { n: "1.200+", l: "Comensales" },
+  { n: "5", l: "Ciudades" },
+  { n: "4,9★", l: "Valoración media" },
+  { n: "0€", l: "Siempre gratis" },
+];
+
+const PAST_CITIES = [
+  { city: "Ibiza", when: "Mayo 2026 · mesa completa", img: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800&q=70" },
+  { city: "Madrid", when: "Abril 2026 · 3 turnos", img: "https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=70" },
+  { city: "Santander", when: "Marzo 2026 · mesa completa", img: "https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?auto=format&fit=crop&w=800&q=70" },
+  { city: "Logroño", when: "Febrero 2026 · mesa completa", img: "https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=800&q=70" },
+];
+
+const TESTIMONIALS = [
+  { quote: "No me lo creía hasta que fui. Comimos de maravilla, la presentación fue corta y nadie nos presionó para comprar nada.", author: "María A.", city: "Madrid" },
+  { quote: "Una tarde estupenda en pareja. El restaurante precioso y la comida de nivel. La organización, impecable.", author: "Jorge R.", city: "Santander" },
+  { quote: "Pensaba que habría truco y no lo hubo. Conocimos gente encantadora y comimos genial. Gracias, Neventia.", author: "Carmen L.", city: "Logroño" },
+];
+
+async function getUpcomingEvents(): Promise<Landing[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("landings")
+      .select("*")
+      .eq("status", "published")
+      .order("event_date", { ascending: true });
+    return (data as Landing[]) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function Home() {
+  const events = await getUpcomingEvents();
+  const next = events[0] ?? null;
+  const nextHref = next ? `/${next.slug}` : "#eventos";
+
   return (
     <div className="flex flex-col">
-      <header className="absolute inset-x-0 top-0 z-30">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
-          <Logo variant="light" />
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b border-forest-900/10 bg-cream/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
+          <Logo />
+          <nav className="hidden gap-7 text-sm font-medium text-forest-800 md:flex">
+            <a href="#concepto" className="hover:text-forest-950">Cómo funciona</a>
+            <a href="#eventos" className="hover:text-forest-950">Eventos</a>
+            <a href="#opiniones" className="hover:text-forest-950">Opiniones</a>
+          </nav>
           <Link
-            href="/login"
-            className="rounded-full border border-white/20 px-5 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+            href={nextHref}
+            className="rounded-full bg-forest-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-forest-800"
           >
-            Backoffice
+            Próximo evento →
           </Link>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-forest-950 text-white">
-        <div className="absolute inset-0 bg-grid opacity-40" />
-        <div className="absolute -top-24 right-0 h-96 w-96 rounded-full bg-mint-500/20 blur-3xl" />
-        <div className="relative mx-auto max-w-5xl px-5 pb-28 pt-40 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-mint-500/30 bg-mint-500/10 px-4 py-1.5 text-sm text-mint-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-mint-400" />
-            Plataforma de eventos
-          </span>
-          <h1 className="mx-auto mt-6 max-w-3xl text-5xl font-extrabold leading-[1.05] tracking-tight text-balance sm:text-6xl">
-            Eventos que llenan salas y convierten visitas en asistentes
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-white/75">
-            Con neventia creas landings a medida para cada evento, captas leads
-            desde la web y desde Meta Ads, y los gestionas todos desde un único
-            backoffice.
-          </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              href="/comida-gratis"
-              className="inline-flex items-center gap-2 rounded-full bg-mint-500 px-7 py-4 font-semibold text-forest-950 transition hover:bg-mint-400"
-            >
-              Ver landing de ejemplo →
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-7 py-4 font-semibold text-white transition hover:bg-white/10"
-            >
-              Entrar al backoffice
-            </Link>
+      <section className="bg-cream">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+          <div className="animate-fade-up">
+            <span className="inline-flex items-center gap-2 rounded-full border border-forest-900/15 bg-white px-4 py-1.5 text-sm font-medium text-forest-800">
+              <span className="h-1.5 w-1.5 rounded-full bg-mint-500" />
+              Experiencias gastronómicas · toda España
+            </span>
+            <h1 className="mt-5 text-5xl font-extrabold leading-[1.02] tracking-tight text-forest-950 text-balance sm:text-6xl lg:text-7xl">
+              Comemos juntos.
+              <br />
+              <span className="text-mint-600">Invita la casa.</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-forest-800/75">
+              Neventia reúne a buenos comensales en torno a una gran mesa:
+              comidas de autor en las mejores ciudades, sin coste y sin
+              compromiso. Tú pones el apetito — la comida, la ponemos nosotros.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href={nextHref}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-forest-900 px-7 py-4 text-base font-semibold text-white transition hover:bg-forest-800"
+              >
+                {next ? `Ver próximo evento · ${next.city ?? ""}`.trim() : "Ver eventos"}
+              </Link>
+              <a
+                href="#concepto"
+                className="inline-flex items-center justify-center rounded-full border border-forest-900/15 bg-white px-7 py-4 text-base font-semibold text-forest-900 transition hover:bg-white/60"
+              >
+                Cómo funciona
+              </a>
+            </div>
+            <div className="mt-8 flex items-center gap-4">
+              <div className="flex -space-x-2">
+                {["MA", "JR", "CL", "+"].map((a) => (
+                  <span
+                    key={a}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-cream bg-forest-800 text-xs font-bold text-mint-300"
+                  >
+                    {a}
+                  </span>
+                ))}
+              </div>
+              <div>
+                <div className="text-mint-600">★★★★★</div>
+                <div className="text-sm text-forest-800/70">
+                  Más de 1.200 comensales en 5 ciudades
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative h-[26rem] animate-fade-up">
+            <div className="absolute left-0 top-0 h-56 w-3/5 overflow-hidden rounded-3xl shadow-soft">
+              <Image src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=70" alt="Mesa montada" fill sizes="400px" className="object-cover" priority />
+            </div>
+            <div className="absolute right-0 top-16 h-52 w-1/2 overflow-hidden rounded-3xl shadow-soft">
+              <Image src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=70" alt="Plato de autor" fill sizes="320px" className="object-cover" />
+            </div>
+            <div className="absolute bottom-0 left-8 h-44 w-1/2 overflow-hidden rounded-3xl shadow-soft">
+              <Image src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=70" alt="Brindis" fill sizes="320px" className="object-cover" />
+            </div>
+            <div className="absolute bottom-6 right-2 rounded-2xl bg-mint-500 px-5 py-3 text-center shadow-card">
+              <div className="text-xl font-extrabold text-forest-950">5 ciudades</div>
+              <div className="text-xs font-medium text-forest-900/70">y sumando</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="bg-cream py-24">
+      {/* Stats */}
+      <section className="bg-forest-950 py-10 text-white">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-5 md:grid-cols-4">
+          {STATS.map((s) => (
+            <div key={s.l} className="text-center">
+              <div className="text-4xl font-extrabold">{s.n}</div>
+              <div className="mt-1 text-sm text-white/60">{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Concepto */}
+      <section id="concepto" className="scroll-mt-20 bg-white py-20">
         <div className="mx-auto max-w-6xl px-5">
-          <div className="max-w-2xl">
+          <div className="mx-auto max-w-2xl text-center">
             <span className="text-sm font-bold uppercase tracking-widest text-forest-600">
-              Todo en uno
+              El concepto
             </span>
-            <h2 className="mt-2 text-4xl font-extrabold tracking-tight text-forest-950 text-balance">
-              De la campaña al asistente, sin perder ningún lead
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-forest-950 text-balance sm:text-4xl">
+              Una idea sencilla: buena comida que une
             </h2>
+            <p className="mt-4 text-lg text-forest-800/70">
+              Marcas que quieren darse a conocer patrocinan la comida. Tú
+              disfrutas de un menú completo, gratis, en buena compañía.
+            </p>
           </div>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="rounded-2xl border border-forest-900/10 bg-white p-6 shadow-card"
-              >
-                <h3 className="text-lg font-bold text-forest-950">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-forest-800/70">
-                  {f.description}
-                </p>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <div key={i} className="rounded-2xl border border-forest-900/10 bg-cream/50 p-7">
+                <div className="text-sm font-extrabold text-mint-600">0{i + 1}</div>
+                <h3 className="mt-3 text-xl font-bold text-forest-950">{s.title}</h3>
+                <p className="mt-2 leading-relaxed text-forest-800/70">{s.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-forest-900 py-20 text-white">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 px-5 text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-            ¿Listo para llenar tu próximo evento?
-          </h2>
-          <p className="max-w-xl text-white/75">
-            Empieza con la landing de la comida gratuita y gestiona tus
-            asistentes desde el primer minuto.
-          </p>
-          <Link
-            href="/comida-gratis"
-            className="rounded-full bg-mint-500 px-7 py-4 font-semibold text-forest-950 transition hover:bg-mint-400"
-          >
-            Ver el evento de ejemplo
-          </Link>
+      {/* Eventos */}
+      <section id="eventos" className="scroll-mt-20 bg-cream py-20">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="max-w-2xl">
+            <span className="text-sm font-bold uppercase tracking-widest text-forest-600">
+              Eventos
+            </span>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-forest-950 text-balance sm:text-4xl">
+              Dónde estaremos y dónde hemos estado
+            </h2>
+          </div>
+
+          {/* Próximo evento */}
+          {next ? (
+            <div className="mt-10 grid overflow-hidden rounded-3xl bg-white shadow-soft lg:grid-cols-2">
+              <div className="relative h-64 lg:h-auto">
+                <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full bg-forest-950/85 px-3 py-1.5 text-xs font-semibold text-white">
+                  <span className="h-1.5 w-1.5 rounded-full bg-mint-400" /> Próximo evento
+                </span>
+                {next.content?.heroImage && (
+                  <Image
+                    src={next.content.heroImage}
+                    alt={next.city ?? next.name}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 560px"
+                    className="object-cover"
+                  />
+                )}
+              </div>
+              <div className="p-8 lg:p-10">
+                {next.region && (
+                  <div className="text-sm font-bold uppercase tracking-widest text-forest-600">
+                    {next.region}
+                  </div>
+                )}
+                <div className="mt-1 text-4xl font-extrabold text-forest-950">
+                  {next.city ?? next.name}
+                </div>
+                {next.content?.dates?.[0] && (
+                  <div className="mt-3 flex items-center gap-2 text-forest-800/80">
+                    <span className="text-mint-600">📅</span>
+                    {next.content.dates[0].label} · {next.content.dates[0].time}
+                  </div>
+                )}
+                <p className="mt-4 text-forest-800/70">
+                  {next.content?.subheadline}
+                </p>
+                <Link
+                  href={`/${next.slug}`}
+                  className="mt-6 inline-flex rounded-full bg-mint-500 px-6 py-3.5 font-semibold text-forest-950 transition hover:bg-mint-400"
+                >
+                  Reservar plaza gratis →
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <p className="mt-10 rounded-3xl bg-white p-10 text-center text-forest-800/60 shadow-card">
+              Pronto anunciaremos el próximo evento. ¡Vuelve pronto!
+            </p>
+          )}
+
+          {/* Más eventos publicados */}
+          {events.length > 1 && (
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {events.slice(1).map((e) => (
+                <Link
+                  key={e.id}
+                  href={`/${e.slug}`}
+                  className="rounded-2xl border border-forest-900/10 bg-white p-5 transition hover:-translate-y-1 hover:shadow-card"
+                >
+                  <div className="text-lg font-bold text-forest-950">
+                    {e.city ?? e.name}
+                  </div>
+                  {e.content?.dates?.[0] && (
+                    <div className="mt-1 text-sm text-forest-800/60">
+                      {e.content.dates[0].label}
+                    </div>
+                  )}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Eventos celebrados */}
+          <div className="mt-14 flex items-end justify-between">
+            <h3 className="text-xl font-bold text-forest-950">Eventos celebrados</h3>
+            <span className="text-sm text-forest-800/60">
+              Más de 1.200 comensales en 5 ciudades
+            </span>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {PAST_CITIES.map((p) => (
+              <article
+                key={p.city}
+                className="overflow-hidden rounded-2xl border border-forest-900/10 bg-white"
+              >
+                <div className="relative h-36">
+                  <Image src={p.img} alt={p.city} fill sizes="280px" className="object-cover" />
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-bold text-forest-950">{p.city}</h4>
+                    <span className="rounded-full bg-forest-900/10 px-2 py-0.5 text-xs font-semibold text-forest-800/70">
+                      Celebrado
+                    </span>
+                  </div>
+                  <div className="mt-1 text-sm text-forest-800/60">{p.when}</div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      <footer className="bg-forest-950 py-8 text-center text-sm text-white/40">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5">
-          <Logo variant="light" />
-          <p>© {new Date().getFullYear()} neventia. Todos los derechos reservados.</p>
+      {/* Opiniones */}
+      <section id="opiniones" className="scroll-mt-20 bg-white py-20">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-sm font-bold uppercase tracking-widest text-forest-600">
+              Opiniones
+            </span>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-forest-950 text-balance sm:text-4xl">
+              Lo que dicen quienes ya se sentaron a la mesa
+            </h2>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {TESTIMONIALS.map((t, i) => (
+              <figure key={i} className="rounded-2xl border border-forest-900/10 bg-cream/50 p-6">
+                <div className="text-mint-600">★★★★★</div>
+                <blockquote className="mt-3 text-forest-900">“{t.quote}”</blockquote>
+                <figcaption className="mt-4 flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-forest-800 text-xs font-bold text-mint-300">
+                    {t.author.slice(0, 2).toUpperCase()}
+                  </span>
+                  <span>
+                    <span className="block text-sm font-bold text-forest-950">{t.author}</span>
+                    <span className="block text-xs text-forest-800/55">{t.city}</span>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA final */}
+      <section className="bg-cream py-20">
+        <div className="mx-auto max-w-4xl px-5">
+          <div className="rounded-3xl bg-forest-900 px-6 py-14 text-center text-white sm:px-12">
+            <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
+              {next ? `La próxima mesa es en ${next.city}` : "Pronto, nueva mesa"}
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-white/75">
+              Plazas limitadas. Reserva ahora y asegura tu sitio en la próxima
+              comida gratuita de Neventia.
+            </p>
+            <Link
+              href={nextHref}
+              className="mt-8 inline-flex rounded-full bg-mint-500 px-7 py-4 font-semibold text-forest-950 transition hover:bg-mint-400"
+            >
+              Reservar mi plaza gratis
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-forest-950 py-12 text-white/60">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="flex flex-col gap-6 border-b border-white/10 pb-8 sm:flex-row sm:items-start sm:justify-between">
+            <div className="max-w-sm">
+              <Logo variant="light" />
+              <p className="mt-3 text-sm text-white/50">
+                Experiencias gastronómicas y eventos por toda España. Comidas y
+                celebraciones con buena mesa y mejor compañía.
+              </p>
+            </div>
+            <div className="flex gap-12 text-sm">
+              <div className="flex flex-col gap-2">
+                <span className="font-semibold text-white">Neventia</span>
+                <a href="#concepto" className="hover:text-white">Cómo funciona</a>
+                <a href="#eventos" className="hover:text-white">Eventos</a>
+                <a href="#opiniones" className="hover:text-white">Opiniones</a>
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="font-semibold text-white">Acceso</span>
+                <Link href="/admin" className="hover:text-white">Backoffice</Link>
+              </div>
+            </div>
+          </div>
+          <p className="mt-6 text-sm text-white/40">
+            © {new Date().getFullYear()} Neventia. Todos los derechos reservados.
+          </p>
         </div>
       </footer>
     </div>

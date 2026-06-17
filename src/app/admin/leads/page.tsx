@@ -11,6 +11,12 @@ type Search = {
   landing?: string;
 };
 
+const PARTY_LABELS: Record<string, string> = {
+  pareja: "En pareja",
+  solo: "Solo/a",
+  amigos: "Con amigos",
+};
+
 export default async function LeadsPage({
   searchParams,
 }: {
@@ -111,7 +117,7 @@ export default async function LeadsPage({
               <tr>
                 <th className="px-5 py-3">Nombre</th>
                 <th className="px-5 py-3">Contacto</th>
-                <th className="px-5 py-3">Pers.</th>
+                <th className="px-5 py-3">Reserva</th>
                 <th className="px-5 py-3">Evento</th>
                 <th className="px-5 py-3">Origen</th>
                 <th className="px-5 py-3">Estado</th>
@@ -133,7 +139,15 @@ export default async function LeadsPage({
                       </div>
                     )}
                   </td>
-                  <td className="px-5 py-3">{lead.guests}</td>
+                  <td className="px-5 py-3 text-forest-800/80">
+                    {lead.preferred_date && (
+                      <div className="text-sm">{lead.preferred_date}</div>
+                    )}
+                    <div className="text-xs text-forest-800/50">
+                      {PARTY_LABELS[lead.party_type ?? ""] ??
+                        `${lead.guests} pers.`}
+                    </div>
+                  </td>
                   <td className="px-5 py-3 text-forest-800/80">
                     {lead.landing_id
                       ? (landingMap.get(lead.landing_id) ?? "—")
