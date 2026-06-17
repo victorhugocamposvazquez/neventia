@@ -48,14 +48,9 @@ export function LandingView({ landing }: { landing: Landing }) {
 
       {/* Hero */}
       <section className="bg-cream">
-        <div className="mx-auto grid max-w-6xl gap-12 px-5 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-20">
+        <div className="mx-auto grid max-w-6xl gap-12 px-5 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-20">
           <div className="animate-fade-up">
-            {c.badge && (
-              <span className="inline-flex items-center gap-2 rounded-full border border-forest-900/15 bg-white px-4 py-1.5 text-sm font-medium text-forest-800">
-                <span className="h-1.5 w-1.5 rounded-full bg-mint-500" />
-                {c.badge}
-              </span>
-            )}
+            {c.badge && <span className="eyebrow">{c.badge}</span>}
             <h1 className="mt-5 text-5xl font-extrabold leading-[1.04] tracking-tight text-forest-950 text-balance sm:text-6xl">
               {c.headline ?? landing.name}
               {c.freePrice && (
@@ -157,11 +152,13 @@ export function LandingView({ landing }: { landing: Landing }) {
 
       {/* Tira de beneficios */}
       {c.strip && c.strip.length > 0 && (
-        <div className="bg-forest-950 text-white">
-          <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5 py-5 text-sm sm:flex-row sm:justify-between">
+        <div className="border-y border-forest-900/10 bg-sand">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-5 text-sm text-forest-900 sm:flex-row">
             {c.strip.map((item, i) => (
-              <span key={i} className="flex items-center gap-2 text-center">
-                <span className="text-mint-400">✓</span>
+              <span key={i} className="flex items-center gap-2.5">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-mint-200 text-forest-700">
+                  ✓
+                </span>
                 {item}
               </span>
             ))}
@@ -243,7 +240,7 @@ export function LandingView({ landing }: { landing: Landing }) {
               ))}
             </div>
             {c.menuIncludes && c.menuIncludes.length > 0 && (
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
                 <span className="text-sm text-white/60">Incluye también:</span>
                 {c.menuIncludes.map((item) => (
                   <span
@@ -350,16 +347,16 @@ export function LandingView({ landing }: { landing: Landing }) {
                         </div>
                       </div>
                       {full ? (
-                        <span className="rounded-full bg-forest-900/10 px-4 py-1.5 text-sm font-semibold text-forest-800/50">
+                        <span className="rounded-full bg-clay px-3 py-1.5 text-xs font-semibold text-forest-800/60">
                           Agotado
                         </span>
                       ) : (
                         <a
                           href="#reservar"
-                          className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+                          className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
                             d.status === "low"
-                              ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
-                              : "bg-forest-900 text-white hover:bg-forest-800"
+                              ? "bg-[#B0413E]/12 text-[#B0413E] hover:bg-[#B0413E]/20"
+                              : "bg-mint-500/20 text-forest-600 hover:bg-mint-500/30"
                           }`}
                         >
                           {d.status === "low" ? "Últimas plazas" : "Reservar"}
@@ -426,22 +423,22 @@ export function LandingView({ landing }: { landing: Landing }) {
       {/* FAQ */}
       {c.faqs && c.faqs.length > 0 && (
         <section id="faq" className="scroll-mt-20 bg-white py-20">
-          <div className="mx-auto max-w-3xl px-5">
+          <div className="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-[0.8fr_1.2fr]">
             <SectionHeading
               eyebrow="Preguntas frecuentes"
               title="Todo lo que quieres saber"
-              center
+              intro="¿Te queda alguna duda? Aquí respondemos las más habituales antes de reservar."
             />
-            <div className="mt-10 divide-y divide-forest-900/10">
+            <div className="divide-y divide-forest-900/10 border-y border-forest-900/10">
               {c.faqs.map((f, i) => (
                 <details key={i} className="group py-5">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold text-forest-950">
                     {f.q}
-                    <span className="text-mint-600 transition group-open:rotate-45">
+                    <span className="text-2xl leading-none text-forest-600 transition group-open:rotate-45">
                       +
                     </span>
                   </summary>
-                  <p className="mt-3 text-forest-800/75">{f.a}</p>
+                  <p className="mt-3 max-w-2xl text-forest-800/75">{f.a}</p>
                 </details>
               ))}
             </div>
@@ -458,19 +455,19 @@ export function LandingView({ landing }: { landing: Landing }) {
               title="Así se vive una comida Neventia"
               center
             />
-            <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
+            <div className="mt-10 grid auto-rows-[150px] grid-cols-2 gap-3.5 md:grid-cols-4">
               {c.gallery.map((src, i) => (
                 <div
                   key={i}
                   className={`relative overflow-hidden rounded-2xl shadow-card ${
-                    i === 0 ? "row-span-2 h-full min-h-64" : "h-48 sm:h-56"
-                  }`}
+                    i === 0 ? "row-span-2" : ""
+                  } ${i === 3 ? "col-span-2" : ""}`}
                 >
                   <Image
                     src={src}
                     alt={`Galería ${i + 1}`}
                     fill
-                    sizes="(max-width: 768px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 50vw, 25vw"
                     className="object-cover transition duration-500 hover:scale-105"
                   />
                 </div>
@@ -482,18 +479,18 @@ export function LandingView({ landing }: { landing: Landing }) {
 
       {/* CTA final */}
       <section className="bg-white py-20">
-        <div className="mx-auto max-w-4xl px-5">
-          <div className="rounded-3xl bg-forest-900 px-6 py-14 text-center text-white sm:px-12">
-            <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
+        <div className="mx-auto max-w-5xl px-5">
+          <div className="rounded-[2rem] bg-mint-500 px-6 py-16 text-center text-forest-950 sm:px-12">
+            <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">
               Tu mesa te está esperando
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-white/75">
+            <p className="mx-auto mt-4 max-w-xl text-lg text-forest-950/80">
               Plazas limitadas para cada fecha. Reserva ahora y asegura tu sitio
               en la próxima comida de Neventia.
             </p>
             <a
               href="#reservar"
-              className="mt-8 inline-flex rounded-full bg-mint-500 px-7 py-4 font-semibold text-forest-950 transition hover:bg-mint-400"
+              className="mt-8 inline-flex rounded-full bg-forest-950 px-7 py-4 font-semibold text-cream transition hover:bg-forest-900"
             >
               Reservar mi plaza gratis
             </a>
@@ -544,15 +541,11 @@ function SectionHeading({
 }) {
   return (
     <div className={`${center ? "mx-auto text-center" : ""} max-w-2xl`}>
-      <span
-        className={`text-sm font-bold uppercase tracking-widest ${
-          variant === "light" ? "text-mint-400" : "text-forest-600"
-        }`}
-      >
+      <span className={`eyebrow ${variant === "light" ? "on-dark" : ""}`}>
         {eyebrow}
       </span>
       <h2
-        className={`mt-2 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl ${
+        className={`mt-4 text-3xl font-extrabold tracking-tight text-balance sm:text-[2.6rem] ${
           variant === "light" ? "text-white" : "text-forest-950"
         }`}
       >

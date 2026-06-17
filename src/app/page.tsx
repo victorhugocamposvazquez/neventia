@@ -86,8 +86,7 @@ export default async function Home() {
       <section className="bg-cream">
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
           <div className="animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-forest-900/15 bg-white px-4 py-1.5 text-sm font-medium text-forest-800">
-              <span className="h-1.5 w-1.5 rounded-full bg-mint-500" />
+            <span className="eyebrow">
               Experiencias gastronómicas · toda España
             </span>
             <h1 className="mt-5 text-5xl font-extrabold leading-[1.02] tracking-tight text-forest-950 text-balance sm:text-6xl lg:text-7xl">
@@ -167,10 +166,8 @@ export default async function Home() {
       {/* Concepto */}
       <section id="concepto" className="scroll-mt-20 bg-white py-20">
         <div className="mx-auto max-w-6xl px-5">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-sm font-bold uppercase tracking-widest text-forest-600">
-              El concepto
-            </span>
+          <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+            <span className="eyebrow">El concepto</span>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-forest-950 text-balance sm:text-4xl">
               Una idea sencilla: buena comida que une
             </h2>
@@ -192,12 +189,10 @@ export default async function Home() {
       </section>
 
       {/* Eventos */}
-      <section id="eventos" className="scroll-mt-20 bg-cream py-20">
+      <section id="eventos" className="scroll-mt-20 bg-sand py-20">
         <div className="mx-auto max-w-6xl px-5">
           <div className="max-w-2xl">
-            <span className="text-sm font-bold uppercase tracking-widest text-forest-600">
-              Eventos
-            </span>
+            <span className="eyebrow">Eventos</span>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-forest-950 text-balance sm:text-4xl">
               Dónde estaremos y dónde hemos estado
             </h2>
@@ -207,8 +202,9 @@ export default async function Home() {
           {next ? (
             <div className="mt-10 grid overflow-hidden rounded-3xl bg-white shadow-soft lg:grid-cols-2">
               <div className="relative h-64 lg:h-auto">
-                <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full bg-forest-950/85 px-3 py-1.5 text-xs font-semibold text-white">
-                  <span className="h-1.5 w-1.5 rounded-full bg-mint-400" /> Próximo evento
+                <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full bg-mint-500 px-3.5 py-1.5 text-xs font-semibold text-forest-950">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-forest-950" />{" "}
+                  Próximo evento
                 </span>
                 {next.content?.heroImage && (
                   <Image
@@ -293,7 +289,7 @@ export default async function Home() {
                 <div className="p-4">
                   <div className="flex items-center justify-between">
                     <h4 className="font-bold text-forest-950">{p.city}</h4>
-                    <span className="rounded-full bg-forest-900/10 px-2 py-0.5 text-xs font-semibold text-forest-800/70">
+                    <span className="rounded-full bg-mint-200 px-2.5 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wide text-forest-600">
                       Celebrado
                     </span>
                   </div>
@@ -308,10 +304,8 @@ export default async function Home() {
       {/* Opiniones */}
       <section id="opiniones" className="scroll-mt-20 bg-white py-20">
         <div className="mx-auto max-w-6xl px-5">
-          <div className="mx-auto max-w-2xl text-center">
-            <span className="text-sm font-bold uppercase tracking-widest text-forest-600">
-              Opiniones
-            </span>
+          <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+            <span className="eyebrow">Opiniones</span>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-forest-950 text-balance sm:text-4xl">
               Lo que dicen quienes ya se sentaron a la mesa
             </h2>
@@ -337,19 +331,19 @@ export default async function Home() {
       </section>
 
       {/* CTA final */}
-      <section className="bg-cream py-20">
-        <div className="mx-auto max-w-4xl px-5">
-          <div className="rounded-3xl bg-forest-900 px-6 py-14 text-center text-white sm:px-12">
-            <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-5xl px-5">
+          <div className="rounded-[2rem] bg-mint-500 px-6 py-16 text-center text-forest-950 sm:px-12">
+            <h2 className="text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">
               {next ? `La próxima mesa es en ${next.city}` : "Pronto, nueva mesa"}
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-white/75">
+            <p className="mx-auto mt-4 max-w-xl text-lg text-forest-950/80">
               Plazas limitadas. Reserva ahora y asegura tu sitio en la próxima
               comida gratuita de Neventia.
             </p>
             <Link
               href={nextHref}
-              className="mt-8 inline-flex rounded-full bg-mint-500 px-7 py-4 font-semibold text-forest-950 transition hover:bg-mint-400"
+              className="mt-8 inline-flex rounded-full bg-forest-950 px-7 py-4 font-semibold text-cream transition hover:bg-forest-900"
             >
               Reservar mi plaza gratis
             </Link>
