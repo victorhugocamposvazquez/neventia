@@ -4,7 +4,13 @@ import { LoginForm } from "./LoginForm";
 
 export const metadata = { title: "Acceso · Backoffice" };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ setup?: string }>;
+}) {
+  const { setup } = await searchParams;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-forest-950 px-5">
       <div className="absolute inset-0 bg-grid opacity-30" />
@@ -19,6 +25,12 @@ export default function LoginPage() {
           <p className="mt-1 text-sm text-forest-800/70">
             Gestiona tus landings y leads.
           </p>
+          {setup && (
+            <p className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              Falta configurar Supabase. Crea un archivo <code>.env.local</code>{" "}
+              con tus credenciales y reinicia el servidor.
+            </p>
+          )}
           <Suspense>
             <LoginForm />
           </Suspense>

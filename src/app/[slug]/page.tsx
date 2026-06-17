@@ -6,14 +6,19 @@ import { LandingView } from "@/components/landing/LandingView";
 import type { Landing } from "@/lib/types";
 
 async function getLanding(slug: string): Promise<Landing | null> {
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("landings")
-    .select("*")
-    .eq("slug", slug)
-    .eq("status", "published")
-    .maybeSingle();
-  return (data as Landing) ?? null;
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return null;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("landings")
+      .select("*")
+      .eq("slug", slug)
+      .eq("status", "published")
+      .maybeSingle();
+    return (data as Landing) ?? null;
+  } catch {
+    return null;
+  }
 }
 
 export async function generateMetadata({
