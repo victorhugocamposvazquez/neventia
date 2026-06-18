@@ -114,18 +114,18 @@ export function LandingView({ landing }: { landing: Landing }) {
                 />
               </div>
               {c.freePrice && (
-                <div className="absolute -left-3 top-6 rounded-2xl bg-mint-500 px-5 py-3 text-center shadow-card sm:-left-5">
-                  <div className="text-2xl font-extrabold text-forest-950">
+                <div className="absolute -left-3 top-6 rounded-2xl bg-forest-950 px-5 py-4 text-left shadow-soft sm:-left-5">
+                  <div className="text-4xl font-extrabold leading-none text-cream">
                     {c.freePrice}
                   </div>
-                  <div className="text-xs font-medium text-forest-900/70">
+                  <div className="mt-1.5 text-[0.65rem] font-medium uppercase tracking-widest text-cream/70">
                     Menú completo
                   </div>
                 </div>
               )}
               {card && (
-                <div className="absolute -bottom-4 right-5 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-card">
-                  <div className="flex flex-col items-center rounded-xl bg-forest-900 px-3 py-1.5 text-white">
+                <div className="absolute -bottom-4 right-5 flex items-center gap-3 rounded-2xl border border-forest-900/10 bg-cream px-4 py-3 shadow-card">
+                  <div className="flex flex-col items-center rounded-xl bg-mint-500 px-3 py-1.5 text-forest-950">
                     <span className="text-[0.6rem] font-semibold tracking-wide">
                       {card.month}
                     </span>

@@ -83,8 +83,22 @@ export default async function Home() {
       </header>
 
       {/* Hero */}
-      <section className="bg-cream">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+      <section className="relative overflow-hidden bg-cream">
+        <svg
+          className="pointer-events-none absolute -right-40 -top-32 h-[520px] w-[520px] opacity-50"
+          viewBox="0 0 64 64"
+          aria-hidden="true"
+        >
+          <path
+            d="M 48.94 25.90 A 18 18 0 1 1 38.10 15.06"
+            fill="none"
+            stroke="#6cae8c"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+          />
+          <circle cx="44.7" cy="19.3" r="4.2" fill="#6cae8c" />
+        </svg>
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-[0.82fr_1.18fr] lg:py-24">
           <div className="animate-fade-up">
             <span className="eyebrow">
               Experiencias gastronómicas · toda España
@@ -133,19 +147,21 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="relative h-[26rem] animate-fade-up">
-            <div className="absolute left-0 top-0 h-56 w-3/5 overflow-hidden rounded-3xl shadow-soft">
-              <Image src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=70" alt="Mesa montada" fill sizes="400px" className="object-cover" priority />
+          <div className="relative h-[clamp(420px,52vw,600px)] animate-fade-up">
+            <div className="absolute right-0 top-0 h-[64%] w-[60%] overflow-hidden rounded-3xl shadow-soft">
+              <Image src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1100&q=70" alt="Mesa montada" fill sizes="(max-width:1024px) 60vw, 400px" className="object-cover" priority />
             </div>
-            <div className="absolute right-0 top-16 h-52 w-1/2 overflow-hidden rounded-3xl shadow-soft">
-              <Image src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=70" alt="Plato de autor" fill sizes="320px" className="object-cover" />
+            <div className="absolute bottom-0 left-0 h-[50%] w-[50%] overflow-hidden rounded-3xl shadow-soft">
+              <Image src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=70" alt="Plato de autor" fill sizes="(max-width:1024px) 50vw, 320px" className="object-cover" />
             </div>
-            <div className="absolute bottom-0 left-8 h-44 w-1/2 overflow-hidden rounded-3xl shadow-soft">
-              <Image src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=70" alt="Brindis" fill sizes="320px" className="object-cover" />
+            <div className="absolute right-[8%] top-[38%] h-[34%] w-[34%] overflow-hidden rounded-2xl border-[6px] border-cream shadow-soft">
+              <Image src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=700&q=70" alt="Brindis" fill sizes="220px" className="object-cover" />
             </div>
-            <div className="absolute bottom-6 right-2 rounded-2xl bg-mint-500 px-5 py-3 text-center shadow-card">
-              <div className="text-xl font-extrabold text-forest-950">5 ciudades</div>
-              <div className="text-xs font-medium text-forest-900/70">y sumando</div>
+            <div className="absolute left-[2%] top-[6%] z-10 rounded-2xl bg-forest-950 px-4 py-3 text-cream shadow-card">
+              <div className="text-2xl font-extrabold leading-none">5 ciudades</div>
+              <div className="mt-1 text-[0.65rem] font-medium uppercase tracking-widest text-cream/70">
+                y sumando
+              </div>
             </div>
           </div>
         </div>
