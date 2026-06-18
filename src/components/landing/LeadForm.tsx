@@ -22,7 +22,7 @@ function SubmitButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-full bg-mint-500 px-6 py-4 text-base font-semibold text-forest-950 transition hover:bg-mint-400 disabled:cursor-not-allowed disabled:opacity-70"
+      className="btn btn-accent btn-block submit"
     >
       {pending ? "Enviando…" : label}
     </button>
@@ -54,178 +54,141 @@ export function LeadForm({
 
   if (state.ok) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-3xl bg-white p-8 text-center shadow-card">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-mint-200 text-3xl text-forest-800">
-          ✓
+      <div className="form-card">
+        <div className="form-success show">
+          <div className="tick">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+              <path d="M20 6 9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <h3>{form?.successTitle ?? "¡Plaza reservada!"}</h3>
+          <p>
+            {form?.successText ??
+              "Hemos recibido tu reserva. Te llamaremos en las próximas 24-48 h para confirmarla."}
+          </p>
         </div>
-        <h3 className="text-2xl font-bold text-forest-950">
-          {form?.successTitle ?? "¡Plaza reservada!"}
-        </h3>
-        <p className="text-forest-800/80">
-          {form?.successText ??
-            "Te llamaremos en breve para confirmar tu reserva."}
-        </p>
       </div>
     );
   }
 
   return (
-    <form
-      action={actionWithUtm}
-      className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-card sm:p-8"
-    >
-      <div>
-        <h3 className="text-2xl font-bold text-forest-950">
-          {form?.title ?? "Reserva gratuita"}
-        </h3>
-        {form?.subtitle && (
-          <p className="mt-1 text-sm text-forest-800/70">{form.subtitle}</p>
-        )}
-      </div>
-
-      <input type="hidden" name="landingId" value={landingId} />
-      {/* Honeypot anti-spam (oculto para humanos) */}
-      <input
-        type="text"
-        name="company"
-        tabIndex={-1}
-        autoComplete="off"
-        className="hidden"
-        aria-hidden="true"
-      />
-
-      <Field
-        label="Nombre y apellidos"
-        name="fullName"
-        placeholder="Ej. María García"
-        autoComplete="name"
-        error={state.fieldErrors?.fullName}
-      />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field
-          label="Email"
-          name="email"
-          type="email"
-          placeholder="tucorreo@email.com"
-          autoComplete="email"
-          error={state.fieldErrors?.email}
-        />
-        <Field
-          label="Teléfono"
-          name="phone"
-          type="tel"
-          placeholder="600 000 000"
-          autoComplete="tel"
-          error={state.fieldErrors?.phone}
-        />
-      </div>
-
-      {availableDates.length > 0 && (
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">
-            Fecha preferida
-          </span>
-          <select
-            name="preferredDate"
-            defaultValue={defaultDate ?? ""}
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-3 text-forest-950 outline-none transition focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          >
-            <option value="">Elige una fecha</option>
-            {availableDates.map((d) => (
-              <option key={d.value} value={d.value}>
-                {d.label}
-                {d.time ? ` · ${d.time}` : ""}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
-
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-sm font-semibold text-forest-900">
-          ¿Cómo vienes?
-        </legend>
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { value: "pareja", label: "En pareja" },
-            { value: "solo", label: "Solo/a" },
-            { value: "amigos", label: "Con amigos" },
-          ].map((opt, i) => (
-            <label
-              key={opt.value}
-              className="cursor-pointer rounded-xl border border-forest-900/15 bg-cream/40 px-3 py-2.5 text-center text-sm font-medium text-forest-900 transition has-[:checked]:border-forest-700 has-[:checked]:bg-forest-900 has-[:checked]:text-white"
-            >
-              <input
-                type="radio"
-                name="party"
-                value={opt.value}
-                defaultChecked={i === 0}
-                className="sr-only"
-              />
-              {opt.label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <label className="flex items-start gap-2.5 text-sm text-forest-800/80">
-        <input
-          type="checkbox"
-          name="consent"
-          className="mt-0.5 h-4 w-4 shrink-0 rounded border-forest-900/30 accent-forest-800"
-        />
-        <span>
-          Acepto la política de privacidad y que Neventia me contacte para
-          gestionar mi reserva.
-        </span>
-      </label>
-      {state.fieldErrors?.consent && (
-        <span className="-mt-2 text-xs text-red-600">
-          {state.fieldErrors.consent}
-        </span>
-      )}
-
-      {state.error && (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
-          {state.error}
-        </p>
-      )}
-
-      <SubmitButton label={form?.ctaText ?? "Reservar mi plaza gratis"} />
-      <p className="text-center text-xs text-forest-800/50">
-        🔒 Tus datos están seguros y no se comparten con terceros.
+    <div className="form-card">
+      <h3>{form?.title ?? "Reserva gratuita"}</h3>
+      <p className="fhint">
+        {form?.subtitle ?? "Completa tus datos y te confirmamos la plaza."}
       </p>
-    </form>
-  );
-}
+      <form action={actionWithUtm} noValidate>
+        <input type="hidden" name="landingId" value={landingId} />
+        {/* Honeypot anti-spam */}
+        <input
+          type="text"
+          name="company"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-9999px" }}
+        />
 
-function Field({
-  label,
-  name,
-  type = "text",
-  placeholder,
-  autoComplete,
-  error,
-}: {
-  label: string;
-  name: string;
-  type?: string;
-  placeholder?: string;
-  autoComplete?: string;
-  error?: string;
-}) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-semibold text-forest-900">{label}</span>
-      <input
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
-        aria-invalid={Boolean(error)}
-        className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-3 text-forest-950 outline-none transition placeholder:text-forest-900/35 focus:border-forest-700 focus:ring-2 focus:ring-mint-300 aria-[invalid=true]:border-red-400"
-      />
-      {error && <span className="text-xs text-red-600">{error}</span>}
-    </label>
+        <div className={`field${state.fieldErrors?.fullName ? " invalid" : ""}`}>
+          <label htmlFor="f-name">Nombre y apellidos</label>
+          <input
+            type="text"
+            id="f-name"
+            name="fullName"
+            placeholder="Ej. María García"
+            autoComplete="name"
+          />
+          {state.fieldErrors?.fullName && (
+            <div className="field-err">{state.fieldErrors.fullName}</div>
+          )}
+        </div>
+
+        <div className="field-row">
+          <div className={`field${state.fieldErrors?.email ? " invalid" : ""}`}>
+            <label htmlFor="f-email">Email</label>
+            <input
+              type="email"
+              id="f-email"
+              name="email"
+              placeholder="tucorreo@email.com"
+              autoComplete="email"
+            />
+            {state.fieldErrors?.email && (
+              <div className="field-err">{state.fieldErrors.email}</div>
+            )}
+          </div>
+          <div className={`field${state.fieldErrors?.phone ? " invalid" : ""}`}>
+            <label htmlFor="f-phone">Teléfono</label>
+            <input
+              type="tel"
+              id="f-phone"
+              name="phone"
+              placeholder="600 000 000"
+              autoComplete="tel"
+            />
+            {state.fieldErrors?.phone && (
+              <div className="field-err">{state.fieldErrors.phone}</div>
+            )}
+          </div>
+        </div>
+
+        {availableDates.length > 0 && (
+          <div className="field">
+            <label htmlFor="f-date">Fecha preferida</label>
+            <select id="f-date" name="preferredDate" defaultValue={defaultDate ?? ""}>
+              <option value="" disabled>
+                Elige una fecha
+              </option>
+              {availableDates.map((d) => (
+                <option key={d.value} value={d.value}>
+                  {d.label}
+                  {d.time ? ` · ${d.time}` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="field">
+          <label>¿Cómo vienes?</label>
+          <div className="toggle-group">
+            {[
+              { id: "p-pareja", value: "pareja", label: "En pareja" },
+              { id: "p-solo", value: "solo", label: "Solo/a" },
+              { id: "p-amigos", value: "amigos", label: "Con amigos" },
+            ].map((opt, i) => (
+              <div className="opt" key={opt.value}>
+                <input
+                  type="radio"
+                  id={opt.id}
+                  name="party"
+                  value={opt.value}
+                  defaultChecked={i === 0}
+                />
+                <label htmlFor={opt.id}>{opt.label}</label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <label className="consent">
+          <input type="checkbox" name="consent" />
+          <span>
+            Acepto la <a href="#">política de privacidad</a> y que Neventia me
+            contacte para gestionar mi reserva.
+          </span>
+        </label>
+        {state.fieldErrors?.consent && (
+          <div className="field-err">{state.fieldErrors.consent}</div>
+        )}
+
+        {state.error && <div className="field-err">{state.error}</div>}
+
+        <SubmitButton label={form?.ctaText ?? "Reservar mi plaza gratis"} />
+        <div className="form-foot">
+          🔒 Tus datos están seguros y no se comparten con terceros.
+        </div>
+      </form>
+    </div>
   );
 }
