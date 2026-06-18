@@ -155,7 +155,6 @@ export function LeadForm({
             {[
               { id: "p-pareja", value: "pareja", label: "En pareja" },
               { id: "p-solo", value: "solo", label: "Solo/a" },
-              { id: "p-amigos", value: "amigos", label: "Con amigos" },
             ].map((opt, i) => (
               <div className="opt" key={opt.value}>
                 <input
@@ -169,6 +168,10 @@ export function LeadForm({
               </div>
             ))}
           </div>
+          <p className="fhint">
+            Las personas que vengan en pareja tendrán preferencia en la
+            asignación de mesa.
+          </p>
         </div>
 
         <label className="consent">

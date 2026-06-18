@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <>
       {/* HEADER */}
-      <header className="site-header">
+      <header className="site-header site-header--home">
         <div className="wrap header-inner">
           <Link className="brand" href="#top" aria-label="Neventia inicio">
             <BrandLogo />
@@ -43,7 +43,8 @@ export default function Home() {
           </nav>
           <div className="header-right">
             <Link className="btn btn-primary header-cta" href={EVENT_HREF}>
-              Próximo evento →
+              <span className="cta-lg-text">Próximo evento →</span>
+              <span className="cta-sm-text">Evento A Coruña</span>
             </Link>
           </div>
         </div>
@@ -489,13 +490,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Sticky CTA móvil */}
-      <div className="mobile-cta">
-        <Link className="btn btn-primary" href={EVENT_HREF}>
-          Reservar plaza · A Coruña · 0€
-        </Link>
-      </div>
     </>
   );
 }

@@ -197,6 +197,10 @@
   padding: 12px 22px;
   font-size: 15px;
 }
+/* Texto corto del CTA de cabecera, solo visible en móvil (home) */
+.nv-site .cta-sm-text {
+  display: none;
+}
 
 /* ---------- Hero (evento) ---------- */
 .nv-site .hero {
@@ -1505,6 +1509,18 @@
   }
   .nv-site .header-cta {
     display: none;
+  }
+  /* En la home sí mostramos el CTA arriba (junto al logo) en móvil */
+  .nv-site .site-header--home .header-cta {
+    display: inline-flex;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  .nv-site .cta-lg-text {
+    display: none;
+  }
+  .nv-site .cta-sm-text {
+    display: inline;
   }
   .nv-site .home-hero .orbit-deco {
     width: 320px;

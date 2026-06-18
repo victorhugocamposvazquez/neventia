@@ -24,8 +24,7 @@ values (
     "region": "Galicia",
     "strip": [
       "Menú completo · entrante, principal, postre y bebida",
-      "Sin compromiso de compra",
-      "Ven en pareja · ambiente cuidado"
+      "También para parejas · ambiente cuidado"
     ],
     "stepsIntro": "Reservar tu plaza lleva menos de un minuto. El resto lo ponemos nosotros.",
     "steps": [
@@ -72,12 +71,15 @@ values (
       { "quote": "Pensaba que habría truco y no lo hubo. Conocimos gente encantadora y comimos genial. Gracias, Neventia.", "author": "Carmen L.", "role": "Logroño" }
     ],
     "faqs": [
-      { "q": "¿De verdad es totalmente gratis?", "a": "Sí. No pagas nada por el menú ni por las bebidas. La comida está patrocinada por las marcas colaboradoras que presentan sus productos antes de comer." },
-      { "q": "¿Estoy obligado a comprar algo?", "a": "En absoluto. La presentación de productos es informativa y sin ningún compromiso. Puedes disfrutar de la comida sin adquirir nada." },
-      { "q": "¿Cuánto dura el evento?", "a": "Entre 2 y 3 horas aproximadamente: una breve presentación inicial y, a continuación, la comida completa con tiempo para disfrutar sin prisas." },
-      { "q": "¿Puedo ir solo o tengo que ir en pareja?", "a": "Puedes venir como prefieras. La experiencia está pensada para disfrutarse en pareja, pero también puedes asistir solo/a o con amigos. Indícalo en el formulario." },
-      { "q": "¿Qué incluye exactamente el menú?", "a": "Entrante, plato principal, postre, agua, vino de la casa y café. Disponemos de opciones vegetarianas; indícanos cualquier alergia o intolerancia al confirmar." },
-      { "q": "¿Cómo confirmo mi plaza?", "a": "Tras enviar el formulario, nuestro equipo te llamará en 24-48 h para confirmar la reserva y darte la dirección exacta del restaurante." }
+      { "q": "¿Este evento es solo para personas de 45 años o más?", "a": "Sí, este evento es completamente gratuito y está dirigido a personas de 45 años en adelante. Damos prioridad a quienes asisten en pareja, ya que las plazas son limitadas." },
+      { "q": "¿Realmente es 0€/persona?", "a": "¡Sí, exactamente! Este evento no tiene ningún coste, es 0€/persona. De hecho, los patrocinadores prefieren invertir en esta experiencia de calidad y en directo con nuestro público, en lugar de gastar en publicidad. Es su manera de privilegiar el contacto humano y el intercambio de experiencias enriquecedoras." },
+      { "q": "¿Qué es la invitación de Neventia?", "a": "El evento de Neventia es un momento de convivencia y de intercambio, organizado en torno a una comida completamente ofrecida por una de nuestras empresas colaboradoras. En el programa, una presentación de los productos/servicios del patrocinador y una comida deliciosa en un restaurante de calidad." },
+      { "q": "¿Cómo puedo participar en el evento?", "a": "Para participar, solo tienes que inscribirte a través del formulario disponible en esta página. Luego recibirás un correo electrónico de confirmación con la información necesaria." },
+      { "q": "¿Debo comprar algo para disfrutar de la comida?", "a": "No, absolutamente no. La comida está completamente ofrecida por nuestros patrocinadores. No hay ninguna obligación de compra; tu opinión sobre los productos/servicios presentados es muy valiosa para ellos." },
+      { "q": "¿Qué pasa si llego tarde al evento?", "a": "Te recomendamos encarecidamente llegar a tiempo. Para el buen desarrollo del evento, una vez comenzado no podremos garantizar tu acceso." },
+      { "q": "¿Puedo invitar a otra pareja para que me acompañe al evento?", "a": "Sí, puedes invitar a otra pareja, por lo que en total seríais dos parejas: la tuya y la que invitas, que también deben tener más de 45 años." },
+      { "q": "¿Cuál es el ambiente en estos eventos?", "a": "Nuestros eventos están diseñados para ser conviviales y agradables. Es una ocasión ideal para relajarse, conocer nuevas personas y descubrir productos y servicios interesantes." },
+      { "q": "¿Puedo venir con niños?", "a": "Lamentablemente no. Dado que las plazas son limitadas, solo aceptamos personas mayores de 45 años. Gracias por tu comprensión." }
     ],
     "form": {
       "title": "Reserva gratuita",
