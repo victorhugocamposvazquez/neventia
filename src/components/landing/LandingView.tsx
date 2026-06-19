@@ -1,10 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { LeadForm } from "@/components/landing/LeadForm";
-import {
-  ExperienceScroll,
-  buildExperienceStepsFromGallery,
-} from "@/components/site/ExperienceScroll";
+import { ExperienceScroll } from "@/components/site/ExperienceScroll";
+import { buildExperienceStepsFromGallery } from "@/lib/experience-steps";
 import type { Landing, LandingStep } from "@/lib/types";
 
 const MONTHS = [
