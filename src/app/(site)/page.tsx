@@ -75,8 +75,9 @@ export default function Home() {
               </h1>
               <p className="lede">
                 Neventia reúne a buenos comensales en torno a una gran mesa:
-                comidas de autor en las mejores ciudades, sin coste. Tú pones el
-                apetito — la comida, la ponemos nosotros.
+                comidas de autor en las mejores ciudades, sin coste y sin
+                compromiso. Tú pones el apetito — la comida, la ponemos
+                nosotros.
               </p>
               <div className="home-hero-cta">
                 <Link className="btn btn-primary btn-lg" href={EVENT_HREF}>

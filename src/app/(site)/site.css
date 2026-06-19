@@ -1178,19 +1178,7 @@
 @media (max-width: 760px) {
   .nv-site .stats-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 28px 20px;
-    padding: 44px 0 48px;
-  }
-  .nv-site .stat {
-    padding: 4px 6px;
-  }
-  .nv-site .stat .n {
-    font-size: clamp(30px, 8vw, 42px);
-    line-height: 1.15;
-  }
-  .nv-site .stat .l {
-    margin-top: 8px;
-    font-size: 13px;
+    gap: 32px 16px;
   }
 }
 
@@ -1443,46 +1431,31 @@
   .nv-site .home-hero-grid {
     grid-template-columns: 1fr;
   }
-  .nv-site .home-hero-copy {
-    order: 1;
-  }
   .nv-site .collage {
-    order: 2;
     position: relative;
-    display: block;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
     height: auto;
     width: 100%;
-    max-width: none;
-    margin-top: 28px;
-    margin-inline: 0;
+    max-width: 520px;
+    order: 0;
+    margin-top: 8px;
+    margin-inline: auto;
   }
   .nv-site .collage img {
     position: static;
-    display: block;
-    width: 100%;
+    width: auto;
     height: auto;
-    border-radius: var(--r-lg);
-    box-shadow: var(--shadow);
+    inset: auto;
+    aspect-ratio: 4 / 3;
   }
   .nv-site .collage .c1 {
+    grid-column: 1 / -1;
     aspect-ratio: 16 / 10;
-    object-fit: cover;
   }
-  .nv-site .collage .c2,
   .nv-site .collage .c3 {
-    display: none;
-  }
-  .nv-site .collage .c-tag {
-    position: absolute;
-    left: 16px;
-    top: 16px;
-    right: auto;
-    bottom: auto;
-    z-index: 2;
-    padding: 12px 16px;
-  }
-  .nv-site .collage .c-tag .big {
-    font-size: 24px;
+    border: none;
   }
 }
 
@@ -1528,24 +1501,7 @@
     display: none;
   }
   .nv-site .strip-inner {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: 0;
-  }
-  .nv-site .strip-item {
-    padding: 16px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 14px;
-    line-height: 1.45;
-    align-items: flex-start;
-  }
-  .nv-site .strip-item:last-child {
-    border-bottom: none;
-  }
-  .nv-site .strip-item .ico {
-    margin-top: 2px;
-    flex-shrink: 0;
+    gap: 14px;
   }
   .nv-site .footer-top {
     flex-direction: column;
@@ -1569,11 +1525,12 @@
     display: inline;
   }
   .nv-site .home-hero .orbit-deco {
-    display: none;
+    width: 320px;
+    right: -110px;
+    top: -80px;
   }
   .nv-site .home-hero h1 {
-    font-size: clamp(36px, 10vw, 52px);
-    margin-top: 16px;
+    font-size: clamp(40px, 11vw, 60px);
   }
   .nv-site .upcoming-body .btn {
     align-self: stretch;
@@ -1647,8 +1604,7 @@
     font-size: clamp(34px, 9vw, 52px);
   }
   .nv-site .home-hero {
-    padding: 20px 0 36px;
-    overflow: visible;
+    padding: clamp(28px, 7vw, 56px) 0 clamp(28px, 5vw, 48px);
   }
   .nv-site .home-hero .lede,
   .nv-site .hero-sub {
