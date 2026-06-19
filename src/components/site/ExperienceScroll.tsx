@@ -114,8 +114,9 @@ export function ExperienceScroll({
         </div>
 
         <div className="exp-scroll-layout">
-          <div className="exp-scroll-sticky" aria-hidden="true">
-            <div className="exp-scroll-visual">
+          <div className="exp-scroll-media-col" aria-hidden="true">
+            <div className="exp-scroll-sticky">
+              <div className="exp-scroll-visual">
               {steps.map((step, i) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -143,6 +144,7 @@ export function ExperienceScroll({
                   }
                 />
               ))}
+            </div>
             </div>
           </div>
 

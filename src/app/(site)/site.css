@@ -30,7 +30,8 @@
   letter-spacing: -0.01em;
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 .nv-site * {
   box-sizing: border-box;
@@ -928,11 +929,15 @@
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   gap: clamp(32px, 5vw, 72px);
-  align-items: start;
+  align-items: stretch;
+}
+.nv-site .exp-scroll-media-col {
+  min-height: 100%;
 }
 .nv-site .exp-scroll-sticky {
   position: sticky;
   top: clamp(88px, 12vh, 120px);
+  align-self: start;
 }
 .nv-site .exp-scroll-visual {
   position: relative;
@@ -1073,7 +1078,7 @@
   .nv-site .exp-scroll-layout {
     grid-template-columns: 1fr;
   }
-  .nv-site .exp-scroll-sticky {
+  .nv-site .exp-scroll-media-col {
     display: none;
   }
   .nv-site .exp-scroll-step {
