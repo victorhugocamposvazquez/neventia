@@ -31,8 +31,8 @@ export async function submitLead(
   const partyRaw = String(formData.get("party") ?? "").trim();
   const consent = formData.get("consent");
 
-  // Honeypot anti-spam: si viene relleno, lo ignoramos silenciosamente.
-  const honeypot = String(formData.get("company") ?? "").trim();
+  // Honeypot anti-spam: nombre poco habitual para evitar autofill del navegador.
+  const honeypot = String(formData.get("_hp") ?? "").trim();
   if (honeypot) {
     return { ok: true };
   }
@@ -66,7 +66,18 @@ export async function submitLead(
     if (value) utm[key] = value;
   }
 
-  const supabase = createAdminClient();
+  let supabase;
+  try {
+    supabase = createAdminClient();
+  } catch (err) {
+    console.error("[submitLead] config:", err);
+    return {
+      ok: false,
+      error:
+        "El formulario no está configurado en el servidor. Contacta con el organizador.",
+    };
+  }
+
   const { error } = await supabase.from("leads").insert({
     landing_id: landingId,
     full_name: fullName,

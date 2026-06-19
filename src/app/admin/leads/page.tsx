@@ -109,7 +109,9 @@ export default async function LeadsPage({
       <div className="overflow-x-auto rounded-2xl border border-forest-900/10 bg-white shadow-card">
         {leads.length === 0 ? (
           <p className="px-6 py-12 text-center text-forest-800/60">
-            No hay leads con estos filtros.
+            {sp.source || sp.status || sp.landing
+              ? "No hay leads con estos filtros."
+              : "Aún no hay leads. Envía el formulario desde una landing publicada (p. ej. /a-coruna) y recarga esta página."}
           </p>
         ) : (
           <table className="w-full min-w-[760px] text-left text-sm">

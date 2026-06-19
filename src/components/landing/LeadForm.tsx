@@ -79,14 +79,14 @@ export function LeadForm({
       </p>
       <form action={actionWithUtm} noValidate>
         <input type="hidden" name="landingId" value={landingId} />
-        {/* Honeypot anti-spam */}
+        {/* Honeypot anti-spam (nombre sin autofill) */}
         <input
           type="text"
-          name="company"
+          name="_hp"
           tabIndex={-1}
           autoComplete="off"
           aria-hidden="true"
-          style={{ position: "absolute", left: "-9999px" }}
+          style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0 }}
         />
 
         <div className={`field${state.fieldErrors?.fullName ? " invalid" : ""}`}>
