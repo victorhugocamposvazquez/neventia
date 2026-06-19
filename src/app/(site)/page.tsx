@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ExperienceScroll } from "@/components/site/ExperienceScroll";
 
 export const metadata: Metadata = {
   title:
@@ -389,47 +390,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* GALERÍA */}
-        <section className="section gallery">
-          <div className="wrap">
-            <div className="section-head center">
-              <span className="eyebrow">El ambiente</span>
-              <h2>Así se vive una comida Neventia</h2>
-            </div>
-            <div className="gallery-grid">
-              <img
-                className="g-tall"
-                src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=70"
-                alt="Mesa"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=70"
-                alt="Plato"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&q=70"
-                alt="Comensales"
-              />
-              <img
-                className="g-wide"
-                src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=70"
-                alt="Comedor"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=800&q=70"
-                alt="Detalle"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=800&q=70"
-                alt="Brindis"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=800&q=70"
-                alt="Postre"
-              />
-            </div>
-          </div>
-        </section>
+        {/* EXPERIENCIA */}
+        <ExperienceScroll />
 
         {/* CTA FINAL */}
         <section className="section final">

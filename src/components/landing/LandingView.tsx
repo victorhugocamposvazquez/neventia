@@ -1,6 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { LeadForm } from "@/components/landing/LeadForm";
+import {
+  ExperienceScroll,
+  buildExperienceStepsFromGallery,
+} from "@/components/site/ExperienceScroll";
 import type { Landing, LandingStep } from "@/lib/types";
 
 const MONTHS = [
@@ -424,31 +428,20 @@ export function LandingView({ landing }: { landing: Landing }) {
           </section>
         )}
 
-        {/* GALERÍA */}
-        {c.gallery && c.gallery.length > 0 && (
-          <section className="section gallery">
-            <div className="wrap">
-              <div className="section-head center">
-                <span className="eyebrow">El ambiente</span>
-                <h2>Así se vive una comida Neventia</h2>
-                <p>
-                  Mesa cuidada, buena compañía y buen producto. Un anticipo de lo
-                  que te espera en {city}.
-                </p>
-              </div>
-              <div className="gallery-grid">
-                {c.gallery.map((src, i) => (
-                  <img
-                    key={i}
-                    className={i === 0 ? "g-tall" : i === 3 ? "g-wide" : undefined}
-                    src={src}
-                    alt={`Galería ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {/* EXPERIENCIA */}
+        <ExperienceScroll
+          city={city}
+          subtitle={
+            c.gallery && c.gallery.length > 0
+              ? `Mesa cuidada, buena compañía y buen producto. Un anticipo de lo que te espera en ${city}.`
+              : undefined
+          }
+          steps={
+            c.gallery && c.gallery.length > 0
+              ? buildExperienceStepsFromGallery(c.gallery)
+              : undefined
+          }
+        />
 
         {/* CTA FINAL */}
         <section className="section final">
