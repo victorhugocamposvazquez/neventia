@@ -165,7 +165,7 @@
 .nv-site .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
 }
 .nv-site .brand .logo {
   width: 34px;
@@ -1963,8 +1963,8 @@
     font-size: 20px;
   }
   .nv-site .brand .logo {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
   }
 
   /* CTAs apilados y a ancho completo (mejor toque y jerarquía) */
@@ -2059,7 +2059,7 @@
     font-size: 13px;
   }
   .nv-site .brand .name {
-    font-size: 18px;
+    font-size: 20px;
   }
   .nv-site .hero-trust .t-text {
     font-size: 13.5px;
