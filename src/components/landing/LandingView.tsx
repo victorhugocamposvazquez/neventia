@@ -3,7 +3,9 @@ import Link from "next/link";
 import { LeadForm } from "@/components/landing/LeadForm";
 import { ExperienceScroll } from "@/components/site/ExperienceScroll";
 import { CookiePreferencesButton } from "@/components/site/CookiePreferencesButton";
+import { TestimonialsSection } from "@/components/site/TestimonialsSection";
 import { buildExperienceStepsFromGallery } from "@/lib/experience-steps";
+import { HOME_TESTIMONIALS, mapLandingTestimonials } from "@/lib/testimonials";
 import { LEGAL_LINKS } from "@/lib/legal";
 import type { Landing, LandingStep } from "@/lib/types";
 
@@ -77,6 +79,15 @@ export function LandingView({ landing }: { landing: Landing }) {
     calFromDate(landing.event_date) ??
     (nextDate ? calFromDate(nextDate.value) : null);
   const steps = c.steps && c.steps.length > 0 ? c.steps : DEFAULT_STEPS;
+
+  const landingTestimonials = c.testimonials?.length
+    ? mapLandingTestimonials(c.testimonials)
+    : [];
+  const landingAuthors = new Set(landingTestimonials.map((t) => t.author));
+  const testimonials = [
+    ...landingTestimonials,
+    ...HOME_TESTIMONIALS.filter((t) => !landingAuthors.has(t.author)),
+  ];
 
   return (
     <>
@@ -427,6 +438,12 @@ export function LandingView({ landing }: { landing: Landing }) {
             </div>
           </section>
         )}
+
+        <TestimonialsSection
+          testimonials={testimonials}
+          title={`Lo que dicen quienes ya vivieron un evento en ${city}`}
+          subtitle="Experiencias reales de comensales que ya se sentaron a la mesa con Neventia."
+        />
 
         {/* EXPERIENCIA */}
         <ExperienceScroll

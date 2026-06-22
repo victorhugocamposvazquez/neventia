@@ -2,7 +2,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ExperienceScroll } from "@/components/site/ExperienceScroll";
+import { TestimonialsSection } from "@/components/site/TestimonialsSection";
 import { CookiePreferencesButton } from "@/components/site/CookiePreferencesButton";
+import { HOME_TESTIMONIALS } from "@/lib/testimonials";
 import { LEGAL_LINKS } from "@/lib/legal";
 
 export const metadata: Metadata = {
@@ -348,49 +350,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* OPINIONES */}
-        <section className="section" id="opiniones">
-          <div className="wrap">
-            <div className="section-head center">
-              <span className="eyebrow">Opiniones</span>
-              <h2>Lo que dicen quienes ya se sentaron a la mesa</h2>
-            </div>
-            <div className="testi-grid">
-              {[
-                {
-                  text: "“No me lo creía hasta que fui. Comimos de maravilla, la presentación fue corta y nadie nos presionó para comprar nada. Repetiremos seguro.”",
-                  av: "MA",
-                  nm: "María A.",
-                  ct: "Madrid",
-                },
-                {
-                  text: "“Una tarde estupenda en pareja. El restaurante precioso y la comida de nivel. La organización, impecable de principio a fin.”",
-                  av: "JR",
-                  nm: "Jorge R.",
-                  ct: "Santander",
-                },
-                {
-                  text: "“Pensaba que habría truco y no lo hubo. Conocimos gente encantadora y comimos genial. Gracias, Neventia.”",
-                  av: "CL",
-                  nm: "Carmen L.",
-                  ct: "Logroño",
-                },
-              ].map((t) => (
-                <div className="testi" key={t.nm}>
-                  <div className="stars">★★★★★</div>
-                  <p>{t.text}</p>
-                  <div className="who">
-                    <span className="av">{t.av}</span>
-                    <div>
-                      <div className="nm">{t.nm}</div>
-                      <div className="ct">{t.ct}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <TestimonialsSection testimonials={HOME_TESTIMONIALS} />
 
         {/* EXPERIENCIA */}
         <ExperienceScroll />
