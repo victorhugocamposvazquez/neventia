@@ -1306,33 +1306,7 @@
 /* collage */
 .nv-site .collage {
   position: relative;
-  height: clamp(420px, 50vw, 620px);
-}
-.nv-site .collage img {
-  position: absolute;
-  object-fit: cover;
-  border-radius: 22px;
-  box-shadow: var(--shadow);
-}
-.nv-site .collage .c1 {
-  width: 60%;
-  height: 64%;
-  top: 0;
-  right: 0;
-}
-.nv-site .collage .c2 {
-  width: 50%;
-  height: 50%;
-  bottom: 0;
-  left: 0;
-}
-.nv-site .collage .c3 {
-  width: 34%;
-  height: 34%;
-  top: 38%;
-  right: 8%;
-  border: 6px solid var(--cream);
-  border-radius: 18px;
+  width: 100%;
 }
 .nv-site .collage .c-tag {
   position: absolute;
@@ -1357,6 +1331,91 @@
   text-transform: uppercase;
   opacity: 0.7;
   margin-top: 4px;
+}
+
+/* collage · desktop (absoluto con porcentajes) */
+@media (min-width: 921px) {
+  .nv-site .collage {
+    height: clamp(420px, 50vw, 620px);
+  }
+  .nv-site .collage img {
+    position: absolute;
+    object-fit: cover;
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+  }
+  .nv-site .collage .c1 {
+    width: 60%;
+    height: 64%;
+    top: 0;
+    right: 0;
+  }
+  .nv-site .collage .c2 {
+    width: 50%;
+    height: 50%;
+    bottom: 0;
+    left: 0;
+  }
+  .nv-site .collage .c3 {
+    width: 34%;
+    height: 34%;
+    top: 38%;
+    right: 8%;
+    border: 6px solid var(--cream);
+    border-radius: 18px;
+  }
+}
+
+/* collage · móvil y tablet (rejilla, sin porcentajes) */
+@media (max-width: 920px) {
+  .nv-site .collage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    height: auto;
+    margin-top: 28px;
+    margin-bottom: 24px;
+  }
+  .nv-site .collage img {
+    position: static;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    object-fit: cover;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    inset: auto;
+  }
+  .nv-site .collage .c1,
+  .nv-site .collage .c2,
+  .nv-site .collage .c3 {
+    width: 100%;
+    height: auto;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    border: none;
+  }
+  .nv-site .collage .c1 {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 11;
+    min-height: 240px;
+  }
+  .nv-site .collage .c2,
+  .nv-site .collage .c3 {
+    aspect-ratio: 1 / 1;
+    min-height: 160px;
+  }
+  .nv-site .collage .c-tag {
+    left: 14px;
+    top: 14px;
+    padding: 12px 16px;
+  }
+  .nv-site .collage .c-tag .big {
+    font-size: 26px;
+  }
 }
 
 /* stats band */
@@ -1763,48 +1822,6 @@
   .nv-site .home-hero-grid .collage {
     grid-column: 1;
     grid-row: auto;
-  }
-  .nv-site .collage {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    height: auto;
-    width: 100%;
-    max-width: none;
-    margin-top: 28px;
-    margin-bottom: 24px;
-    margin-inline: 0;
-  }
-  .nv-site .collage img {
-    position: static;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-    display: block;
-    object-fit: cover;
-    border-radius: 18px;
-  }
-  .nv-site .collage .c1 {
-    grid-column: 1 / -1;
-    aspect-ratio: 16 / 11;
-    min-height: 240px;
-  }
-  .nv-site .collage .c2,
-  .nv-site .collage .c3 {
-    aspect-ratio: 1 / 1;
-    min-height: 160px;
-  }
-  .nv-site .collage .c3 {
-    border: none;
-  }
-  .nv-site .collage .c-tag {
-    left: 14px;
-    top: 14px;
-    padding: 12px 16px;
-  }
-  .nv-site .collage .c-tag .big {
-    font-size: 26px;
   }
   .nv-site .hero-trust--home {
     margin-top: 0;
