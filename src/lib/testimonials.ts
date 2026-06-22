@@ -185,6 +185,216 @@ export const HOME_TESTIMONIALS: Testimonial[] = [
     author: "Nuria E.",
     city: "A Coruña",
   },
+  {
+    id: "25",
+    quote:
+      "Reservamos sin muchas expectativas y salimos encantados. El menú tenía personalidad y el trato, de diez.",
+    author: "Pablo I.",
+    city: "Lugo",
+  },
+  {
+    id: "26",
+    quote:
+      "Me gustó la naturalidad de todo el evento. Nada forzado, nada agresivo: solo buena mesa y buen rollo.",
+    author: "Teresa U.",
+    city: "Ourense",
+  },
+  {
+    id: "27",
+    quote:
+      "Fuimos dos amigas y nos sentimos muy cómodas desde el primer momento. Volveríamos sin pensarlo.",
+    author: "Raquel Y.",
+    city: "Palma",
+  },
+  {
+    id: "28",
+    quote:
+      "El restaurante elegido fue un acierto. Producto fresco, platos bien ejecutados y un servicio muy profesional.",
+    author: "Manuel X.",
+    city: "Córdoba",
+  },
+  {
+    id: "29",
+    quote:
+      "Pensé que sería demasiado comercial y fue justo lo contrario. La comida fue lo más importante del día.",
+    author: "Inés G.",
+    city: "Valladolid",
+  },
+  {
+    id: "30",
+    quote:
+      "Una forma distinta de pasar el mediodía del sábado. Comida excelente y conversación con gente muy agradable.",
+    author: "Alberto P.",
+    city: "Badajoz",
+  },
+  {
+    id: "31",
+    quote:
+      "La organización fue impecable: horarios claros, buena acogida y un ambiente relajado en todo momento.",
+    author: "Mónica S.",
+    city: "Cáceres",
+  },
+  {
+    id: "32",
+    quote:
+      "No había ido nunca a algo así y me llevé una grata sorpresa. Todo fue sencillo, transparente y muy cuidado.",
+    author: "Víctor A.",
+    city: "Tarragona",
+  },
+  {
+    id: "33",
+    quote:
+      "Salimos hablando del menú durante todo el camino a casa. Entrante, principal y postre: todo muy logrado.",
+    author: "Claudia M.",
+    city: "Girona",
+  },
+  {
+    id: "34",
+    quote:
+      "Me encantó el equilibrio entre la presentación y la comida. Ni se hizo largo ni se quedó corto.",
+    author: "Óscar T.",
+    city: "Lleida",
+  },
+  {
+    id: "35",
+    quote:
+      "Fue una tarde perfecta para ir en pareja. El restaurante tenía encanto y la experiencia, muy bien coordinada.",
+    author: "Sonia V.",
+    city: "Huelva",
+  },
+  {
+    id: "36",
+    quote:
+      "Lo mejor fue la sensación de autenticidad. No parecía un evento promocional, sino una comida de verdad.",
+    author: "Iván C.",
+    city: "Almería",
+  },
+  {
+    id: "37",
+    quote:
+      "Repetiría sin dudarlo. La calidad del menú estuvo a la altura de restaurantes que sí pagas habitualmente.",
+    author: "Lorena B.",
+    city: "Jaén",
+  },
+  {
+    id: "38",
+    quote:
+      "Nos confirmaron la plaza rápido y el día del evento todo salió como prometían. Muy recomendable.",
+    author: "Andrés F.",
+    city: "Cuenca",
+  },
+  {
+    id: "39",
+    quote:
+      "Conocimos a otra pareja de la mesa y acabamos charlando como si nos conociéramos de antes.",
+    author: "Pilar D.",
+    city: "Ávila",
+  },
+  {
+    id: "40",
+    quote:
+      "El sitio era precioso y la comida, mejor aún. Se notaba el cuidado en cada detalle del servicio.",
+    author: "Ricardo L.",
+    city: "Segovia",
+  },
+  {
+    id: "41",
+    quote:
+      "Dudábamos por el tema de la presentación, pero fue breve y respetuosa. Luego, comida de lujo.",
+    author: "Alicia N.",
+    city: "Soria",
+  },
+  {
+    id: "42",
+    quote:
+      "Muy buena experiencia de principio a fin. Desde la reserva hasta la despedida, todo muy fluido.",
+    author: "Emilio R.",
+    city: "Teruel",
+  },
+  {
+    id: "43",
+    quote:
+      "Fui sola y también me sentí muy a gusto. El ambiente fue acogedor y la organización, muy profesional.",
+    author: "Noelia H.",
+    city: "Huesca",
+  },
+  {
+    id: "44",
+    quote:
+      "No esperaba un menú tan cuidado. Cada plato tenía su detalle y el postre fue la guinda del pastel.",
+    author: "Gabriel J.",
+    city: "Zamora",
+  },
+  {
+    id: "45",
+    quote:
+      "Un plan estupendo para descubrir nuevos restaurantes sin arriesgar. Comimos genial y gratis.",
+    author: "Verónica K.",
+    city: "Palencia",
+  },
+  {
+    id: "46",
+    quote:
+      "La experiencia transmitió confianza desde el minuto uno. Nada de letra pequeña ni sorpresas raras.",
+    author: "Tomás W.",
+    city: "Lérida",
+  },
+  {
+    id: "47",
+    quote:
+      "Nos gustó tanto que ya estamos pendientes del próximo evento. Muy buena propuesta para salir del rutinario.",
+    author: "Esther Q.",
+    city: "Castellón",
+  },
+  {
+    id: "48",
+    quote:
+      "El trato del personal del restaurante fue excelente y la comida, de nivel. Una tarde muy redonda.",
+    author: "Francisco Z.",
+    city: "Reus",
+  },
+  {
+    id: "49",
+    quote:
+      "Pensaba que sería un evento frío y resultó muy cercano. Buena conversación y mejor comida.",
+    author: "Yolanda C.",
+    city: "Marbella",
+  },
+  {
+    id: "50",
+    quote:
+      "Todo estuvo muy bien explicado desde la web hasta el propio evento. Eso da mucha tranquilidad.",
+    author: "Marcos E.",
+    city: "Benidorm",
+  },
+  {
+    id: "51",
+    quote:
+      "La mesa estaba perfectamente montada y el ritmo del evento, muy agradable. Sin prisas ni agobios.",
+    author: "Helena P.",
+    city: "Gandía",
+  },
+  {
+    id: "52",
+    quote:
+      "Salimos convencidos de que mereció la pena reservar. Comida de calidad y trato humano de verdad.",
+    author: "Raúl M.",
+    city: "Elche",
+  },
+  {
+    id: "53",
+    quote:
+      "Fue una sorpresa muy positiva. El menú superó lo que imaginábamos y el ambiente fue muy agradable.",
+    author: "Celia O.",
+    city: "Cartagena",
+  },
+  {
+    id: "54",
+    quote:
+      "Si buscas una experiencia distinta, esta es. Buena comida, buena gente y una organización que se nota.",
+    author: "Adrián S.",
+    city: "Ferrol",
+  },
 ];
 
 export function mapLandingTestimonials(
