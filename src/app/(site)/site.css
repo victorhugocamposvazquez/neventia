@@ -1550,11 +1550,6 @@
 }
 
 /* testimonios */
-.nv-site .testi-count {
-  margin-top: 12px;
-  font-size: 15px;
-  opacity: 0.62;
-}
 .nv-site .testi-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -72,9 +72,6 @@ export function TestimonialsSection({
           <span className="eyebrow">Opiniones</span>
           <h2>{title}</h2>
           {subtitle ? <p>{subtitle}</p> : null}
-          <p className="testi-count">
-            {testimonials.length} valoraciones de comensales reales
-          </p>
         </div>
 
         <div className="testi-grid">
@@ -90,7 +87,7 @@ export function TestimonialsSection({
               className="btn btn-ghost testi-more-btn"
               onClick={() => setOpen(true)}
             >
-              Ver las {testimonials.length} opiniones
+              Ver más opiniones
             </button>
           </div>
         )}
@@ -116,8 +113,8 @@ export function TestimonialsSection({
                 <p className="testi-modal-eyebrow">Opiniones</p>
                 <h3 id={titleId}>Lo que dicen nuestros comensales</h3>
                 <p className="testi-modal-sub">
-                  {testimonials.length} experiencias compartidas por personas que
-                  ya asistieron a un evento Neventia.
+                  Experiencias reales de personas que ya vivieron un evento
+                  Neventia.
                 </p>
               </div>
               <button
