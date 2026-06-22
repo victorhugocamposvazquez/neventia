@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookiePreferencesButton } from "@/components/site/CookiePreferencesButton";
 import { LEGAL, LEGAL_LINKS } from "@/lib/legal";
 
 function BrandLogo({ stroke = "#142E23" }: { stroke?: string }) {
@@ -49,6 +50,7 @@ export function LegalLayout({
             <Link href={LEGAL_LINKS.avisoLegal}>Aviso legal</Link>
             <Link href={LEGAL_LINKS.privacidad}>Política de privacidad</Link>
             <Link href={LEGAL_LINKS.cookies}>Política de cookies</Link>
+            <CookiePreferencesButton variant="mobile" />
           </nav>
         </div>
       </main>

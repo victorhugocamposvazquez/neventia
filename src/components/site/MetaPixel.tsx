@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import {
+  COOKIE_CONSENT_EVENT,
   COOKIE_CONSENT_KEY,
   hasMarketingConsent,
   parseConsent,
@@ -18,10 +19,10 @@ export function MetaPixel({ pixelId }: { pixelId: string }) {
     };
 
     sync();
-    window.addEventListener("neventia:cookie-consent", sync);
+    window.addEventListener(COOKIE_CONSENT_EVENT, sync);
     window.addEventListener("storage", sync);
     return () => {
-      window.removeEventListener("neventia:cookie-consent", sync);
+      window.removeEventListener(COOKIE_CONSENT_EVENT, sync);
       window.removeEventListener("storage", sync);
     };
   }, []);

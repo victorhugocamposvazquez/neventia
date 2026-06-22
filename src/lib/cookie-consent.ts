@@ -1,5 +1,7 @@
 export const COOKIE_CONSENT_KEY = "neventia-cookie-consent";
 export const COOKIE_CONSENT_VERSION = "1";
+export const COOKIE_BANNER_OPEN_EVENT = "neventia:cookie-banner-open";
+export const COOKIE_CONSENT_EVENT = "neventia:cookie-consent";
 
 export type CookieConsentLevel = "all" | "essential";
 
@@ -33,7 +35,16 @@ export function saveConsent(level: CookieConsentLevel): CookieConsent {
   };
   if (typeof window !== "undefined") {
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(value));
-    window.dispatchEvent(new CustomEvent("neventia:cookie-consent", { detail: value }));
+    window.dispatchEvent(
+      new CustomEvent(COOKIE_CONSENT_EVENT, { detail: value }),
+    );
   }
   return value;
+}
+
+export function openCookieBanner() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(COOKIE_CONSENT_KEY);
+  window.dispatchEvent(new CustomEvent(COOKIE_CONSENT_EVENT));
+  window.dispatchEvent(new CustomEvent(COOKIE_BANNER_OPEN_EVENT));
 }

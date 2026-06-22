@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { AdminLegalFooter } from "@/components/admin/AdminLegalFooter";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/lib/actions/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
@@ -26,7 +27,8 @@ export default async function AdminLayout({
           <AdminNav />
         </div>
         <div className="border-t border-white/10 pt-4">
-          <p className="truncate text-xs text-white/40">{user?.email}</p>
+          <AdminLegalFooter />
+          <p className="mt-4 truncate text-xs text-white/40">{user?.email}</p>
           <form action={logout}>
             <button
               type="submit"
@@ -52,7 +54,12 @@ export default async function AdminLayout({
             <AdminNav variant="horizontal" />
           </div>
         </div>
-        <main className="flex-1 overflow-x-hidden p-6 lg:p-10">{children}</main>
+        <main className="flex-1 overflow-x-hidden p-6 lg:p-10">
+          {children}
+          <div className="mt-10 border-t border-forest-900/10 pt-6 lg:hidden">
+            <AdminLegalFooter variant="mobile" />
+          </div>
+        </main>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { LeadForm } from "@/components/landing/LeadForm";
 import { ExperienceScroll } from "@/components/site/ExperienceScroll";
+import { CookiePreferencesButton } from "@/components/site/CookiePreferencesButton";
 import { buildExperienceStepsFromGallery } from "@/lib/experience-steps";
 import { LEGAL_LINKS } from "@/lib/legal";
 import type { Landing, LandingStep } from "@/lib/types";
@@ -492,6 +493,7 @@ export function LandingView({ landing }: { landing: Landing }) {
                 <Link href={LEGAL_LINKS.avisoLegal}>Aviso legal</Link>
                 <Link href={LEGAL_LINKS.privacidad}>Política de privacidad</Link>
                 <Link href={LEGAL_LINKS.cookies}>Política de cookies</Link>
+                <CookiePreferencesButton variant="site" />
               </div>
             </div>
           </div>

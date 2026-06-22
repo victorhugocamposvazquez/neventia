@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
+  COOKIE_BANNER_OPEN_EVENT,
   COOKIE_CONSENT_KEY,
   parseConsent,
   saveConsent,
@@ -14,8 +15,15 @@ export function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const stored = parseConsent(localStorage.getItem(COOKIE_CONSENT_KEY));
-    setVisible(!stored);
+    const sync = () => {
+      const stored = parseConsent(localStorage.getItem(COOKIE_CONSENT_KEY));
+      setVisible(!stored);
+    };
+    const open = () => setVisible(true);
+
+    sync();
+    window.addEventListener(COOKIE_BANNER_OPEN_EVENT, open);
+    return () => window.removeEventListener(COOKIE_BANNER_OPEN_EVENT, open);
   }, []);
 
   const accept = (level: CookieConsentLevel) => {
@@ -27,7 +35,7 @@ export function CookieBanner() {
 
   return (
     <div className="cookie-banner" role="dialog" aria-labelledby="cookie-banner-title">
-      <div className="cookie-banner-inner wrap">
+      <div className="cookie-banner-inner">
         <div className="cookie-banner-copy">
           <p id="cookie-banner-title" className="cookie-banner-title">
             Usamos cookies
@@ -44,14 +52,14 @@ export function CookieBanner() {
         <div className="cookie-banner-actions">
           <button
             type="button"
-            className="btn btn-ghost cookie-btn"
+            className="cookie-btn cookie-btn-ghost"
             onClick={() => accept("essential")}
           >
             Solo necesarias
           </button>
           <button
             type="button"
-            className="btn btn-primary cookie-btn"
+            className="cookie-btn cookie-btn-primary"
             onClick={() => accept("all")}
           >
             Aceptar todas

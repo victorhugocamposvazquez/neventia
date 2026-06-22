@@ -1202,6 +1202,15 @@
 .nv-site .footer-col a:hover {
   color: var(--cream);
 }
+.nv-site .footer-col .cookie-prefs-trigger--site {
+  display: block;
+  padding: 5px 0;
+  text-align: left;
+  text-decoration: none;
+}
+.nv-site .footer-col .cookie-prefs-trigger--site:hover {
+  color: var(--cream);
+}
 .nv-site .footer-bottom {
   display: flex;
   align-items: center;
@@ -1963,75 +1972,6 @@
     display: block;
     overflow-x: auto;
     white-space: nowrap;
-  }
-}
-
-/* ---------- Cookie banner ---------- */
-.nv-site .cookie-banner {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 80;
-  padding: 16px 0 calc(16px + env(safe-area-inset-bottom));
-  background: color-mix(in srgb, var(--cream) 94%, transparent);
-  backdrop-filter: blur(14px) saturate(140%);
-  border-top: 1px solid var(--line);
-  box-shadow: 0 -18px 40px -24px rgba(20, 46, 35, 0.35);
-}
-.nv-site .cookie-banner-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(18px, 3vw, 36px);
-}
-.nv-site .cookie-banner-title {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-.nv-site .cookie-banner-text {
-  margin-top: 6px;
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: var(--ink);
-  opacity: 0.76;
-  max-width: 52rem;
-}
-.nv-site .cookie-banner-text a {
-  color: var(--accent-strong);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.nv-site .cookie-banner-actions {
-  display: flex;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.nv-site .cookie-btn {
-  padding: 13px 22px;
-  font-size: 14.5px;
-}
-@media (max-width: 860px) {
-  .nv-site .cookie-banner-inner {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .nv-site .cookie-banner-actions {
-    width: 100%;
-  }
-  .nv-site .cookie-banner-actions .cookie-btn {
-    flex: 1;
-  }
-}
-@media (max-width: 760px) {
-  body:has(.nv-site .cookie-banner) {
-    padding-bottom: calc(78px + 120px);
-  }
-  body:has(.nv-site .cookie-banner):has(.nv-site .mobile-cta) {
-    padding-bottom: calc(78px + 200px);
   }
 }
 
