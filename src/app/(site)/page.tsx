@@ -69,7 +69,7 @@ export default function Home() {
             <circle cx="44.7" cy="19.3" r="4.2" fill="#6CAE8C" />
           </svg>
           <div className="wrap home-hero-grid">
-            <div className="home-hero-copy">
+            <div className="home-hero-main">
               <span className="eyebrow">
                 Experiencias gastronómicas · toda España
               </span>
@@ -92,20 +92,6 @@ export default function Home() {
                   Cómo funciona
                 </a>
               </div>
-              <div className="hero-trust">
-                <div className="avatars" aria-hidden="true">
-                  <span>MA</span>
-                  <span>JR</span>
-                  <span>CL</span>
-                  <span>+</span>
-                </div>
-                <div>
-                  <div className="stars">★★★★★</div>
-                  <div className="t-text">
-                    Más de 1.200 comensales en 4 ciudades
-                  </div>
-                </div>
-              </div>
             </div>
             <div className="collage">
               <div className="c-tag">
@@ -127,6 +113,20 @@ export default function Home() {
                 src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=70"
                 alt="Brindis"
               />
+            </div>
+            <div className="hero-trust hero-trust--home">
+              <div className="avatars" aria-hidden="true">
+                <span>MA</span>
+                <span>JR</span>
+                <span>CL</span>
+                <span>+</span>
+              </div>
+              <div>
+                <div className="stars">★★★★★</div>
+                <div className="t-text">
+                  Más de 1.200 comensales en 4 ciudades
+                </div>
+              </div>
             </div>
           </div>
         </section>
