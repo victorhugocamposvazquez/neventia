@@ -1,4 +1,5 @@
 import { Space_Grotesk } from "next/font/google";
+import { CookieBanner } from "@/components/site/CookieBanner";
 import { HeaderScroll } from "@/components/site/HeaderScroll";
 import "./site.css";
 
@@ -16,6 +17,7 @@ export default function SiteLayout({
     <div className={`nv-site ${spaceGrotesk.variable}`}>
       <HeaderScroll />
       {children}
+      <CookieBanner />
     </div>
   );
 }

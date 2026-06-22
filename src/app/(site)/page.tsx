@@ -2,6 +2,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ExperienceScroll } from "@/components/site/ExperienceScroll";
+import { LEGAL_LINKS } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title:
@@ -440,9 +441,9 @@ export default function Home() {
               </div>
               <div className="footer-col">
                 <h5>Legal</h5>
-                <a href="#">Aviso legal</a>
-                <a href="#">Política de privacidad</a>
-                <a href="#">Política de cookies</a>
+                <Link href={LEGAL_LINKS.avisoLegal}>Aviso legal</Link>
+                <Link href={LEGAL_LINKS.privacidad}>Política de privacidad</Link>
+                <Link href={LEGAL_LINKS.cookies}>Política de cookies</Link>
               </div>
             </div>
           </div>

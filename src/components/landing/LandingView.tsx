@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LeadForm } from "@/components/landing/LeadForm";
 import { ExperienceScroll } from "@/components/site/ExperienceScroll";
 import { buildExperienceStepsFromGallery } from "@/lib/experience-steps";
+import { LEGAL_LINKS } from "@/lib/legal";
 import type { Landing, LandingStep } from "@/lib/types";
 
 const MONTHS = [
@@ -488,9 +489,9 @@ export function LandingView({ landing }: { landing: Landing }) {
               </div>
               <div className="footer-col">
                 <h5>Legal</h5>
-                <a href="#">Aviso legal</a>
-                <a href="#">Política de privacidad</a>
-                <a href="#">Política de cookies</a>
+                <Link href={LEGAL_LINKS.avisoLegal}>Aviso legal</Link>
+                <Link href={LEGAL_LINKS.privacidad}>Política de privacidad</Link>
+                <Link href={LEGAL_LINKS.cookies}>Política de cookies</Link>
               </div>
             </div>
           </div>

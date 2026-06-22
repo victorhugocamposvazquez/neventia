@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitLead, type LeadFormState } from "@/lib/actions/leads";
+import { LEGAL_LINKS } from "@/lib/legal";
 import type { EventDate, LandingForm } from "@/lib/types";
 
 const initialState: LeadFormState = { ok: false };
@@ -177,8 +179,9 @@ export function LeadForm({
         <label className="consent">
           <input type="checkbox" name="consent" />
           <span>
-            Acepto la <a href="#">política de privacidad</a> y que Neventia me
-            contacte para gestionar mi reserva.
+            Acepto la{" "}
+            <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link> y
+            que Neventia me contacte para gestionar mi reserva.
           </span>
         </label>
         {state.fieldErrors?.consent && (
