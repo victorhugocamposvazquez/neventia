@@ -102,11 +102,15 @@ export function LandingEditor({ landing }: { landing: Landing }) {
         </label>
         <label className="flex flex-col gap-1.5">
           <span className="text-sm font-semibold text-forest-900">
-            Fecha principal (para ordenar y mostrar en la home)
+            Fecha y hora del evento
+          </span>
+          <span className="text-xs text-forest-800/55">
+            Cada landing es un evento concreto. Duplica la landing para otra fecha.
           </span>
           <input
             name="event_date"
             type="datetime-local"
+            required
             defaultValue={
               landing.event_date
                 ? new Date(landing.event_date).toISOString().slice(0, 16)

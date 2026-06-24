@@ -1,24 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { LeadForm } from "@/components/landing/LeadForm";
+import { ChatReserve } from "@/components/landing/ChatReserve";
 import { ExperienceScroll } from "@/components/site/ExperienceScroll";
 import { CookiePreferencesButton } from "@/components/site/CookiePreferencesButton";
 import { TestimonialsSection } from "@/components/site/TestimonialsSection";
 import { buildExperienceStepsFromGallery } from "@/lib/experience-steps";
+import { calFromEventDate, resolveLandingEvent } from "@/lib/landing-event";
 import { HOME_TESTIMONIALS, mapLandingTestimonials } from "@/lib/testimonials";
 import { LEGAL_LINKS } from "@/lib/legal";
 import type { Landing, LandingStep } from "@/lib/types";
-
-const MONTHS = [
-  "ENE", "FEB", "MAR", "ABR", "MAY", "JUN",
-  "JUL", "AGO", "SEP", "OCT", "NOV", "DIC",
-];
 
 const DEFAULT_STEPS: LandingStep[] = [
   {
     title: "Reserva tu plaza",
     description:
-      "Elige una de las fechas disponibles y déjanos tus datos. Las plazas son limitadas y se asignan por orden de reserva.",
+      "Déjanos tus datos en el chat. Las plazas son limitadas y se asignan por orden de inscripción.",
   },
   {
     title: "Asiste a la presentación",
@@ -62,23 +58,15 @@ function BrandLogo({ stroke = "#142E23" }: { stroke?: string }) {
   );
 }
 
-function calFromDate(iso: string | null): { month: string; day: string } | null {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return { month: MONTHS[d.getMonth()], day: String(d.getDate()) };
-}
-
 export function LandingView({ landing }: { landing: Landing }) {
   const c = landing.content ?? {};
   const city = landing.city ?? "tu ciudad";
   const freePrice = c.freePrice ?? "0€";
-  const dates = c.dates ?? [];
-  const nextDate = dates.find((d) => d.status !== "full") ?? dates[0];
-  const cal =
-    calFromDate(landing.event_date) ??
-    (nextDate ? calFromDate(nextDate.value) : null);
+  const event = resolveLandingEvent(landing);
+  const cal = calFromEventDate(landing.event_date);
   const steps = c.steps && c.steps.length > 0 ? c.steps : DEFAULT_STEPS;
+  const eventFull = event?.status === "full";
+  const showVenue = event || c.venueTitle || c.venueImage || c.venueNote;
 
   const landingTestimonials = c.testimonials?.length
     ? mapLandingTestimonials(c.testimonials)
@@ -171,10 +159,10 @@ export function LandingView({ landing }: { landing: Landing }) {
                     {cal.day}
                   </div>
                   <div>
-                    <div className="d-main">Próxima fecha</div>
+                    <div className="d-main">Fecha del evento</div>
                     <div className="d-sub">
-                      {nextDate
-                        ? `${nextDate.label.split(",")[0]} · ${nextDate.time ?? ""}`.trim()
+                      {event
+                        ? `${event.label.split(",")[0]} · ${event.time}`.trim()
                         : ""}
                     </div>
                   </div>
@@ -312,8 +300,8 @@ export function LandingView({ landing }: { landing: Landing }) {
           </section>
         )}
 
-        {/* FECHAS Y UBICACIÓN */}
-        {dates.length > 0 && (
+        {/* FECHA Y UBICACIÓN */}
+        {showVenue && (
           <section className="section" id="fechas" style={{ paddingTop: 0 }}>
             <div className="wrap venue-grid">
               {c.venueImage && (
@@ -322,7 +310,7 @@ export function LandingView({ landing }: { landing: Landing }) {
                 </div>
               )}
               <div className="dates-card">
-                <span className="eyebrow">Fechas y lugar</span>
+                <span className="eyebrow">Fecha y lugar</span>
                 <h3 style={{ marginTop: 14 }}>
                   {c.venueTitle ?? `Restaurante en el centro de ${city}`}
                 </h3>
@@ -335,32 +323,32 @@ export function LandingView({ landing }: { landing: Landing }) {
                     <span>{c.venueNote}</span>
                   </div>
                 )}
-                <div className="date-list">
-                  {dates.map((d) => {
-                    const full = d.status === "full";
-                    return (
-                      <div className={`date-row${full ? " full" : ""}`} key={d.value}>
-                        <div className="dl">
-                          <div>
-                            <div className="ddate">{d.label}</div>
-                            <div className="dslots">
-                              {full
-                                ? "Completo"
-                                : `${d.time ?? ""}${d.slotsLabel ? ` · ${d.slotsLabel}` : ""}`}
-                            </div>
+                {event && (
+                  <div className="date-list">
+                    <div className={`date-row${eventFull ? " full" : ""}`}>
+                      <div className="dl">
+                        <div>
+                          <div className="ddate">{event.label}</div>
+                          <div className="dslots">
+                            {eventFull
+                              ? "Completo"
+                              : `${event.time}${event.slotsLabel ? ` · ${event.slotsLabel}` : ""}`}
                           </div>
                         </div>
-                        {full ? (
-                          <span className="pill">Agotado</span>
-                        ) : (
-                          <a className={`pill${d.status === "low" ? " low" : ""}`} href="#reservar">
-                            {d.status === "low" ? "Últimas plazas" : "Reservar"}
-                          </a>
-                        )}
                       </div>
-                    );
-                  })}
-                </div>
+                      {eventFull ? (
+                        <span className="pill">Agotado</span>
+                      ) : (
+                        <a
+                          className={`pill${event.status === "low" ? " low" : ""}`}
+                          href="#reservar"
+                        >
+                          {event.status === "low" ? "Últimas plazas" : "Reservar"}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -402,12 +390,25 @@ export function LandingView({ landing }: { landing: Landing }) {
               </ul>
             </div>
 
-            <LeadForm
-              landingId={landing.id}
-              form={c.form}
-              dates={dates}
-              defaultDate={nextDate?.value}
-            />
+            {event && !eventFull ? (
+              <ChatReserve
+                landingId={landing.id}
+                city={city}
+                eventDate={event.isoDate}
+                dateLabel={event.dateLabel}
+              />
+            ) : (
+              <div className="form-card">
+                <div className="form-success show">
+                  <h3>{eventFull ? "Plazas agotadas" : "Reservas próximamente"}</h3>
+                  <p>
+                    {eventFull
+                      ? `Este evento ya no admite nuevas solicitudes. Sigue atento a la home para el próximo evento en ${city}.`
+                      : "Estamos preparando la fecha de este evento. Vuelve pronto o contacta con nosotros."}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 

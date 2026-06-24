@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { createLanding } from "@/lib/actions/landings";
+import { formatAdminEventDate } from "@/lib/landing-event";
 import type { Landing } from "@/lib/types";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -19,7 +20,7 @@ export default async function LandingsPage({
   const { data } = await supabase
     .from("landings")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("event_date", { ascending: false, nullsFirst: false });
   const landings = (data as Landing[]) ?? [];
 
   const counts = await Promise.all(
@@ -37,7 +38,7 @@ export default async function LandingsPage({
       <div>
         <h1 className="text-3xl font-extrabold text-forest-950">Landings</h1>
         <p className="mt-1 text-forest-800/70">
-          Gestiona las URLs y el contenido de cada evento.
+          Una landing por evento. Cambia el slug y la fecha para cada comida.
         </p>
       </div>
 
@@ -68,7 +69,18 @@ export default async function LandingsPage({
           </span>
           <input
             name="slug"
-            placeholder="cena-barcelona"
+            placeholder="a-coruna-28-junio"
+            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
+          />
+        </label>
+        <label className="flex flex-1 flex-col gap-1.5">
+          <span className="text-sm font-semibold text-forest-900">
+            Fecha y hora
+          </span>
+          <input
+            name="event_date"
+            type="datetime-local"
+            required
             className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
           />
         </label>
@@ -91,6 +103,7 @@ export default async function LandingsPage({
               <tr>
                 <th className="px-6 py-3">Evento</th>
                 <th className="px-6 py-3">URL</th>
+                <th className="px-6 py-3">Fecha</th>
                 <th className="px-6 py-3">Estado</th>
                 <th className="px-6 py-3">Leads</th>
                 <th className="px-6 py-3"></th>
@@ -111,6 +124,9 @@ export default async function LandingsPage({
                     >
                       /{l.slug} ↗
                     </a>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-forest-800/80">
+                    {formatAdminEventDate(l.event_date)}
                   </td>
                   <td className="px-6 py-4">
                     <span

@@ -87,10 +87,15 @@ export type LandingContent = {
   whyImage?: string;
   whyPoints?: WhyPoint[];
 
-  // Fechas y lugar
+  // Fechas y lugar (una landing = un evento; la fecha oficial es `event_date` en la tabla)
   venueTitle?: string;
   venueNote?: string;
   venueImage?: string;
+  /** Texto de plazas, p. ej. "quedan 12 plazas" */
+  slotsLabel?: string;
+  /** Disponibilidad del evento de esta landing */
+  eventStatus?: "available" | "low" | "full";
+  /** @deprecated Usar `event_date` + slotsLabel/eventStatus */
   dates?: EventDate[];
 
   // Pruebas sociales y cierre

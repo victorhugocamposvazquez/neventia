@@ -28,7 +28,7 @@ values (
     ],
     "stepsIntro": "Reservar tu plaza lleva menos de un minuto. El resto lo ponemos nosotros.",
     "steps": [
-      { "title": "Reserva tu plaza", "description": "Elige una de las fechas disponibles y déjanos tus datos. Las plazas son limitadas y se asignan por orden de reserva." },
+      { "title": "Reserva tu plaza", "description": "Déjanos tus datos en el chat. Las plazas son limitadas y se asignan por orden de inscripción." },
       { "title": "Asiste a la presentación", "description": "Antes de comer, nuestros colaboradores presentan sus productos en una charla breve y amena. Sin ninguna obligación de comprar nada." },
       { "title": "Disfruta tu comida", "description": "Siéntate, relájate y disfruta de un menú completo de autor, totalmente gratis. La mejor parte del plan." }
     ],
@@ -51,12 +51,8 @@ values (
     "venueTitle": "Restaurante en el centro de A Coruña",
     "venueNote": "Dirección exacta enviada al confirmar tu plaza · fácil aparcamiento",
     "venueImage": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=70",
-    "dates": [
-      { "value": "2026-06-28", "label": "Sábado, 28 de junio", "time": "13:30 h", "slotsLabel": "quedan 12 plazas", "status": "available" },
-      { "value": "2026-07-05", "label": "Sábado, 5 de julio", "time": "13:30 h", "slotsLabel": "últimas plazas", "status": "low" },
-      { "value": "2026-07-12", "label": "Sábado, 12 de julio", "time": "13:30 h", "slotsLabel": "plazas disponibles", "status": "available" },
-      { "value": "2026-06-21", "label": "Sábado, 21 de junio", "time": "13:30 h", "slotsLabel": "completo", "status": "full" }
-    ],
+    "slotsLabel": "quedan 12 plazas",
+    "eventStatus": "available",
     "gallery": [
       "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=70",
       "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=70",

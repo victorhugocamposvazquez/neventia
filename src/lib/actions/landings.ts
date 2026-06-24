@@ -18,7 +18,7 @@ const STARTER_CONTENT = {
   ],
   stepsIntro: "Reservar tu plaza lleva menos de un minuto.",
   steps: [
-    { title: "Reserva tu plaza", description: "Elige fecha y déjanos tus datos." },
+    { title: "Reserva tu plaza", description: "Déjanos tus datos en el chat. Las plazas son limitadas." },
     { title: "Asiste a la presentación", description: "Una charla breve de nuestras marcas. Sin compromiso." },
     { title: "Disfruta tu comida", description: "Un menú completo de autor, gratis." },
   ],
@@ -36,9 +36,8 @@ const STARTER_CONTENT = {
   venueTitle: "",
   venueNote: "Dirección exacta enviada al confirmar tu plaza.",
   venueImage: "",
-  dates: [
-    { value: "2026-01-01", label: "Sábado, 1 de enero", time: "13:30 h", slotsLabel: "plazas disponibles", status: "available" },
-  ],
+  slotsLabel: "plazas disponibles",
+  eventStatus: "available",
   gallery: [],
   testimonials: [],
   faqs: [],
@@ -66,15 +65,22 @@ export async function createLanding(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   const slugInput = String(formData.get("slug") ?? "").trim();
   const slug = slugify(slugInput || name);
+  const eventDateRaw = String(formData.get("event_date") ?? "").trim();
 
-  if (!name || !slug) {
+  if (!name || !slug || !eventDateRaw) {
     redirect("/admin/landings?error=Faltan%20datos");
   }
 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("landings")
-    .insert({ name, slug, status: "draft", content: STARTER_CONTENT })
+    .insert({
+      name,
+      slug,
+      status: "draft",
+      event_date: new Date(eventDateRaw).toISOString(),
+      content: STARTER_CONTENT,
+    })
     .select("id")
     .single();
 
