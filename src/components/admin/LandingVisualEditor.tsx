@@ -28,7 +28,7 @@ export function LandingVisualEditor({
   onMetaChange,
 }: Props) {
   const [activeSection, setActiveSection] = useState<LandingSectionId>("hero");
-  const [mobileTab, setMobileTab] = useState<"edit" | "preview">("edit");
+  const [mobileTab, setMobileTab] = useState<"edit" | "preview">("preview");
   const previewScrollRef = useRef<HTMLDivElement>(null);
   const previewInnerRef = useRef<HTMLDivElement>(null);
 
@@ -52,12 +52,6 @@ export function LandingVisualEditor({
     const sectionId = id as LandingSectionId;
     setActiveSection(sectionId);
     setMobileTab("edit");
-
-    requestAnimationFrame(() => {
-      previewInnerRef.current
-        ?.querySelector(`[data-landing-section="${id}"]`)
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
   }, []);
 
   const scrollPreviewToSection = (id: LandingSectionId) => {
@@ -139,7 +133,7 @@ export function LandingVisualEditor({
           className={`le-canvas${mobileTab === "edit" ? " le-hidden-mobile" : ""}`}
         >
           <div className="le-canvas-bar">
-            Vista previa en vivo · clic en un bloque para editarlo
+            Clic en textos e imágenes para editar · panel lateral para listas
           </div>
           <div className="le-preview-scroll" ref={previewScrollRef}>
             <LandingPreview
@@ -147,6 +141,8 @@ export function LandingVisualEditor({
               landing={draftLanding}
               activeSection={activeSection}
               onSectionClick={selectSection}
+              onContentChange={onContentChange}
+              onMetaChange={(patch) => onMetaChange(patch)}
             />
           </div>
         </div>

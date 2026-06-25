@@ -30,7 +30,7 @@ export function EditSectionWrap({
         const target = e.target as HTMLElement;
         if (
           target.closest(
-            "a, button, input, textarea, select, details, summary, label"
+            "a, button, input, textarea, select, details, summary, label, [data-landing-inline]"
           )
         ) {
           return;

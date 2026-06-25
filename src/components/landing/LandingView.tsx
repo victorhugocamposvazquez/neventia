@@ -9,7 +9,8 @@ import { buildExperienceStepsFromGallery } from "@/lib/experience-steps";
 import { calFromEventDate, resolveLandingEvent } from "@/lib/landing-event";
 import { HOME_TESTIMONIALS, mapLandingTestimonials } from "@/lib/testimonials";
 import { LEGAL_LINKS } from "@/lib/legal";
-import type { Landing, LandingStep } from "@/lib/types";
+import { InlineAddButton, InlineEdit, InlineImage } from "@/components/landing/InlineEdit";
+import type { Dish, Landing, LandingContent, LandingFaq, LandingStep, WhyPoint } from "@/lib/types";
 
 const DEFAULT_STEPS: LandingStep[] = [
   {
@@ -28,6 +29,20 @@ const DEFAULT_STEPS: LandingStep[] = [
       "Siéntate, relájate y disfruta de un menú completo de autor, totalmente gratis. La mejor parte del plan.",
   },
 ];
+
+const HERO_FALLBACK_IMAGE =
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=70";
+
+const EMPTY_DISH: Dish = {
+  course: "Entrante",
+  name: "Nuevo plato",
+  description: "",
+  image: "",
+};
+
+const EMPTY_WHY: WhyPoint = { title: "Nuevo punto", description: "" };
+
+const EMPTY_FAQ: LandingFaq = { q: "Nueva pregunta", a: "Respuesta…" };
 
 const STEP_ICONS = [
   <svg key="1" className="s-ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2">
@@ -93,6 +108,8 @@ export type LandingViewProps = {
   preview?: boolean;
   activeSection?: string | null;
   onSectionClick?: (id: string) => void;
+  onContentChange?: (content: LandingContent) => void;
+  onMetaChange?: (patch: { city?: string }) => void;
 };
 
 export function LandingView({
@@ -101,6 +118,8 @@ export function LandingView({
   preview,
   activeSection,
   onSectionClick,
+  onContentChange,
+  onMetaChange,
 }: LandingViewProps) {
   const c = landing.content ?? {};
   const city = landing.city ?? "tu ciudad";
@@ -125,6 +144,41 @@ export function LandingView({
   const showVenueBlock = showVenue || editMode;
   const showFaq = (c.faqs && c.faqs.length > 0) || editMode;
 
+  const inline = Boolean(editMode && onContentChange);
+  const defaultHeadline = "Una comida de autor.";
+  const defaultSubheadline = `Te invitamos a una experiencia gastronómica completa en uno de los mejores restaurantes de ${city}. Sin coste, sin compromiso de compra. Solo buena mesa y buena compañía.`;
+
+  const applyPatch = (partial: Partial<LandingContent>) => {
+    onContentChange?.({ ...c, ...partial });
+  };
+
+  const editableSteps = (): LandingStep[] =>
+    c.steps?.length ? [...c.steps] : [...DEFAULT_STEPS];
+
+  const updateStep = (index: number, field: keyof LandingStep, value: string) => {
+    const next = editableSteps();
+    next[index] = { ...next[index], [field]: value };
+    applyPatch({ steps: next });
+  };
+
+  const updateDish = (index: number, field: keyof Dish, value: string) => {
+    const menu = [...(c.menu ?? [])];
+    menu[index] = { ...menu[index], [field]: value };
+    applyPatch({ menu });
+  };
+
+  const updateWhy = (index: number, field: keyof WhyPoint, value: string) => {
+    const whyPoints = [...(c.whyPoints ?? [])];
+    whyPoints[index] = { ...whyPoints[index], [field]: value };
+    applyPatch({ whyPoints });
+  };
+
+  const updateFaq = (index: number, field: keyof LandingFaq, value: string) => {
+    const faqs = [...(c.faqs ?? [])];
+    faqs[index] = { ...faqs[index], [field]: value };
+    applyPatch({ faqs });
+  };
+
   return (
     <>
       {/* HEADER */}
@@ -135,9 +189,15 @@ export function LandingView({
             <span className="name">neventia</span>
           </Link>
           <div className="header-right">
-            {landing.city && (
+            {(landing.city || inline) && (
               <span className="header-meta">
-                <span className="pin" /> {landing.city}
+                <span className="pin" />{" "}
+                <InlineEdit
+                  enabled={inline && Boolean(onMetaChange)}
+                  value={landing.city ?? ""}
+                  onChange={(city) => onMetaChange?.({ city })}
+                  placeholder="Ciudad"
+                />
               </span>
             )}
             <a className="btn btn-primary header-cta" href="#reservar">
@@ -159,18 +219,43 @@ export function LandingView({
         <section className="hero">
           <div className="wrap hero-grid">
             <div className="hero-copy">
-              <span className="eyebrow">
-                {c.badge ?? "Evento gastronómico · plazas limitadas"}
-              </span>
+              <InlineEdit
+                as="span"
+                className="eyebrow"
+                enabled={inline}
+                value={c.badge ?? "Evento gastronómico · plazas limitadas"}
+                onChange={(badge) => applyPatch({ badge })}
+                placeholder="Etiqueta superior"
+              />
               <h1>
-                {c.headline ?? "Una comida de autor."}
+                <InlineEdit
+                  as="span"
+                  enabled={inline}
+                  value={c.headline ?? defaultHeadline}
+                  onChange={(headline) => applyPatch({ headline })}
+                  placeholder="Titular principal"
+                />
                 <br />
-                Por <span className="free">{freePrice}</span>.
+                Por{" "}
+                <InlineEdit
+                  as="span"
+                  className="free"
+                  enabled={inline}
+                  value={freePrice}
+                  onChange={(freePrice) => applyPatch({ freePrice })}
+                  placeholder="0€"
+                />
+                .
               </h1>
-              <p className="hero-sub">
-                {c.subheadline ??
-                  `Te invitamos a una experiencia gastronómica completa en uno de los mejores restaurantes de ${city}. Sin coste, sin compromiso de compra. Solo buena mesa y buena compañía.`}
-              </p>
+              <InlineEdit
+                as="p"
+                className="hero-sub"
+                enabled={inline}
+                multiline
+                value={c.subheadline ?? defaultSubheadline}
+                onChange={(subheadline) => applyPatch({ subheadline })}
+                placeholder="Texto bajo el titular"
+              />
               <div className="hero-cta-row">
                 <a className="btn btn-primary btn-lg" href="#reservar">
                   Reservar mi plaza gratis
@@ -196,15 +281,22 @@ export function LandingView({
             </div>
 
             <div className="hero-media">
-              <img
-                src={
-                  c.heroImage ??
-                  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=70"
-                }
+              <InlineImage
+                enabled={inline}
+                src={c.heroImage ?? ""}
+                fallback={HERO_FALLBACK_IMAGE}
                 alt={landing.name}
+                onChange={(heroImage) => applyPatch({ heroImage })}
               />
               <div className="hero-badge">
-                <div className="big">{freePrice}</div>
+                <div className="big">
+                  <InlineEdit
+                    enabled={inline}
+                    value={freePrice}
+                    onChange={(v) => applyPatch({ freePrice: v })}
+                    placeholder="0€"
+                  />
+                </div>
                 <div className="lbl">Menú completo</div>
               </div>
               {cal && (
@@ -275,8 +367,16 @@ export function LandingView({
               <span className="eyebrow">Cómo funciona</span>
               <h2>Tres pasos. Una gran comida.</h2>
               <p>
-                {c.stepsIntro ??
-                  "Reservar tu plaza lleva menos de un minuto. El resto, lo ponemos nosotros."}
+                <InlineEdit
+                  enabled={inline}
+                  multiline
+                  value={
+                    c.stepsIntro ??
+                    "Reservar tu plaza lleva menos de un minuto. El resto, lo ponemos nosotros."
+                  }
+                  onChange={(stepsIntro) => applyPatch({ stepsIntro })}
+                  placeholder="Introducción de los pasos"
+                />
               </p>
             </div>
             <div className="steps">
@@ -284,8 +384,21 @@ export function LandingView({
                 <div className="step" key={i}>
                   <div className="num">0{i + 1}</div>
                   {STEP_ICONS[i]}
-                  <h3>{s.title}</h3>
-                  <p>{s.description}</p>
+                  <InlineEdit
+                    as="h3"
+                    enabled={inline}
+                    value={s.title}
+                    onChange={(v) => updateStep(i, "title", v)}
+                    placeholder={`Título paso ${i + 1}`}
+                  />
+                  <InlineEdit
+                    as="p"
+                    enabled={inline}
+                    multiline
+                    value={s.description}
+                    onChange={(v) => updateStep(i, "description", v)}
+                    placeholder="Descripción del paso"
+                  />
                 </div>
               ))}
             </div>
@@ -306,25 +419,79 @@ export function LandingView({
               <div className="section-head">
                 <span className="eyebrow on-dark">El menú</span>
                 <h2>
-                  {c.menuTitle ?? "Un menú pensado para disfrutar sin prisa"}
+                  <InlineEdit
+                    as="span"
+                    enabled={inline}
+                    value={
+                      c.menuTitle ?? "Un menú pensado para disfrutar sin prisa"
+                    }
+                    onChange={(menuTitle) => applyPatch({ menuTitle })}
+                    placeholder="Título del menú"
+                  />
                 </h2>
                 <p>
-                  {c.menuIntro ??
-                    "Producto de mercado, cocina de temporada y un postre que merece la pena. Esto es lo que te espera en la mesa."}
+                  <InlineEdit
+                    as="span"
+                    enabled={inline}
+                    multiline
+                    value={
+                      c.menuIntro ??
+                      "Producto de mercado, cocina de temporada y un postre que merece la pena. Esto es lo que te espera en la mesa."
+                    }
+                    onChange={(menuIntro) => applyPatch({ menuIntro })}
+                    placeholder="Introducción del menú"
+                  />
                 </p>
               </div>
               <div className="menu-grid">
                 {(c.menu ?? []).map((dish, i) => (
                   <article className="dish" key={i}>
-                    {dish.image && <img src={dish.image} alt={dish.name} />}
+                    {(dish.image || inline) && (
+                      <InlineImage
+                        enabled={inline}
+                        src={dish.image ?? ""}
+                        fallback={HERO_FALLBACK_IMAGE}
+                        alt={dish.name}
+                        imgClassName=""
+                        onChange={(image) => updateDish(i, "image", image)}
+                      />
+                    )}
                     <div className="dish-body">
-                      <div className="course">{dish.course}</div>
-                      <h3>{dish.name}</h3>
-                      {dish.description && <p>{dish.description}</p>}
+                      <InlineEdit
+                        as="div"
+                        className="course"
+                        enabled={inline}
+                        value={dish.course}
+                        onChange={(v) => updateDish(i, "course", v)}
+                        placeholder="Entrante"
+                      />
+                      <InlineEdit
+                        as="h3"
+                        enabled={inline}
+                        value={dish.name}
+                        onChange={(v) => updateDish(i, "name", v)}
+                        placeholder="Nombre del plato"
+                      />
+                      <InlineEdit
+                        as="p"
+                        enabled={inline}
+                        multiline
+                        value={dish.description ?? ""}
+                        onChange={(v) => updateDish(i, "description", v)}
+                        placeholder="Descripción del plato"
+                      />
                     </div>
                   </article>
                 ))}
               </div>
+              <InlineAddButton
+                enabled={inline}
+                onClick={() =>
+                  applyPatch({ menu: [...(c.menu ?? []), { ...EMPTY_DISH }] })
+                }
+              >
+                + Añadir plato
+              </InlineAddButton>
               {c.menuIncludes && c.menuIncludes.length > 0 && (
                 <div className="menu-foot">
                   <span>Incluye también:</span>
@@ -353,12 +520,24 @@ export function LandingView({
               <div className="why-copy">
                 <span className="eyebrow">Sin letra pequeña</span>
                 <h2 style={{ fontSize: "clamp(28px, 3.4vw, 42px)", marginTop: 16 }}>
-                  {c.whyTitle ?? "¿Por qué es gratis?"}
+                  <InlineEdit
+                    as="span"
+                    enabled={inline}
+                    value={c.whyTitle ?? "¿Por qué es gratis?"}
+                    onChange={(whyTitle) => applyPatch({ whyTitle })}
+                    placeholder="Título"
+                  />
                 </h2>
-                {c.whyIntro && (
-                  <p style={{ opacity: 0.74, marginTop: 16, fontSize: 17 }}>
-                    {c.whyIntro}
-                  </p>
+                {(c.whyIntro || inline) && (
+                  <InlineEdit
+                    as="p"
+                    enabled={inline}
+                    multiline
+                    value={c.whyIntro ?? ""}
+                    onChange={(whyIntro) => applyPatch({ whyIntro })}
+                    placeholder="Introducción"
+                    style={{ opacity: 0.74, marginTop: 16, fontSize: 17 }}
+                  />
                 )}
                 <div className="why-list">
                   {(c.whyPoints ?? []).map((p, i) => (
@@ -367,16 +546,45 @@ export function LandingView({
                         <Check />
                       </span>
                       <div>
-                        <h4>{p.title}</h4>
-                        <p>{p.description}</p>
+                        <InlineEdit
+                          as="h4"
+                          enabled={inline}
+                          value={p.title}
+                          onChange={(v) => updateWhy(i, "title", v)}
+                          placeholder="Título del punto"
+                        />
+                        <InlineEdit
+                          as="p"
+                          enabled={inline}
+                          multiline
+                          value={p.description}
+                          onChange={(v) => updateWhy(i, "description", v)}
+                          placeholder="Descripción"
+                        />
                       </div>
                     </div>
                   ))}
                 </div>
+                <InlineAddButton
+                  enabled={inline}
+                  onClick={() =>
+                    applyPatch({
+                      whyPoints: [...(c.whyPoints ?? []), { ...EMPTY_WHY }],
+                    })
+                  }
+                >
+                  + Añadir punto
+                </InlineAddButton>
               </div>
-              {c.whyImage && (
+              {(c.whyImage || inline) && (
                 <div className="why-media">
-                  <img src={c.whyImage} alt="Ambiente del comedor" />
+                  <InlineImage
+                    enabled={inline}
+                    src={c.whyImage ?? ""}
+                    fallback={HERO_FALLBACK_IMAGE}
+                    alt="Ambiente del comedor"
+                    onChange={(whyImage) => applyPatch({ whyImage })}
+                  />
                 </div>
               )}
             </div>
@@ -394,23 +602,43 @@ export function LandingView({
           >
           <section className="section" id="fechas" style={{ paddingTop: 0 }}>
             <div className="wrap venue-grid">
-              {c.venueImage && (
+              {(c.venueImage || inline) && (
                 <div className="venue-media">
-                  <img src={c.venueImage} alt={c.venueTitle ?? "Restaurante"} />
+                  <InlineImage
+                    enabled={inline}
+                    src={c.venueImage ?? ""}
+                    fallback={HERO_FALLBACK_IMAGE}
+                    alt={c.venueTitle ?? "Restaurante"}
+                    onChange={(venueImage) => applyPatch({ venueImage })}
+                  />
                 </div>
               )}
               <div className="dates-card">
                 <span className="eyebrow">Fecha y lugar</span>
                 <h3 style={{ marginTop: 14 }}>
-                  {c.venueTitle ?? `Restaurante en el centro de ${city}`}
+                  <InlineEdit
+                    as="span"
+                    enabled={inline}
+                    value={
+                      c.venueTitle ?? `Restaurante en el centro de ${city}`
+                    }
+                    onChange={(venueTitle) => applyPatch({ venueTitle })}
+                    placeholder="Nombre del local"
+                  />
                 </h3>
-                {c.venueNote && (
+                {(c.venueNote || inline) && (
                   <div className="venue-line">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                       <path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z" strokeLinejoin="round" />
                       <circle cx="12" cy="10" r="2.6" />
                     </svg>
-                    <span>{c.venueNote}</span>
+                    <InlineEdit
+                      as="span"
+                      enabled={inline}
+                      value={c.venueNote ?? ""}
+                      onChange={(venueNote) => applyPatch({ venueNote })}
+                      placeholder="Nota de ubicación"
+                    />
                   </div>
                 )}
                 {event && (
@@ -420,9 +648,23 @@ export function LandingView({
                         <div>
                           <div className="ddate">{event.label}</div>
                           <div className="dslots">
-                            {eventFull
-                              ? "Completo"
-                              : `${event.time}${event.slotsLabel ? ` · ${event.slotsLabel}` : ""}`}
+                            {eventFull ? (
+                              "Completo"
+                            ) : (
+                              <>
+                                {event.time}
+                                {" · "}
+                                <InlineEdit
+                                  as="span"
+                                  enabled={inline}
+                                  value={c.slotsLabel ?? event.slotsLabel ?? "plazas disponibles"}
+                                  onChange={(slotsLabel) =>
+                                    applyPatch({ slotsLabel })
+                                  }
+                                  placeholder="plazas disponibles"
+                                />
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -520,14 +762,38 @@ export function LandingView({
               </div>
               <div className="faq-list">
                 {(c.faqs ?? []).map((f, i) => (
-                  <details className="faq-item" key={i}>
+                  <details className="faq-item" key={i} open={inline || undefined}>
                     <summary>
-                      {f.q} <span className="plus" />
+                      <InlineEdit
+                        as="span"
+                        enabled={inline}
+                        value={f.q}
+                        onChange={(v) => updateFaq(i, "q", v)}
+                        placeholder="Pregunta"
+                      />{" "}
+                      <span className="plus" />
                     </summary>
-                    <div className="answer">{f.a}</div>
+                    <div className="answer">
+                      <InlineEdit
+                        as="span"
+                        enabled={inline}
+                        multiline
+                        value={f.a}
+                        onChange={(v) => updateFaq(i, "a", v)}
+                        placeholder="Respuesta"
+                      />
+                    </div>
                   </details>
                 ))}
               </div>
+              <InlineAddButton
+                enabled={inline}
+                onClick={() =>
+                  applyPatch({ faqs: [...(c.faqs ?? []), { ...EMPTY_FAQ }] })
+                }
+              >
+                + Añadir pregunta
+              </InlineAddButton>
             </div>
           </section>
           </SectionWrap>
