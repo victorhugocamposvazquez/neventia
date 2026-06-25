@@ -659,14 +659,6 @@
   line-height: 1.05;
   color: var(--cream);
 }
-.nv-site .reserve-headline {
-  margin: 14px 0 0;
-  font-size: clamp(22px, 2.8vw, 30px);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  color: var(--on-dark-dim);
-}
 .nv-site .reserve .lede {
   color: var(--on-dark-dim);
   font-size: 18px;

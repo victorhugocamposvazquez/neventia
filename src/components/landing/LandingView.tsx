@@ -359,7 +359,6 @@ export function LandingView({ landing }: { landing: Landing }) {
           <div className="wrap reserve-grid">
             <div className="reserve-copy">
               <p className="reserve-kicker">Solicita tu plaza</p>
-              <h2 className="reserve-headline">En menos de un minuto</h2>
               <p className="lede">Es gratis y no necesitas tarjeta.</p>
               <ul className="reserve-points">
                 <li>
