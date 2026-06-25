@@ -1,6 +1,7 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { RESERVATION_LEGAL } from "@/lib/legal";
 
 export type LeadFormState = {
   ok: boolean;
@@ -29,7 +30,9 @@ export async function submitLead(
   const email = String(formData.get("email") ?? "").trim();
   const preferredDate = String(formData.get("preferredDate") ?? "").trim();
   const partyRaw = String(formData.get("party") ?? "").trim();
-  const consent = formData.get("consent");
+  const legalSubmit = formData.get("legalSubmit");
+  const legalVersion = String(formData.get("legalVersion") ?? "").trim();
+  const sourceChannel = String(formData.get("sourceChannel") ?? "form").trim();
 
   // Honeypot anti-spam: nombre poco habitual para evitar autofill del navegador.
   const honeypot = String(formData.get("_hp") ?? "").trim();
@@ -45,8 +48,12 @@ export async function submitLead(
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     fieldErrors.email = "Email no válido.";
   }
-  if (!consent) {
-    fieldErrors.consent = "Debes aceptar la política de privacidad.";
+  if (legalSubmit !== "on") {
+    fieldErrors.legal =
+      "Debes pulsar Enviar solicitud para confirmar tu petición.";
+  }
+  if (legalVersion !== RESERVATION_LEGAL.version) {
+    fieldErrors.legal = "Recarga la página e inténtalo de nuevo.";
   }
   if (!landingId) {
     return { ok: false, error: "No se ha podido identificar el evento." };
@@ -65,6 +72,14 @@ export async function submitLead(
     const value = String(formData.get(key) ?? "").trim();
     if (value) utm[key] = value;
   }
+
+  const submittedAt = new Date().toISOString();
+  const consents = {
+    version: legalVersion,
+    submitted_at: submittedAt,
+    channel: sourceChannel,
+    notice: RESERVATION_LEGAL.submitNotice,
+  };
 
   let supabase;
   try {
@@ -88,6 +103,7 @@ export async function submitLead(
     guests,
     source: "landing",
     utm,
+    consents,
   });
 
   if (error) {

@@ -1093,6 +1093,63 @@
 .nv-site .chat-consent a {
   text-decoration: underline;
 }
+.nv-site .chat-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.nv-site .chat-confirm-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  color: var(--ink);
+}
+.nv-site .chat-confirm-summary strong {
+  font-size: 15px;
+}
+.nv-site .chat-confirm-legal {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.nv-site .chat-confirm-legal a {
+  text-decoration: underline;
+}
+.nv-site .chat-submit {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cream);
+  background: var(--ink);
+  border: none;
+  border-radius: 999px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.nv-site .chat-submit:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+.nv-site .chat-submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.nv-site .form-legal {
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0.74;
+}
+.nv-site .form-legal a {
+  text-decoration: underline;
+}
 .nv-site .chat-restart {
   background: none;
   border: none;

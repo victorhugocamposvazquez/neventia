@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitLead, type LeadFormState } from "@/lib/actions/leads";
-import { LEGAL_LINKS } from "@/lib/legal";
+import { LEGAL_LINKS, RESERVATION_LEGAL } from "@/lib/legal";
 import type { EventDate, LandingForm } from "@/lib/types";
 
 const initialState: LeadFormState = { ok: false };
@@ -51,6 +51,9 @@ export function LeadForm({
       const value = params.get(key);
       if (value) formData.set(key, value);
     }
+    formData.set("legalSubmit", "on");
+    formData.set("legalVersion", RESERVATION_LEGAL.version);
+    formData.set("sourceChannel", "form");
     return formAction(formData);
   };
 
@@ -176,21 +179,20 @@ export function LeadForm({
           </p>
         </div>
 
-        <label className="consent">
-          <input type="checkbox" name="consent" />
-          <span>
-            Acepto la{" "}
-            <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link> y
-            que Neventia me contacte para gestionar mi reserva.
-          </span>
-        </label>
-        {state.fieldErrors?.consent && (
-          <div className="field-err">{state.fieldErrors.consent}</div>
+        <p className="form-legal">
+          Al pulsar <strong>Enviar solicitud</strong>, declaras tener{" "}
+          <strong>45 años cumplidos o más</strong>, haber leído la{" "}
+          <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link> y entender que el
+          evento es <strong>gratuito</strong> e incluye una presentación informativa de productos
+          de salud y bienestar, <strong>sin obligación de compra</strong>.
+        </p>
+        {state.fieldErrors?.legal && (
+          <div className="field-err">{state.fieldErrors.legal}</div>
         )}
 
         {state.error && <div className="field-err">{state.error}</div>}
 
-        <SubmitButton label={form?.ctaText ?? "Reservar mi plaza gratis"} />
+        <SubmitButton label={form?.ctaText ?? "Enviar solicitud"} />
         <div className="form-foot">
           🔒 Tus datos están seguros y no se comparten con terceros.
         </div>

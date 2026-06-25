@@ -51,6 +51,7 @@ create table if not exists public.leads (
   utm          jsonb not null default '{}'::jsonb,
   meta_lead_id text unique,
   notes        text,
+  consents     jsonb not null default '{}'::jsonb,
   created_at   timestamptz not null default now()
 );
 

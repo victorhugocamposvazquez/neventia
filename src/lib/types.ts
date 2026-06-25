@@ -135,5 +135,6 @@ export type Lead = {
   utm: Record<string, string>;
   meta_lead_id: string | null;
   notes: string | null;
+  consents?: Record<string, unknown>;
   created_at: string;
 };

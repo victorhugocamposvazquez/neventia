@@ -3,13 +3,19 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { submitLead } from "@/lib/actions/leads";
-import { LEGAL_LINKS } from "@/lib/legal";
+import { LEGAL_LINKS, RESERVATION_LEGAL } from "@/lib/legal";
 
 type Party = { value: string; label: string };
 const PARTY: Party[] = [
   { value: "pareja", label: "En pareja" },
   { value: "solo", label: "Solo/a" },
 ];
+
+type ConfirmDraft = {
+  name: string;
+  phone: string;
+  party: Party;
+};
 
 const UTM_KEYS = [
   "utm_source",
@@ -37,6 +43,7 @@ type InputMode =
       validate: (v: string) => boolean;
     }
   | { kind: "chips"; items: Party[] }
+  | { kind: "confirm"; draft: ConfirmDraft }
   | { kind: "restart" };
 
 const nowHHMM = () => {
@@ -48,8 +55,6 @@ const esc = (s: string) =>
   s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-const makeRef = () => "NV-" + Math.random().toString(36).slice(2, 7).toUpperCase();
 
 function buildWhatsAppShareHref(city: string, dateLabel: string) {
   const url = window.location.href.split("#")[0];
@@ -77,9 +82,7 @@ export function ChatReserve({
 }: {
   landingId: string;
   city: string;
-  /** YYYY-MM-DD del evento de esta landing */
   eventDate: string;
-  /** Etiqueta legible, p. ej. "Sábado, 28 de junio · 13:30 h" */
   dateLabel: string;
   whatsappUrl?: string;
 }) {
@@ -88,10 +91,12 @@ export function ChatReserve({
   const [mode, setMode] = useState<InputMode>({ kind: "none" });
   const [textValue, setTextValue] = useState("");
   const [shareHref, setShareHref] = useState("");
+  const [sending, setSending] = useState(false);
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const resolver = useRef<((v: string | Party) => void) | null>(null);
+  const confirmResolver = useRef<((ok: boolean) => void) | null>(null);
   const started = useRef(false);
   const utm = useRef<Record<string, string>>({});
 
@@ -133,6 +138,14 @@ export function ChatReserve({
     });
   }, []);
 
+  const askConfirm = useCallback((draft: ConfirmDraft) => {
+    setSending(false);
+    setMode({ kind: "confirm", draft });
+    return new Promise<boolean>((res) => {
+      confirmResolver.current = res;
+    });
+  }, []);
+
   const submitText = () => {
     if (mode.kind !== "text") return;
     const v = textValue.trim();
@@ -160,7 +173,9 @@ export function ChatReserve({
       formData.set("phone", lead.phone);
       formData.set("party", lead.party);
       formData.set("preferredDate", eventDate);
-      formData.set("consent", "on");
+      formData.set("legalSubmit", "on");
+      formData.set("legalVersion", RESERVATION_LEGAL.version);
+      formData.set("sourceChannel", "chat");
       formData.set("_hp", "");
       for (const key of UTM_KEYS) {
         const value = utm.current[key];
@@ -168,10 +183,22 @@ export function ChatReserve({
       }
 
       const result = await submitLead({ ok: false }, formData);
-      return result.ok ? makeRef() : null;
+      return result.ok;
     },
     [eventDate, landingId]
   );
+
+  const handleConfirmSubmit = async () => {
+    if (mode.kind !== "confirm" || sending) return;
+    setSending(true);
+    const { draft } = mode;
+    const ok = await sendLead({ name: draft.name, phone: draft.phone, party: draft.party.value });
+    setSending(false);
+    setMode({ kind: "none" });
+    const r = confirmResolver.current;
+    confirmResolver.current = null;
+    r?.(ok);
+  };
 
   const run = useCallback(async () => {
     await botSay("¡Hola! 👋 Soy el asistente de reservas de Neventia.");
@@ -200,7 +227,10 @@ export function ChatReserve({
     await botSay('Y para terminar: ¿cómo vienes? <b>Las parejas tienen preferencia</b> para entrar.');
     const party = await askChips(PARTY);
 
-    if (!(await sendLead({ name, phone, party: party.value }))) {
+    await botSay("Revisa tu solicitud y pulsa <b>Enviar solicitud</b> para confirmar.");
+    const ok = await askConfirm({ name, phone, party });
+
+    if (!ok) {
       await botSay("Ups, algo falló al enviar la solicitud. Inténtalo de nuevo en un momento.");
       setMode({ kind: "restart" });
       return;
@@ -215,7 +245,7 @@ export function ChatReserve({
       "Te llamaremos para confirmar si hay plaza. Se asignan por <b>orden de solicitud</b> y en pareja tiene preferencia."
     );
     setMode({ kind: "restart" });
-  }, [askChips, askText, botSay, city, dateLabel, sendLead]);
+  }, [askChips, askConfirm, askText, botSay, city, dateLabel]);
 
   const start = useCallback(() => {
     if (started.current) return;
@@ -227,6 +257,7 @@ export function ChatReserve({
     started.current = false;
     setMessages([]);
     setMode({ kind: "none" });
+    setSending(false);
     start();
   };
 
@@ -320,34 +351,28 @@ export function ChatReserve({
 
       <div className="chat-input" id="chat-input">
         {mode.kind === "text" && (
-          <>
-            <div className="chat-textrow">
-              <input
-                type={mode.type || "text"}
-                inputMode={mode.inputmode || "text"}
-                autoComplete={mode.autocomplete}
-                placeholder={mode.placeholder}
-                value={textValue}
-                autoFocus
-                onChange={(e) => setTextValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    submitText();
-                  }
-                }}
-              />
-              <button className="chat-send" type="button" aria-label="Enviar" onClick={submitText}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                  <path d="M5 12h13M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-            <div className="chat-consent">
-              Al continuar aceptas la{" "}
-              <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link>.
-            </div>
-          </>
+          <div className="chat-textrow">
+            <input
+              type={mode.type || "text"}
+              inputMode={mode.inputmode || "text"}
+              autoComplete={mode.autocomplete}
+              placeholder={mode.placeholder}
+              value={textValue}
+              autoFocus
+              onChange={(e) => setTextValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  submitText();
+                }
+              }}
+            />
+            <button className="chat-send" type="button" aria-label="Enviar" onClick={submitText}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                <path d="M5 12h13M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
         )}
 
         {mode.kind === "chips" && (
@@ -357,6 +382,33 @@ export function ChatReserve({
                 {it.label}
               </button>
             ))}
+          </div>
+        )}
+
+        {mode.kind === "confirm" && (
+          <div className="chat-confirm">
+            <div className="chat-confirm-summary">
+              <strong>{mode.draft.name}</strong>
+              <span>{mode.draft.phone}</span>
+              <span>
+                {mode.draft.party.label} · {dateLabel}
+              </span>
+            </div>
+            <p className="chat-confirm-legal">
+              Al pulsar <strong>Enviar solicitud</strong>, declaras tener{" "}
+              <strong>45 años cumplidos o más</strong>, haber leído la{" "}
+              <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link> y entender que el
+              evento es <strong>gratuito</strong> e incluye una presentación informativa de
+              productos de salud y bienestar, <strong>sin obligación de compra</strong>.
+            </p>
+            <button
+              type="button"
+              className="chat-submit"
+              disabled={sending}
+              onClick={handleConfirmSubmit}
+            >
+              {sending ? "Enviando…" : "Enviar solicitud"}
+            </button>
           </div>
         )}
 
