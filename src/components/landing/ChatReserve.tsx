@@ -88,7 +88,6 @@ export function ChatReserve({
   const [mode, setMode] = useState<InputMode>({ kind: "none" });
   const [textValue, setTextValue] = useState("");
   const [shareHref, setShareHref] = useState("");
-  const [completed, setCompleted] = useState(false);
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -201,28 +200,20 @@ export function ChatReserve({
     await botSay('Y para terminar: ¿cómo vienes? <b>Las parejas tienen preferencia</b> para entrar.');
     const party = await askChips(PARTY);
 
-    const ref = await sendLead({ name, phone, party: party.value });
-
-    if (!ref) {
+    if (!(await sendLead({ name, phone, party: party.value }))) {
       await botSay("Ups, algo falló al enviar la solicitud. Inténtalo de nuevo en un momento.");
       setMode({ kind: "restart" });
       return;
     }
 
-    await botSay("🎉 <b>¡Solicitud recibida!</b>");
     await botSay(
-      `Queda anotada así:<br>🍽 <b>Comida Neventia · ${esc(city)}</b><br>` +
+      `🎉 <b>¡Solicitud recibida!</b><br>` +
+        `🍽 <b>Comida Neventia · ${esc(city)}</b><br>` +
         `📅 ${esc(dateLabel)}<br>👤 ${esc(name)} · ${esc(party.label)}<br>📞 ${esc(phone)}`
     );
     await botSay(
-      "Te llamaremos en 24-48 h para confirmarte si queda plaza. Se asignan por <b>orden de inscripción</b> y las parejas tienen preferencia."
+      "Te llamaremos para confirmar si hay plaza. Se asignan por <b>orden de solicitud</b> y en pareja tiene preferencia."
     );
-    await botSay(`Tu referencia es <b>${esc(ref)}</b>. ¡Cruzamos los dedos! 🤞`);
-    await botSay(
-      "¿Conoces a alguien a quien le encajaría? <b>Comparte este evento con amigos</b> por WhatsApp — " +
-        "recuerda avisar que deben ser mayores de 45 años."
-    );
-    setCompleted(true);
     setMode({ kind: "restart" });
   }, [askChips, askText, botSay, city, dateLabel, sendLead]);
 
@@ -236,7 +227,6 @@ export function ChatReserve({
     started.current = false;
     setMessages([]);
     setMode({ kind: "none" });
-    setCompleted(false);
     start();
   };
 
@@ -271,14 +261,13 @@ export function ChatReserve({
   }, [start]);
 
   return (
-    <div className="chat-col">
-      <div
-        className="chat"
-        id="chat"
-        aria-label="Chat de solicitud"
-        ref={rootRef}
-        onPointerDown={start}
-      >
+    <div
+      className="chat"
+      id="chat"
+      aria-label="Chat de solicitud"
+      ref={rootRef}
+      onPointerDown={start}
+    >
       <div className="chat-header">
         <div className="chat-avatar">
           <svg viewBox="0 0 64 64" aria-hidden="true">
@@ -374,15 +363,20 @@ export function ChatReserve({
         {mode.kind === "restart" && (
           <div className="chat-quick chat-quick--stack">
             {shareHref && (
-              <a
-                href={shareHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="chat-share-btn chat-share-btn--inline"
-              >
-                <WhatsAppIcon />
-                Compartir este evento con amigos
-              </a>
+              <>
+                <a
+                  href={shareHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="chat-share-btn chat-share-btn--inline"
+                >
+                  <WhatsAppIcon />
+                  Compartir este evento con amigos
+                </a>
+                <p className="chat-share-note chat-share-note--inline">
+                  Recuerda avisarles: el evento es para mayores de 45 años. Las parejas tienen preferencia.
+                </p>
+              </>
             )}
             <button type="button" className="chat-restart" onClick={restart}>
               Enviar otra solicitud
@@ -390,24 +384,6 @@ export function ChatReserve({
           </div>
         )}
       </div>
-      </div>
-
-      {shareHref && (
-        <div className={`chat-share${completed ? " chat-share--done" : ""}`}>
-          <a
-            href={shareHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="chat-share-btn"
-          >
-            <WhatsAppIcon />
-            Compartir este evento con amigos
-          </a>
-          <p className="chat-share-note">
-            Recuerda avisarles: el evento es para mayores de 45 años. Las parejas tienen preferencia.
-          </p>
-        </div>
-      )}
     </div>
   );
 }

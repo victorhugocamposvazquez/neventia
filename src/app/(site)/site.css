@@ -1096,30 +1096,9 @@
   padding: 6px;
 }
 
-.nv-site .chat-col {
-  max-width: 460px;
-  width: 100%;
-  margin-left: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.nv-site .chat-col .chat {
-  margin-left: 0;
-  max-width: none;
-}
 .nv-site .chat-quick--stack {
   flex-direction: column;
   align-items: stretch;
-}
-.nv-site .chat-share {
-  text-align: center;
-  padding: 0 4px;
-}
-.nv-site .chat-share--done .chat-share-btn {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--ink);
 }
 .nv-site .chat-share-btn {
   display: inline-flex;
@@ -1130,28 +1109,29 @@
   font-family: inherit;
   font-size: 15px;
   font-weight: 600;
-  color: var(--cream);
-  background: rgba(108, 174, 140, 0.22);
-  border: 1.5px solid rgba(108, 174, 140, 0.45);
+  color: var(--ink);
+  background: var(--accent);
+  border: 1.5px solid var(--accent-strong);
   border-radius: 999px;
   padding: 14px 20px;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .nv-site .chat-share-btn:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
   color: var(--ink);
 }
 .nv-site .chat-share-btn--inline {
   font-size: 14.5px;
   padding: 12px 16px;
 }
-.nv-site .chat-share-note {
-  margin-top: 10px;
-  font-size: 13px;
+.nv-site .chat-share-note--inline {
+  margin: 0;
+  font-size: 12px;
   line-height: 1.45;
-  color: var(--on-dark-dim);
-  opacity: 0.92;
+  color: var(--ink-soft);
+  text-align: center;
+  opacity: 0.85;
 }
 
 .nv-site .form-success .ref {
@@ -2196,10 +2176,6 @@
     max-width: 100%;
     margin: 0 auto;
     height: clamp(460px, 70vh, 600px);
-  }
-  .nv-site .chat-col {
-    max-width: 100%;
-    margin: 0 auto;
   }
   .nv-site .venue-media img {
     min-height: 260px;
