@@ -1,6 +1,7 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { logLeadCreated } from "@/lib/actions/leads-admin";
 import { RESERVATION_LEGAL } from "@/lib/legal";
 
 export type LeadFormState = {
@@ -93,26 +94,32 @@ export async function submitLead(
     };
   }
 
-  const { error } = await supabase.from("leads").insert({
-    landing_id: landingId,
-    full_name: fullName,
-    phone,
-    email: email || null,
-    preferred_date: preferredDate || null,
-    party_type: partyType,
-    guests,
-    source: "landing",
-    utm,
-    consents,
-  });
+  const { data: inserted, error } = await supabase
+    .from("leads")
+    .insert({
+      landing_id: landingId,
+      full_name: fullName,
+      phone,
+      email: email || null,
+      preferred_date: preferredDate || null,
+      party_type: partyType,
+      guests,
+      source: "landing",
+      utm,
+      consents,
+    })
+    .select("id")
+    .single();
 
-  if (error) {
-    console.error("[submitLead]", error.message);
+  if (error || !inserted) {
+    console.error("[submitLead]", error?.message);
     return {
       ok: false,
       error: "No hemos podido registrar tu reserva. Inténtalo de nuevo.",
     };
   }
+
+  await logLeadCreated(inserted.id);
 
   return { ok: true };
 }

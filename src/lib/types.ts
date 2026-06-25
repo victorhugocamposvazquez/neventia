@@ -10,6 +10,17 @@ export type LeadStatus =
   | "no_show"
   | "discarded";
 
+export type LeadActivityType =
+  | "created"
+  | "status_change"
+  | "note"
+  | "call"
+  | "whatsapp"
+  | "email"
+  | "tag_added"
+  | "tag_removed"
+  | "system";
+
 export type PartyType = "pareja" | "solo" | "amigos";
 
 export type EventDate = {
@@ -136,5 +147,19 @@ export type Lead = {
   meta_lead_id: string | null;
   notes: string | null;
   consents?: Record<string, unknown>;
+  tags?: string[];
   created_at: string;
+};
+
+export type LeadActivity = {
+  id: string;
+  lead_id: string;
+  type: LeadActivityType;
+  body: string | null;
+  meta: Record<string, unknown>;
+  created_at: string;
+};
+
+export type LeadWithLanding = Lead & {
+  landings?: Pick<Landing, "id" | "name" | "slug" | "city" | "event_date"> | null;
 };

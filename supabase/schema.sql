@@ -52,6 +52,7 @@ create table if not exists public.leads (
   meta_lead_id text unique,
   notes        text,
   consents     jsonb not null default '{}'::jsonb,
+  tags         text[] not null default '{}',
   created_at   timestamptz not null default now()
 );
 
@@ -59,6 +60,22 @@ create index if not exists leads_landing_id_idx on public.leads (landing_id);
 create index if not exists leads_source_idx on public.leads (source);
 create index if not exists leads_status_idx on public.leads (status);
 create index if not exists leads_created_at_idx on public.leads (created_at desc);
+
+-- Timeline de acciones por lead (llamadas, notas, cambios de estado…)
+create table if not exists public.lead_activities (
+  id         uuid primary key default gen_random_uuid(),
+  lead_id    uuid not null references public.leads (id) on delete cascade,
+  type       text not null check (type in (
+    'created', 'status_change', 'note', 'call', 'whatsapp', 'email',
+    'tag_added', 'tag_removed', 'system'
+  )),
+  body       text,
+  meta       jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists lead_activities_lead_id_idx
+  on public.lead_activities (lead_id, created_at desc);
 
 -- ------------------------------------------------------------
 -- updated_at automático en landings
@@ -107,6 +124,16 @@ create policy "landings_admin_all"
 drop policy if exists "leads_admin_all" on public.leads;
 create policy "leads_admin_all"
   on public.leads
+  for all
+  to authenticated
+  using (true)
+  with check (true);
+
+alter table public.lead_activities enable row level security;
+
+drop policy if exists "lead_activities_admin_all" on public.lead_activities;
+create policy "lead_activities_admin_all"
+  on public.lead_activities
   for all
   to authenticated
   using (true)

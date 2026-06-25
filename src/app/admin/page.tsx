@@ -103,9 +103,12 @@ export default async function AdminDashboard() {
                 className="flex flex-wrap items-center justify-between gap-3 px-6 py-3.5"
               >
                 <div>
-                  <p className="font-semibold text-forest-950">
+                  <Link
+                    href={`/admin/leads/${lead.id}`}
+                    className="font-semibold text-forest-950 hover:text-forest-700 hover:underline"
+                  >
                     {lead.full_name}
-                  </p>
+                  </Link>
                   <p className="text-sm text-forest-800/60">
                     {lead.phone ?? lead.email ?? "Sin contacto"}
                   </p>

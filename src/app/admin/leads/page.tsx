@@ -2,13 +2,14 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SourceBadge } from "@/components/admin/Badges";
 import { LeadStatusSelect } from "@/components/admin/LeadStatusSelect";
-import { deleteLead } from "@/lib/actions/leads-admin";
 import type { Landing, Lead, LeadSource, LeadStatus } from "@/lib/types";
 
 type Search = {
   source?: string;
   status?: string;
   landing?: string;
+  error?: string;
+  deleted?: string;
 };
 
 const PARTY_LABELS: Record<string, string> = {
@@ -49,9 +50,20 @@ export default async function LeadsPage({
   if (sp.source) exportParams.set("source", sp.source);
   if (sp.status) exportParams.set("status", sp.status);
   if (sp.landing) exportParams.set("landing", sp.landing);
+  const returnTo = `/admin/leads${exportParams.toString() ? `?${exportParams}` : ""}`;
 
   return (
     <div className="space-y-6">
+      {sp.error && (
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+          {sp.error}
+        </p>
+      )}
+      {sp.deleted && (
+        <p className="rounded-xl bg-mint-200 px-4 py-3 text-sm font-medium text-forest-800">
+          Lead eliminado correctamente.
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold text-forest-950">Leads</h1>
@@ -131,7 +143,12 @@ export default async function LeadsPage({
               {leads.map((lead) => (
                 <tr key={lead.id} className="align-middle hover:bg-cream/30">
                   <td className="px-5 py-3 font-semibold text-forest-950">
-                    {lead.full_name}
+                    <Link
+                      href={`/admin/leads/${lead.id}`}
+                      className="hover:text-forest-700 hover:underline"
+                    >
+                      {lead.full_name}
+                    </Link>
                   </td>
                   <td className="px-5 py-3 text-forest-800/80">
                     {lead.phone && <div>{lead.phone}</div>}
@@ -173,16 +190,12 @@ export default async function LeadsPage({
                     })}
                   </td>
                   <td className="px-5 py-3 text-right">
-                    <form action={deleteLead}>
-                      <input type="hidden" name="id" value={lead.id} />
-                      <button
-                        type="submit"
-                        className="text-xs text-red-500 hover:underline"
-                        title="Eliminar lead"
-                      >
-                        Eliminar
-                      </button>
-                    </form>
+                    <Link
+                      href={`/admin/leads/${lead.id}`}
+                      className="text-xs font-semibold text-forest-700 hover:underline"
+                    >
+                      Ver →
+                    </Link>
                   </td>
                 </tr>
               ))}
