@@ -21,8 +21,8 @@ export default async function EditLandingPage({
   if (!landing) notFound();
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-1">
         <div>
           <Link
             href="/admin/landings"
@@ -30,9 +30,10 @@ export default async function EditLandingPage({
           >
             ← Volver a landings
           </Link>
-          <h1 className="mt-1 text-3xl font-extrabold text-forest-950">
-            {landing.name}
+          <h1 className="mt-1 text-2xl font-extrabold text-forest-950 lg:text-3xl">
+            Editar landing
           </h1>
+          <p className="text-sm text-forest-800/60">{landing.name}</p>
         </div>
         <a
           href={`/${landing.slug}`}
@@ -40,7 +41,7 @@ export default async function EditLandingPage({
           rel="noreferrer"
           className="rounded-full border border-forest-900/15 px-4 py-2 text-sm font-semibold text-forest-800 hover:bg-cream"
         >
-          Ver landing ↗
+          Ver publicada ↗
         </a>
       </div>
 

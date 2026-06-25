@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { EditSectionWrap } from "@/components/landing/EditSectionWrap";
 import { ChatReserve } from "@/components/landing/ChatReserve";
 import { ExperienceScroll } from "@/components/site/ExperienceScroll";
 import { CookiePreferencesButton } from "@/components/site/CookiePreferencesButton";
@@ -58,7 +59,49 @@ function BrandLogo({ stroke = "#142E23" }: { stroke?: string }) {
   );
 }
 
-export function LandingView({ landing }: { landing: Landing }) {
+function SectionWrap({
+  id,
+  label,
+  editMode,
+  activeSection,
+  onSectionClick,
+  children,
+}: {
+  id: string;
+  label: string;
+  editMode?: boolean;
+  activeSection?: string | null;
+  onSectionClick?: (id: string) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <EditSectionWrap
+      id={id}
+      label={label}
+      enabled={editMode}
+      active={activeSection === id}
+      onSelect={onSectionClick}
+    >
+      {children}
+    </EditSectionWrap>
+  );
+}
+
+export type LandingViewProps = {
+  landing: Landing;
+  editMode?: boolean;
+  preview?: boolean;
+  activeSection?: string | null;
+  onSectionClick?: (id: string) => void;
+};
+
+export function LandingView({
+  landing,
+  editMode,
+  preview,
+  activeSection,
+  onSectionClick,
+}: LandingViewProps) {
   const c = landing.content ?? {};
   const city = landing.city ?? "tu ciudad";
   const freePrice = c.freePrice ?? "0€";
@@ -77,12 +120,17 @@ export function LandingView({ landing }: { landing: Landing }) {
     ...HOME_TESTIMONIALS.filter((t) => !landingAuthors.has(t.author)),
   ];
 
+  const showMenu = (c.menu && c.menu.length > 0) || editMode;
+  const showWhy = (c.whyPoints && c.whyPoints.length > 0) || editMode;
+  const showVenueBlock = showVenue || editMode;
+  const showFaq = (c.faqs && c.faqs.length > 0) || editMode;
+
   return (
     <>
       {/* HEADER */}
       <header className="site-header">
         <div className="wrap header-inner">
-          <Link className="brand" href="/" aria-label="Neventia inicio">
+          <Link className="brand" href={preview ? "#" : "/"} aria-label="Neventia inicio">
             <BrandLogo />
             <span className="name">neventia</span>
           </Link>
@@ -101,6 +149,13 @@ export function LandingView({ landing }: { landing: Landing }) {
 
       <main id="top">
         {/* HERO */}
+        <SectionWrap
+          id="hero"
+          label="Cabecera"
+          editMode={editMode}
+          activeSection={activeSection}
+          onSectionClick={onSectionClick}
+        >
         <section className="hero">
           <div className="wrap hero-grid">
             <div className="hero-copy">
@@ -171,8 +226,15 @@ export function LandingView({ landing }: { landing: Landing }) {
             </div>
           </div>
         </section>
+        </SectionWrap>
 
-        {/* STRIP */}
+        <SectionWrap
+          id="event"
+          label="Plazas"
+          editMode={editMode}
+          activeSection={activeSection}
+          onSectionClick={onSectionClick}
+        >
         <div className="strip">
           <div className="wrap strip-inner">
             <div className="strip-item">
@@ -198,8 +260,15 @@ export function LandingView({ landing }: { landing: Landing }) {
             </div>
           </div>
         </div>
+        </SectionWrap>
 
-        {/* CÓMO FUNCIONA */}
+        <SectionWrap
+          id="steps"
+          label="Cómo funciona"
+          editMode={editMode}
+          activeSection={activeSection}
+          onSectionClick={onSectionClick}
+        >
         <section className="section" id="como-funciona">
           <div className="wrap">
             <div className="section-head center">
@@ -222,9 +291,16 @@ export function LandingView({ landing }: { landing: Landing }) {
             </div>
           </div>
         </section>
+        </SectionWrap>
 
-        {/* MENÚ */}
-        {c.menu && c.menu.length > 0 && (
+        {showMenu && (
+          <SectionWrap
+            id="menu"
+            label="Menú"
+            editMode={editMode}
+            activeSection={activeSection}
+            onSectionClick={onSectionClick}
+          >
           <section className="section menu" id="menu">
             <div className="wrap">
               <div className="section-head">
@@ -238,7 +314,7 @@ export function LandingView({ landing }: { landing: Landing }) {
                 </p>
               </div>
               <div className="menu-grid">
-                {c.menu.map((dish, i) => (
+                {(c.menu ?? []).map((dish, i) => (
                   <article className="dish" key={i}>
                     {dish.image && <img src={dish.image} alt={dish.name} />}
                     <div className="dish-body">
@@ -261,10 +337,17 @@ export function LandingView({ landing }: { landing: Landing }) {
               )}
             </div>
           </section>
+          </SectionWrap>
         )}
 
-        {/* POR QUÉ ES GRATIS */}
-        {c.whyPoints && c.whyPoints.length > 0 && (
+        {showWhy && (
+          <SectionWrap
+            id="why"
+            label="¿Por qué es gratis?"
+            editMode={editMode}
+            activeSection={activeSection}
+            onSectionClick={onSectionClick}
+          >
           <section className="section" id="por-que">
             <div className="wrap why-grid">
               <div className="why-copy">
@@ -278,7 +361,7 @@ export function LandingView({ landing }: { landing: Landing }) {
                   </p>
                 )}
                 <div className="why-list">
-                  {c.whyPoints.map((p, i) => (
+                  {(c.whyPoints ?? []).map((p, i) => (
                     <div className="why-item" key={i}>
                       <span className="check">
                         <Check />
@@ -298,10 +381,17 @@ export function LandingView({ landing }: { landing: Landing }) {
               )}
             </div>
           </section>
+          </SectionWrap>
         )}
 
-        {/* FECHA Y UBICACIÓN */}
-        {showVenue && (
+        {showVenueBlock && (
+          <SectionWrap
+            id="venue"
+            label="Lugar"
+            editMode={editMode}
+            activeSection={activeSection}
+            onSectionClick={onSectionClick}
+          >
           <section className="section" id="fechas" style={{ paddingTop: 0 }}>
             <div className="wrap venue-grid">
               {c.venueImage && (
@@ -352,9 +442,9 @@ export function LandingView({ landing }: { landing: Landing }) {
               </div>
             </div>
           </section>
+          </SectionWrap>
         )}
 
-        {/* FORMULARIO */}
         <section className="section reserve" id="reservar">
           <div className="wrap reserve-grid">
             <div className="reserve-copy">
@@ -376,7 +466,17 @@ export function LandingView({ landing }: { landing: Landing }) {
               </ul>
             </div>
 
-            {event && !eventFull ? (
+            {preview ? (
+              <div className="form-card" style={{ pointerEvents: "none", opacity: 0.92 }}>
+                <div className="form-success show">
+                  <h3>Vista previa del chat</h3>
+                  <p>
+                    El formulario de reserva es fijo. Los visitantes completan
+                    nombre, teléfono y tipo de asistencia aquí.
+                  </p>
+                </div>
+              </div>
+            ) : event && !eventFull ? (
               <ChatReserve
                 landingId={landing.id}
                 city={city}
@@ -398,8 +498,14 @@ export function LandingView({ landing }: { landing: Landing }) {
           </div>
         </section>
 
-        {/* FAQ */}
-        {c.faqs && c.faqs.length > 0 && (
+        {showFaq && (
+          <SectionWrap
+            id="faq"
+            label="FAQ"
+            editMode={editMode}
+            activeSection={activeSection}
+            onSectionClick={onSectionClick}
+          >
           <section className="section" id="faq">
             <div className="wrap faq-grid">
               <div className="faq-head">
@@ -413,7 +519,7 @@ export function LandingView({ landing }: { landing: Landing }) {
                 </p>
               </div>
               <div className="faq-list">
-                {c.faqs.map((f, i) => (
+                {(c.faqs ?? []).map((f, i) => (
                   <details className="faq-item" key={i}>
                     <summary>
                       {f.q} <span className="plus" />
@@ -424,15 +530,30 @@ export function LandingView({ landing }: { landing: Landing }) {
               </div>
             </div>
           </section>
+          </SectionWrap>
         )}
 
+        <SectionWrap
+          id="testimonials"
+          label="Testimonios"
+          editMode={editMode}
+          activeSection={activeSection}
+          onSectionClick={onSectionClick}
+        >
         <TestimonialsSection
           testimonials={testimonials}
           title={`Lo que dicen quienes ya vivieron un evento en ${city}`}
           subtitle="Experiencias reales de comensales que ya se sentaron a la mesa con Neventia."
         />
+        </SectionWrap>
 
-        {/* EXPERIENCIA */}
+        <SectionWrap
+          id="gallery"
+          label="Galería"
+          editMode={editMode}
+          activeSection={activeSection}
+          onSectionClick={onSectionClick}
+        >
         <ExperienceScroll
           city={city}
           subtitle={
@@ -446,6 +567,7 @@ export function LandingView({ landing }: { landing: Landing }) {
               : undefined
           }
         />
+        </SectionWrap>
 
         {/* CTA FINAL */}
         <section className="section final">
@@ -469,7 +591,7 @@ export function LandingView({ landing }: { landing: Landing }) {
         <div className="wrap">
           <div className="footer-top">
             <div className="footer-brand">
-              <Link className="brand" href="/">
+              <Link className="brand" href={preview ? "#" : "/"}>
                 <BrandLogo stroke="#F6F4ED" />
                 <span className="name">neventia</span>
               </Link>

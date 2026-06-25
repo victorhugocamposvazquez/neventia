@@ -7,8 +7,9 @@ import {
   deleteLanding,
   type UpdateLandingState,
 } from "@/lib/actions/landings";
-import { LandingContentEditor } from "@/components/admin/LandingContentEditor";
+import { LandingVisualEditor } from "@/components/admin/LandingVisualEditor";
 import { mergeLandingContent } from "@/lib/landing-content";
+import type { LandingMeta } from "@/components/admin/landing-section-panels";
 import type { Landing, LandingContent } from "@/lib/types";
 
 function SaveButton() {
@@ -24,6 +25,11 @@ function SaveButton() {
   );
 }
 
+function toDatetimeLocal(iso: string | null): string {
+  if (!iso) return "";
+  return new Date(iso).toISOString().slice(0, 16);
+}
+
 export function LandingEditor({ landing }: { landing: Landing }) {
   const [state, formAction] = useActionState<UpdateLandingState, FormData>(
     updateLanding,
@@ -32,128 +38,52 @@ export function LandingEditor({ landing }: { landing: Landing }) {
   const [content, setContent] = useState<LandingContent>(() =>
     mergeLandingContent(landing.content)
   );
+  const [meta, setMeta] = useState<LandingMeta>(() => ({
+    name: landing.name,
+    slug: landing.slug,
+    status: landing.status,
+    city: landing.city ?? "",
+    region: landing.region ?? "",
+    eventDate: toDatetimeLocal(landing.event_date),
+    metaPixel: landing.meta_pixel_id ?? "",
+  }));
+
+  const patchMeta = (partial: Partial<LandingMeta>) => {
+    setMeta((prev) => ({ ...prev, ...partial }));
+  };
 
   return (
-    <div className="space-y-6">
-      <form action={formAction} className="space-y-6">
+    <div className="space-y-4">
+      <form action={formAction}>
         <input type="hidden" name="id" value={landing.id} />
+        <input type="hidden" name="content" value={JSON.stringify(content)} />
 
-      <div className="grid gap-4 rounded-2xl border border-forest-900/10 bg-white p-6 shadow-card sm:grid-cols-2">
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">Nombre</span>
-          <input
-            name="name"
-            defaultValue={landing.name}
-            required
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">
-            URL (slug)
-          </span>
-          <input
-            name="slug"
-            defaultValue={landing.slug}
-            required
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">Estado</span>
-          <select
-            name="status"
-            defaultValue={landing.status}
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          >
-            <option value="draft">Borrador</option>
-            <option value="published">Publicada</option>
-            <option value="archived">Archivada</option>
-          </select>
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">
-            Meta Pixel ID · opcional
-          </span>
-          <input
-            name="meta_pixel_id"
-            defaultValue={landing.meta_pixel_id ?? ""}
-            placeholder="1234567890"
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">Ciudad</span>
-          <input
-            name="city"
-            defaultValue={landing.city ?? ""}
-            placeholder="A Coruña"
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">
-            Región · opcional
-          </span>
-          <input
-            name="region"
-            defaultValue={landing.region ?? ""}
-            placeholder="Galicia"
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-forest-900">
-            Fecha y hora del evento
-          </span>
-          <span className="text-xs text-forest-800/55">
-            Cada landing es un evento concreto. Duplica la landing para otra fecha.
-          </span>
-          <input
-            name="event_date"
-            type="datetime-local"
-            required
-            defaultValue={
-              landing.event_date
-                ? new Date(landing.event_date).toISOString().slice(0, 16)
-                : ""
-            }
-            className="rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300"
-          />
-        </label>
-      </div>
-
-      <input type="hidden" name="content" value={JSON.stringify(content)} />
-
-      <div className="space-y-2">
-        <h2 className="text-lg font-bold text-forest-950">
-          Contenido de la landing
-        </h2>
-        <p className="text-sm text-forest-800/60">
-          Edita textos, imágenes y secciones de forma visual. Los cambios se
-          reflejan al guardar y puedes previsualizar con «Ver landing».
-        </p>
-      </div>
-
-      <LandingContentEditor content={content} onChange={setContent} />
-
-      {state.error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-          {state.error}
-        </p>
-      )}
-      {state.ok && (
-        <p className="rounded-xl bg-mint-200 px-4 py-3 text-sm font-medium text-forest-800">
-          Cambios guardados correctamente.
-        </p>
-      )}
-
-        <div className="flex items-center justify-between">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 px-1">
+          <div className="flex flex-wrap items-center gap-3">
+            {state.error && (
+              <p className="rounded-xl bg-red-50 px-4 py-2 text-sm text-red-700">
+                {state.error}
+              </p>
+            )}
+            {state.ok && (
+              <p className="rounded-xl bg-mint-200 px-4 py-2 text-sm font-medium text-forest-800">
+                Cambios guardados.
+              </p>
+            )}
+          </div>
           <SaveButton />
         </div>
+
+        <LandingVisualEditor
+          landing={landing}
+          content={content}
+          onContentChange={setContent}
+          meta={meta}
+          onMetaChange={patchMeta}
+        />
       </form>
 
-      <div className="border-t border-forest-900/10 pt-6">
+      <div className="border-t border-forest-900/10 px-1 pt-6">
         <DeleteForm id={landing.id} />
       </div>
     </div>
