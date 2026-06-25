@@ -7,7 +7,9 @@ import {
   deleteLanding,
   type UpdateLandingState,
 } from "@/lib/actions/landings";
-import type { Landing } from "@/lib/types";
+import { LandingContentEditor } from "@/components/admin/LandingContentEditor";
+import { mergeLandingContent } from "@/lib/landing-content";
+import type { Landing, LandingContent } from "@/lib/types";
 
 function SaveButton() {
   const { pending } = useFormStatus();
@@ -27,8 +29,8 @@ export function LandingEditor({ landing }: { landing: Landing }) {
     updateLanding,
     {}
   );
-  const [content, setContent] = useState(() =>
-    JSON.stringify(landing.content ?? {}, null, 2)
+  const [content, setContent] = useState<LandingContent>(() =>
+    mergeLandingContent(landing.content)
   );
 
   return (
@@ -121,22 +123,19 @@ export function LandingEditor({ landing }: { landing: Landing }) {
         </label>
       </div>
 
-      <div className="rounded-2xl border border-forest-900/10 bg-white p-6 shadow-card">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="font-bold text-forest-950">Contenido de la landing</h2>
-          <span className="text-xs text-forest-800/50">
-            Formato JSON · controla todas las secciones
-          </span>
-        </div>
-        <textarea
-          name="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          spellCheck={false}
-          rows={26}
-          className="w-full rounded-xl border border-forest-900/15 bg-forest-950 p-4 font-mono text-xs leading-relaxed text-mint-200 outline-none focus:ring-2 focus:ring-mint-400"
-        />
+      <input type="hidden" name="content" value={JSON.stringify(content)} />
+
+      <div className="space-y-2">
+        <h2 className="text-lg font-bold text-forest-950">
+          Contenido de la landing
+        </h2>
+        <p className="text-sm text-forest-800/60">
+          Edita textos, imágenes y secciones de forma visual. Los cambios se
+          reflejan al guardar y puedes previsualizar con «Ver landing».
+        </p>
       </div>
+
+      <LandingContentEditor content={content} onChange={setContent} />
 
       {state.error && (
         <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
