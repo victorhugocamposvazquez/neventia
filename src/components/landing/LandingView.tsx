@@ -358,34 +358,21 @@ export function LandingView({ landing }: { landing: Landing }) {
         <section className="section reserve" id="reservar">
           <div className="wrap reserve-grid">
             <div className="reserve-copy">
-              <span className="eyebrow on-dark">Reserva tu plaza</span>
-              <h2>
-                Aparta tu mesa
-                <br />
-                en menos de un minuto
-              </h2>
-              <p className="lede">
-                Completa el formulario y te llamaremos para confirmar tu plaza y
-                resolver cualquier duda. Es gratis y no necesitas tarjeta.
-              </p>
+              <p className="reserve-kicker">Solicita tu plaza</p>
+              <h2 className="reserve-headline">En menos de un minuto</h2>
+              <p className="lede">Es gratis y no necesitas tarjeta.</p>
               <ul className="reserve-points">
                 <li>
                   <span className="check">
                     <Check />
                   </span>{" "}
-                  Confirmación por teléfono en 24-48 h
+                  Confirmación por teléfono
                 </li>
                 <li>
                   <span className="check">
                     <Check />
                   </span>{" "}
                   Menú completo y bebidas incluidos
-                </li>
-                <li>
-                  <span className="check">
-                    <Check />
-                  </span>{" "}
-                  Cancela cuando quieras, sin coste
                 </li>
               </ul>
             </div>
@@ -525,7 +512,7 @@ export function LandingView({ landing }: { landing: Landing }) {
       {/* Sticky CTA móvil */}
       <div className="mobile-cta">
         <a className="btn btn-primary" href="#reservar">
-          Reservar mi plaza gratis · {freePrice}
+          Solicita tu plaza gratis · {freePrice}
         </a>
       </div>
     </>
