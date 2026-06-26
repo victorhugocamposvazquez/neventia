@@ -12,22 +12,25 @@ on conflict (id) do update set
   file_size_limit = excluded.file_size_limit,
   allowed_mime_types = excluded.allowed_mime_types;
 
--- Lectura pública (landings publicadas)
+-- Políticas idempotentes (pueden existir si ya se aplicó en remoto)
+drop policy if exists "landing_media_public_read" on storage.objects;
 create policy "landing_media_public_read"
 on storage.objects for select
 using (bucket_id = 'landing-media');
 
--- Subida / gestión solo usuarios autenticados (backoffice)
+drop policy if exists "landing_media_auth_insert" on storage.objects;
 create policy "landing_media_auth_insert"
 on storage.objects for insert
 to authenticated
 with check (bucket_id = 'landing-media');
 
+drop policy if exists "landing_media_auth_update" on storage.objects;
 create policy "landing_media_auth_update"
 on storage.objects for update
 to authenticated
 using (bucket_id = 'landing-media');
 
+drop policy if exists "landing_media_auth_delete" on storage.objects;
 create policy "landing_media_auth_delete"
 on storage.objects for delete
 to authenticated
