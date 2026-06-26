@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { LegalModal } from "@/components/site/LegalModal";
+import { PrivacidadContent } from "@/components/site/legal/PrivacidadContent";
 import { submitLead } from "@/lib/actions/leads";
-import { LEGAL_LINKS, RESERVATION_LEGAL } from "@/lib/legal";
+import { RESERVATION_LEGAL } from "@/lib/legal";
 
 type Party = { value: string; label: string };
 const PARTY: Party[] = [
@@ -92,6 +93,7 @@ export function ChatReserve({
   const [textValue, setTextValue] = useState("");
   const [shareHref, setShareHref] = useState("");
   const [sending, setSending] = useState(false);
+  const [legalOpen, setLegalOpen] = useState(false);
 
   const bodyRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -397,9 +399,19 @@ export function ChatReserve({
             <p className="chat-confirm-legal">
               Al pulsar <strong>Enviar solicitud</strong>, declaras tener{" "}
               <strong>45 años cumplidos o más</strong>, haber leído la{" "}
-              <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link> y entender que el
-              evento es <strong>gratuito</strong> e incluye una presentación informativa de
-              productos de salud y bienestar, <strong>sin obligación de compra</strong>.
+              <button
+                type="button"
+                className="chat-legal-link"
+                onClick={() => setLegalOpen(true)}
+              >
+                política de privacidad
+              </button>
+              , <strong>aceptar el ofrecimiento de productos y servicios</strong>{" "}
+              de Neventia y de empresas colaboradoras, así como recibir{" "}
+              <strong>llamadas comerciales y/o citas presenciales</strong>, y
+              entender que el evento es <strong>gratuito</strong> e incluye una
+              presentación informativa de productos de salud y bienestar,{" "}
+              <strong>sin obligación de compra</strong>.
             </p>
             <button
               type="button"
@@ -436,6 +448,15 @@ export function ChatReserve({
           </div>
         )}
       </div>
+
+      <LegalModal
+        open={legalOpen}
+        onClose={() => setLegalOpen(false)}
+        title="Política de privacidad"
+        updatedAt="20 de junio de 2026"
+      >
+        <PrivacidadContent inModal />
+      </LegalModal>
     </div>
   );
 }

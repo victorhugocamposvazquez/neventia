@@ -182,9 +182,13 @@ export function LeadForm({
         <p className="form-legal">
           Al pulsar <strong>Enviar solicitud</strong>, declaras tener{" "}
           <strong>45 años cumplidos o más</strong>, haber leído la{" "}
-          <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link> y entender que el
-          evento es <strong>gratuito</strong> e incluye una presentación informativa de productos
-          de salud y bienestar, <strong>sin obligación de compra</strong>.
+          <Link href={LEGAL_LINKS.privacidad}>política de privacidad</Link>,{" "}
+          <strong>aceptar el ofrecimiento de productos y servicios</strong> de
+          Neventia y de empresas colaboradoras, así como recibir{" "}
+          <strong>llamadas comerciales y/o citas presenciales</strong>, y
+          entender que el evento es <strong>gratuito</strong> e incluye una
+          presentación informativa de productos de salud y bienestar,{" "}
+          <strong>sin obligación de compra</strong>.
         </p>
         {state.fieldErrors?.legal && (
           <div className="field-err">{state.fieldErrors.legal}</div>

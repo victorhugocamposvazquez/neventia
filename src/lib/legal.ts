@@ -14,7 +14,7 @@ export const LEGAL_LINKS = {
 
 /** Versión del aviso mostrado al enviar una solicitud de plaza. */
 export const RESERVATION_LEGAL = {
-  version: "2026-06-19",
+  version: "2026-06-20",
   submitNotice:
-    "Al pulsar Enviar solicitud, declaras tener 45 años cumplidos o más, haber leído la política de privacidad y entender que el evento es gratuito e incluye una presentación informativa de productos de salud y bienestar, sin obligación de compra.",
+    "Al pulsar Enviar solicitud, declaras tener 45 años cumplidos o más, haber leído la política de privacidad, aceptar el ofrecimiento de productos y servicios de Neventia y de empresas colaboradoras, así como recibir llamadas comerciales y/o citas presenciales, y entender que el evento es gratuito e incluye una presentación informativa de productos de salud y bienestar, sin obligación de compra.",
 } as const;

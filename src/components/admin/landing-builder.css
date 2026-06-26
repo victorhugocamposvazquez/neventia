@@ -391,6 +391,44 @@
   color: #142e23;
 }
 
+.nv-site .landing-inline-upload {
+  margin-bottom: 8px;
+}
+
+.nv-site .landing-inline-upload-btn {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #142e23;
+  color: #f6f4ed;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-space, system-ui), sans-serif;
+}
+
+.nv-site .landing-inline-upload-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.nv-site .landing-inline-upload-error {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #b42318;
+}
+
+.nv-site .landing-inline-popover-or {
+  margin: 8px 0 6px;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(20, 46, 35, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 .nv-site .landing-inline-add {
   display: block;
   width: 100%;

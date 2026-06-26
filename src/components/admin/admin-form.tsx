@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 
 const fieldClass =
   "rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 outline-none focus:border-forest-700 focus:ring-2 focus:ring-mint-300";
@@ -97,9 +98,15 @@ export function ImageField({
 
   return (
     <div className="flex flex-col gap-1.5">
+      <ImageUploadButton
+        onUploaded={(url) => {
+          setBroken(false);
+          onChange(url);
+        }}
+      />
       <Field
         label={label}
-        hint={hint}
+        hint={hint ?? "También puedes pegar una URL externa."}
         value={value}
         onChange={(e) => {
           setBroken(false);
@@ -217,9 +224,9 @@ export function StringListEditor({
           </span>
         ))}
       </div>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <input
-          className={`${fieldClass} flex-1`}
+          className={`${fieldClass} min-w-[140px] flex-1`}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={placeholder}
@@ -230,12 +237,16 @@ export function StringListEditor({
             }
           }}
         />
+        <ImageUploadButton
+          label="Subir"
+          onUploaded={(url) => onChange([...items, url])}
+        />
         <button
           type="button"
           onClick={add}
           className="rounded-xl bg-forest-900 px-4 py-2 text-sm font-semibold text-white hover:bg-forest-800"
         >
-          Añadir
+          Añadir URL
         </button>
       </div>
     </div>

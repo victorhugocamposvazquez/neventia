@@ -8,6 +8,7 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
+import { ImageUploadButton } from "@/components/admin/ImageUploadButton";
 
 type InlineEditProps = {
   value: string;
@@ -198,13 +199,21 @@ export function InlineImage({
       )}
       {open && (
         <div className="landing-inline-popover" role="dialog">
+          <ImageUploadButton
+            variant="inline"
+            onUploaded={(url) => {
+              setDraft(url);
+              onChange(url);
+              setOpen(false);
+            }}
+          />
+          <p className="landing-inline-popover-or">o pega una URL</p>
           <label className="landing-inline-popover-label">URL de la imagen</label>
           <input
             type="url"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="https://…"
-            autoFocus
             onKeyDown={(e) => {
               e.stopPropagation();
               if (e.key === "Enter") {
@@ -223,7 +232,7 @@ export function InlineImage({
                 setOpen(false);
               }}
             >
-              Aplicar
+              Aplicar URL
             </button>
             <button
               type="button"
