@@ -7,12 +7,12 @@ import {
 import { CopyButton } from "@/components/admin/CopyButton";
 import { DeleteLeadButton } from "@/components/admin/DeleteLeadButton";
 import { LeadContactButtons } from "@/components/admin/LeadContactButtons";
+import { LeadStatusPipeline } from "@/components/admin/LeadStatusPipeline";
 import { AdminAlert, AdminCard } from "@/components/admin/admin-shell";
 import {
   addTimelineNote,
   toggleLeadTag,
   updateLeadNotes,
-  updateLeadStatus,
 } from "@/lib/actions/leads-admin";
 import {
   formatDateTimeEs,
@@ -26,25 +26,13 @@ import {
   telHref,
   whatsappHref,
 } from "@/lib/lead-contact";
-import type { LeadActivity, LeadStatus, LeadWithLanding } from "@/lib/types";
+import type { LeadActivity, LeadWithLanding } from "@/lib/types";
 
 const PARTY_LABELS: Record<string, string> = {
   pareja: "En pareja",
   solo: "Solo/a",
   amigos: "Con amigos",
 };
-
-const PIPELINE: { status: LeadStatus; label: string }[] = [
-  { status: "new", label: "Nuevo" },
-  { status: "contacted", label: "Contactado" },
-  { status: "confirmed", label: "Confirmado" },
-  { status: "attended", label: "Asistió" },
-];
-
-const OUTCOME: { status: LeadStatus; label: string; style: string }[] = [
-  { status: "no_show", label: "No asistió", style: "bg-zinc-200 text-zinc-700" },
-  { status: "discarded", label: "Descartado", style: "bg-red-100 text-red-700" },
-];
 
 const ACTIVITY_LABELS: Record<string, string> = {
   created: "Alta",
@@ -78,11 +66,6 @@ function activityText(a: LeadActivity): string {
   return ACTIVITY_LABELS[a.type] ?? a.type;
 }
 
-function pipelineIndex(status: LeadStatus) {
-  const i = PIPELINE.findIndex((s) => s.status === status);
-  return i;
-}
-
 export function LeadDetailView({
   lead,
   activities,
@@ -104,10 +87,6 @@ export function LeadDetailView({
     lead.phone,
     defaultWhatsAppMessage(lead.full_name, landing?.name ?? landing?.city)
   );
-  const currentPipe = pipelineIndex(lead.status);
-  const isOutcome =
-    lead.status === "no_show" || lead.status === "discarded";
-
   return (
     <div className="admin-lead-page">
       {error && <AdminAlert variant="error">{error}</AdminAlert>}
@@ -157,50 +136,11 @@ export function LeadDetailView({
           </span>
         </div>
 
-        <div className="admin-pipeline" role="group" aria-label="Estado del lead">
-          {PIPELINE.map(({ status, label }, index) => {
-            const active = lead.status === status;
-            const done = !isOutcome && currentPipe > index;
-            return (
-              <form key={status} action={updateLeadStatus} className="admin-pipeline-step">
-                <input type="hidden" name="id" value={lead.id} />
-                <input type="hidden" name="status" value={status} />
-                <input type="hidden" name="returnTo" value={detailReturn} />
-                <button
-                  type="submit"
-                  className={`admin-pipeline-btn ${
-                    active
-                      ? "admin-pipeline-btn--active"
-                      : done
-                        ? "admin-pipeline-btn--done"
-                        : ""
-                  }`}
-                >
-                  <span className="admin-pipeline-index">{index + 1}</span>
-                  {label}
-                </button>
-              </form>
-            );
-          })}
-        </div>
-
-        <div className="admin-status-row">
-          {OUTCOME.map(({ status, label, style }) => (
-            <form key={status} action={updateLeadStatus}>
-              <input type="hidden" name="id" value={lead.id} />
-              <input type="hidden" name="status" value={status} />
-              <input type="hidden" name="returnTo" value={detailReturn} />
-              <button
-                type="submit"
-                className={`admin-status-btn ${
-                  lead.status === status ? style : "admin-status-btn--idle"
-                } ${lead.status === status ? "ring-2 ring-forest-900/15" : ""}`}
-              >
-                {label}
-              </button>
-            </form>
-          ))}
-        </div>
+        <LeadStatusPipeline
+          leadId={lead.id}
+          status={lead.status}
+          returnTo={detailReturn}
+        />
       </div>
 
       <div className="admin-lead-layout">

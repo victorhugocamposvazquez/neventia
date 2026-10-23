@@ -17,7 +17,20 @@ export function LeadStatusSelect({
       <select
         name="status"
         defaultValue={status}
-        onChange={(e) => e.currentTarget.form?.requestSubmit()}
+        onChange={(e) => {
+          const next = e.currentTarget.value as LeadStatus;
+          if (
+            next === "new" &&
+            status !== "new" &&
+            !confirm(
+              "Al volver a Nuevo se borra el historial y las etiquetas de este lead. ¿Continuar?"
+            )
+          ) {
+            e.currentTarget.value = status;
+            return;
+          }
+          e.currentTarget.form?.requestSubmit();
+        }}
         className="admin-status-select"
         aria-label="Cambiar estado del lead"
       >

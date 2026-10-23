@@ -51,17 +51,44 @@ export async function updateLeadStatus(formData: FormData) {
     .eq("id", id)
     .maybeSingle();
 
+  const previous = (current?.status as LeadStatus | undefined) ?? null;
+  const revertingToNew = status === "new" && previous !== null && previous !== "new";
+
+  // Volver a «Nuevo» = reinicio: limpia timeline y etiquetas, no acumula historial.
+  if (revertingToNew) {
+    const { error } = await supabase
+      .from("leads")
+      .update({ status: "new", tags: [] })
+      .eq("id", id);
+    if (error) {
+      if (returnTo) redirect(`${returnTo}?error=${encodeURIComponent(error.message)}`);
+      return;
+    }
+
+    await supabase.from("lead_activities").delete().eq("lead_id", id);
+    await logActivity(
+      supabase,
+      id,
+      "created",
+      "Lead reiniciado a Nuevo. Historial anterior borrado."
+    );
+
+    revalidateLead(id);
+    if (returnTo) redirect(returnTo);
+    return;
+  }
+
   const { error } = await supabase.from("leads").update({ status }).eq("id", id);
   if (error) {
     if (returnTo) redirect(`${returnTo}?error=${encodeURIComponent(error.message)}`);
     return;
   }
 
-  if (current?.status && current.status !== status) {
+  if (previous && previous !== status) {
     await logActivity(supabase, id, "status_change", null, {
-      from: current.status,
+      from: previous,
       to: status,
-      label: `${LEAD_STATUS_LABELS[current.status as LeadStatus]} → ${LEAD_STATUS_LABELS[status]}`,
+      label: `${LEAD_STATUS_LABELS[previous]} → ${LEAD_STATUS_LABELS[status]}`,
     });
   }
 
