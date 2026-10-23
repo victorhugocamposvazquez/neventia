@@ -227,9 +227,9 @@ export async function logLeadContact(formData: FormData) {
   try {
     const supabase = createAdminClient();
     const labels = {
-      call: "Llamada iniciada desde el backoffice",
-      whatsapp: "WhatsApp abierto desde el backoffice",
-      email: "Email abierto desde el backoffice",
+      call: "Llamada iniciada",
+      whatsapp: "WhatsApp abierto",
+      email: "Email abierto",
     };
     await logActivity(supabase, id, type, labels[type]);
     revalidateLead(id);

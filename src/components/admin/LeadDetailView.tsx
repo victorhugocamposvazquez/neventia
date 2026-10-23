@@ -88,7 +88,7 @@ export function LeadDetailView({
     defaultWhatsAppMessage(lead.full_name, landing?.name ?? landing?.city)
   );
   return (
-    <div className="admin-lead-page">
+    <div className="admin-lead-page admin-lead-page--compact">
       {error && <AdminAlert variant="error">{error}</AdminAlert>}
       {saved === "notes" && (
         <AdminAlert variant="success">Notas guardadas.</AdminAlert>
@@ -97,7 +97,7 @@ export function LeadDetailView({
       <div className="admin-lead-hero">
         <div className="admin-lead-hero-main">
           <Link href={returnTo} className="admin-back-link">
-            ← Volver a leads
+            ← Leads
           </Link>
           <div className="admin-lead-identity">
             <div className="admin-lead-avatar" aria-hidden="true">
@@ -105,12 +105,13 @@ export function LeadDetailView({
             </div>
             <div className="min-w-0">
               <div className="admin-lead-title-row">
-                <h1 className="admin-page-title">{lead.full_name}</h1>
+                <h1 className="admin-page-title admin-page-title--sm">
+                  {lead.full_name}
+                </h1>
                 <LeadStatusBadge status={lead.status} />
                 <SourceBadge source={lead.source} />
               </div>
               <p className="admin-lead-meta">
-                Solicitud{" "}
                 <time dateTime={lead.created_at} title={formatDateTimeEs(lead.created_at)}>
                   {formatRelativeShort(lead.created_at)}
                 </time>
@@ -145,10 +146,7 @@ export function LeadDetailView({
 
       <div className="admin-lead-layout">
         <div className="admin-lead-main space-y-4">
-          <AdminCard
-            title="Actividad"
-            description="Lo último aparece arriba. Las llamadas y WhatsApp se registran al pulsar."
-          >
+          <AdminCard title="Actividad">
             <form action={addTimelineNote} className="admin-note-form">
               <input type="hidden" name="id" value={lead.id} />
               <input type="hidden" name="returnTo" value={detailReturn} />
@@ -172,22 +170,22 @@ export function LeadDetailView({
                 ) : (
                   activities.map((a) => (
                     <li key={a.id} className="admin-timeline-item">
-                      <time
-                        className="admin-timeline-time"
-                        dateTime={a.created_at}
-                        title={formatDateTimeEs(a.created_at)}
-                      >
-                        {formatRelativeShort(a.created_at)}
-                      </time>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`admin-timeline-dot ${ACTIVITY_DOT[a.type] ?? ""}`}
-                            aria-hidden="true"
-                          />
+                      <span
+                        className={`admin-timeline-dot ${ACTIVITY_DOT[a.type] ?? ""}`}
+                        aria-hidden="true"
+                      />
+                      <div className="admin-timeline-content">
+                        <div className="admin-timeline-meta">
                           <span className="admin-timeline-type">
                             {ACTIVITY_LABELS[a.type] ?? a.type}
                           </span>
+                          <time
+                            className="admin-timeline-time"
+                            dateTime={a.created_at}
+                            title={formatDateTimeEs(a.created_at)}
+                          >
+                            {formatRelativeShort(a.created_at)}
+                          </time>
                         </div>
                         <p className="admin-timeline-body">{activityText(a)}</p>
                       </div>
@@ -312,18 +310,18 @@ export function LeadDetailView({
             </div>
           </AdminCard>
 
-          <AdminCard title="Notas internas" description="Solo visibles aquí.">
+          <AdminCard title="Notas">
             <form action={updateLeadNotes}>
               <input type="hidden" name="id" value={lead.id} />
               <input type="hidden" name="returnTo" value={detailReturn} />
               <textarea
                 name="notes"
                 defaultValue={lead.notes ?? ""}
-                rows={4}
-                placeholder="Ej. confirmó por teléfono…"
+                rows={3}
+                placeholder="Nota interna…"
                 className="admin-note-textarea"
               />
-              <button type="submit" className="admin-btn-primary mt-2 w-full py-2">
+              <button type="submit" className="admin-btn-primary mt-2 w-full py-1.5 text-sm">
                 Guardar
               </button>
             </form>

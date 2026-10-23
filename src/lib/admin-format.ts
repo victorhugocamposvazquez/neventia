@@ -1,16 +1,14 @@
-/** Fecha relativa corta para el backoffice (es-ES). */
+/** Fecha relativa ultra-corta para el backoffice (no desborda layouts). */
 export function formatRelativeShort(iso: string, now = Date.now()): string {
   const then = new Date(iso).getTime();
   if (Number.isNaN(then)) return "—";
 
-  const diffSec = Math.round((then - now) / 1000);
-  const abs = Math.abs(diffSec);
-  const rtf = new Intl.RelativeTimeFormat("es", { numeric: "auto" });
+  const absSec = Math.abs(Math.round((then - now) / 1000));
 
-  if (abs < 60) return rtf.format(Math.round(diffSec), "second");
-  if (abs < 3600) return rtf.format(Math.round(diffSec / 60), "minute");
-  if (abs < 86400) return rtf.format(Math.round(diffSec / 3600), "hour");
-  if (abs < 86400 * 7) return rtf.format(Math.round(diffSec / 86400), "day");
+  if (absSec < 45) return "ahora";
+  if (absSec < 3600) return `${Math.round(absSec / 60)}m`;
+  if (absSec < 86400) return `${Math.round(absSec / 3600)}h`;
+  if (absSec < 86400 * 7) return `${Math.round(absSec / 86400)}d`;
 
   return new Date(iso).toLocaleDateString("es-ES", {
     day: "2-digit",
