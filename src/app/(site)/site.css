@@ -1593,7 +1593,7 @@
   text-align: center;
 }
 .nv-site .final-card {
-  background: var(--accent);
+  background: #9fffce;
   color: var(--ink);
   border-radius: var(--r-lg);
   padding: clamp(44px, 6vw, 80px) 28px;
