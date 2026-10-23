@@ -4,6 +4,7 @@ import { AdminLegalFooter } from "@/components/admin/AdminLegalFooter";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/lib/actions/auth";
 import { AdminNav } from "@/components/admin/AdminNav";
+import "./admin.css";
 
 export const metadata = { title: "Backoffice" };
 
@@ -19,7 +20,7 @@ export default async function AdminLayout({
 
   return (
     <div className="flex min-h-screen bg-cream">
-      <aside className="hidden w-64 shrink-0 flex-col justify-between bg-forest-950 p-6 text-white lg:flex">
+      <aside className="hidden w-[17.5rem] shrink-0 flex-col justify-between border-r border-white/5 bg-forest-950 p-6 text-white lg:flex">
         <div>
           <Link href="/admin" className="mb-10 block">
             <Logo variant="light" />
@@ -54,7 +55,7 @@ export default async function AdminLayout({
             <AdminNav variant="horizontal" />
           </div>
         </div>
-        <main className="flex-1 overflow-x-hidden p-6 lg:p-10">
+        <main className="admin-main flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">
           {children}
           <div className="mt-10 border-t border-forest-900/10 pt-6 lg:hidden">
             <AdminLegalFooter variant="mobile" />

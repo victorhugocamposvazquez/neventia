@@ -389,32 +389,25 @@ export function ChatReserve({
 
         {mode.kind === "confirm" && (
           <div className="chat-confirm chat-confirm--compact">
-            <p className="chat-confirm-summary chat-confirm-summary--inline">
-              <strong>{mode.draft.name}</strong>
-              <span className="chat-confirm-dot" aria-hidden="true">
-                ·
-              </span>
-              {mode.draft.phone}
-              <span className="chat-confirm-dot" aria-hidden="true">
-                ·
-              </span>
-              {mode.draft.party.label}
-              <span className="chat-confirm-dot" aria-hidden="true">
-                ·
-              </span>
-              {dateLabel}
-            </p>
-            <p className="chat-confirm-legal chat-confirm-legal--compact">
-              Confirmo ser <strong>mayor de 45 años</strong> y acepto la{" "}
-              <button
-                type="button"
-                className="chat-legal-link"
-                onClick={() => setLegalOpen(true)}
-              >
-                privacidad
-              </button>{" "}
-              y condiciones del evento gratuito.
-            </p>
+            <dl className="chat-confirm-grid">
+              <div className="chat-confirm-grid-item">
+                <dt>Nombre</dt>
+                <dd>{mode.draft.name}</dd>
+              </div>
+              <div className="chat-confirm-grid-item">
+                <dt>Teléfono</dt>
+                <dd>{mode.draft.phone}</dd>
+              </div>
+              <div className="chat-confirm-grid-item">
+                <dt>Asistencia</dt>
+                <dd>{mode.draft.party.label}</dd>
+              </div>
+              <div className="chat-confirm-grid-item">
+                <dt>Fecha</dt>
+                <dd>{dateLabel}</dd>
+              </div>
+            </dl>
+
             <button
               type="button"
               className="chat-submit chat-submit--compact"
@@ -423,26 +416,33 @@ export function ChatReserve({
             >
               {sending ? "Enviando…" : "Enviar solicitud"}
             </button>
+
+            <details className="chat-legal-details">
+              <summary>Condiciones al enviar</summary>
+              <ul className="chat-legal-list">
+                <li>Mayor de 45 años cumplidos.</li>
+                <li>Contacto comercial y citas presenciales relacionadas con el evento.</li>
+                <li>Evento gratuito con presentación informativa, sin obligación de compra.</li>
+              </ul>
+              <button type="button" className="chat-legal-link" onClick={() => setLegalOpen(true)}>
+                Ver política de privacidad
+              </button>
+            </details>
           </div>
         )}
 
         {mode.kind === "restart" && (
           <div className="chat-quick chat-quick--stack">
             {shareHref && (
-              <>
-                <a
-                  href={shareHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="chat-share-btn chat-share-btn--inline"
-                >
-                  <WhatsAppIcon />
-                  Compartir este evento con amigos
-                </a>
-                <p className="chat-share-note chat-share-note--inline">
-                  Recuerda avisarles: el evento es para mayores de 45 años. Las parejas tienen preferencia.
-                </p>
-              </>
+              <a
+                href={shareHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="chat-share-btn chat-share-btn--inline"
+              >
+                <WhatsAppIcon />
+                Compartir con amigos
+              </a>
             )}
             <button type="button" className="chat-restart" onClick={restart}>
               Enviar otra solicitud

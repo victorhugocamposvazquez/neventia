@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/admin", label: "Resumen" },
-  { href: "/admin/landings", label: "Landings" },
-  { href: "/admin/leads", label: "Leads" },
+  { href: "/admin", label: "Resumen", short: "Inicio" },
+  { href: "/admin/landings", label: "Landings", short: "Landings" },
+  { href: "/admin/leads", label: "Leads", short: "Leads" },
 ];
 
 export function AdminNav({
@@ -15,15 +15,16 @@ export function AdminNav({
   variant?: "vertical" | "horizontal";
 }) {
   const pathname = usePathname();
+  const horizontal = variant === "horizontal";
 
   return (
     <nav
       className={
-        variant === "horizontal"
-          ? "flex gap-2 overflow-x-auto"
-          : "flex flex-col gap-1"
+        horizontal ? "flex gap-2 overflow-x-auto pb-0.5" : "flex flex-col gap-0.5"
       }
+      aria-label="Menú del backoffice"
     >
+      {!horizontal && <p className="admin-nav-label">Menú</p>}
       {links.map((link) => {
         const active =
           link.href === "/admin"
@@ -33,17 +34,11 @@ export function AdminNav({
           <Link
             key={link.href}
             href={link.href}
-            className={`rounded-xl px-4 py-2.5 text-sm font-medium transition ${
-              active
-                ? variant === "horizontal"
-                  ? "bg-forest-900 text-white"
-                  : "bg-white/10 text-white"
-                : variant === "horizontal"
-                  ? "text-forest-800 hover:bg-forest-900/5"
-                  : "text-white/60 hover:bg-white/5 hover:text-white"
-            }`}
+            className={`admin-nav-link ${
+              horizontal ? "admin-nav-link--horizontal" : ""
+            } ${active ? "admin-nav-link--active" : "admin-nav-link--idle"}`}
           >
-            {link.label}
+            {horizontal ? link.short : link.label}
           </Link>
         );
       })}

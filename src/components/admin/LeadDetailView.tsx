@@ -6,6 +6,7 @@ import {
 } from "@/components/admin/Badges";
 import { DeleteLeadButton } from "@/components/admin/DeleteLeadButton";
 import { LeadContactButtons } from "@/components/admin/LeadContactButtons";
+import { AdminAlert, AdminCard } from "@/components/admin/admin-shell";
 import {
   addTimelineNote,
   toggleLeadTag,
@@ -30,27 +31,27 @@ const PARTY_LABELS: Record<string, string> = {
 const QUICK_STATUSES: { status: LeadStatus; label: string; style: string }[] = [
   { status: "contacted", label: "Contactado", style: "bg-amber-100 text-amber-800" },
   { status: "confirmed", label: "Confirmado", style: "bg-mint-200 text-forest-800" },
-  { status: "attended", label: "Asistió ✓", style: "bg-forest-900 text-mint-300" },
+  { status: "attended", label: "Asistió", style: "bg-forest-900 text-mint-300" },
   { status: "no_show", label: "No asistió", style: "bg-zinc-200 text-zinc-700" },
   { status: "discarded", label: "Descartado", style: "bg-red-100 text-red-700" },
 ];
 
 const ACTIVITY_LABELS: Record<string, string> = {
-  created: "Solicitud recibida",
-  status_change: "Cambio de estado",
+  created: "Alta",
+  status_change: "Estado",
   note: "Nota",
   call: "Llamada",
   whatsapp: "WhatsApp",
   email: "Email",
-  tag_added: "Etiqueta añadida",
-  tag_removed: "Etiqueta eliminada",
+  tag_added: "Etiqueta",
+  tag_removed: "Etiqueta",
   system: "Sistema",
 };
 
 function activityText(a: LeadActivity): string {
   if (a.type === "status_change" && a.meta?.label) return String(a.meta.label);
-  if (a.type === "tag_added") return `Etiqueta: ${a.body}`;
-  if (a.type === "tag_removed") return `Quitada: ${a.body}`;
+  if (a.type === "tag_added") return `+ ${a.body}`;
+  if (a.type === "tag_removed") return `− ${a.body}`;
   if (a.body) return a.body;
   return ACTIVITY_LABELS[a.type] ?? a.type;
 }
@@ -78,33 +79,24 @@ export function LeadDetailView({
   );
 
   return (
-    <div className="space-y-6">
-      {error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
-      )}
+    <div>
+      {error && <AdminAlert variant="error">{error}</AdminAlert>}
       {saved === "notes" && (
-        <p className="rounded-xl bg-mint-200 px-4 py-3 text-sm font-medium text-forest-800">
-          Notas guardadas.
-        </p>
+        <AdminAlert variant="success">Notas guardadas.</AdminAlert>
       )}
 
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <Link
-            href={returnTo}
-            className="text-sm text-forest-700 hover:underline"
-          >
+      <div className="admin-lead-hero">
+        <div className="min-w-0">
+          <Link href={returnTo} className="admin-back-link">
             ← Volver a leads
           </Link>
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <h1 className="text-3xl font-extrabold text-forest-950">
-              {lead.full_name}
-            </h1>
+          <div className="admin-lead-title-row">
+            <h1 className="admin-page-title">{lead.full_name}</h1>
             <LeadStatusBadge status={lead.status} />
             <SourceBadge source={lead.source} />
           </div>
-          <p className="mt-1 text-sm text-forest-800/60">
-            Alta{" "}
+          <p className="admin-lead-meta">
+            Solicitud del{" "}
             {new Date(lead.created_at).toLocaleString("es-ES", {
               day: "2-digit",
               month: "long",
@@ -114,190 +106,161 @@ export function LeadDetailView({
             })}
           </p>
         </div>
-        <DeleteLeadButton
-          id={lead.id}
-          name={lead.full_name}
-          returnTo={returnTo}
-        />
+        <DeleteLeadButton id={lead.id} name={lead.full_name} returnTo={returnTo} />
       </div>
 
-      <LeadContactButtons
-        leadId={lead.id}
-        tel={tel}
-        whatsapp={wa}
-        email={lead.email}
-      />
+      <div className="admin-lead-toolbar">
+        <div className="admin-lead-toolbar-row">
+          <LeadContactButtons
+            leadId={lead.id}
+            tel={tel}
+            whatsapp={wa}
+            email={lead.email}
+          />
+          <span className="hidden text-xs font-medium text-forest-800/50 sm:inline">
+            Estado: {LEAD_STATUS_LABELS[lead.status]}
+          </span>
+        </div>
+        <div className="admin-status-row">
+          {QUICK_STATUSES.map(({ status, label, style }) => (
+            <form key={status} action={updateLeadStatus}>
+              <input type="hidden" name="id" value={lead.id} />
+              <input type="hidden" name="status" value={status} />
+              <input type="hidden" name="returnTo" value={detailReturn} />
+              <button
+                type="submit"
+                className={`admin-status-btn ${
+                  lead.status === status ? style : "admin-status-btn--idle"
+                } ${lead.status === status ? "ring-2 ring-forest-900/15" : ""}`}
+              >
+                {label}
+              </button>
+            </form>
+          ))}
+        </div>
+      </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
-          {/* Cambio rápido de estado */}
-          <section className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card">
-            <h2 className="font-bold text-forest-950">Estado</h2>
-            <p className="mt-1 text-sm text-forest-800/60">
-              Marca si confirmaste, asistió o no vino al evento.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {QUICK_STATUSES.map(({ status, label, style }) => (
-                <form key={status} action={updateLeadStatus}>
-                  <input type="hidden" name="id" value={lead.id} />
-                  <input type="hidden" name="status" value={status} />
-                  <input type="hidden" name="returnTo" value={detailReturn} />
-                  <button
-                    type="submit"
-                    className={`rounded-full px-4 py-2 text-sm font-semibold transition hover:opacity-90 ${
-                      lead.status === status
-                        ? `${style} ring-2 ring-forest-900/20`
-                        : "border border-forest-900/15 bg-cream/40 text-forest-800"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                </form>
-              ))}
-            </div>
-            <p className="mt-3 text-xs text-forest-800/50">
-              Estado actual: <strong>{LEAD_STATUS_LABELS[lead.status]}</strong>
-            </p>
-          </section>
-
-          {/* Timeline */}
-          <section className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card">
-            <h2 className="font-bold text-forest-950">Timeline</h2>
-            <form action={addTimelineNote} className="mt-4 flex gap-2">
+      <div className="admin-lead-layout">
+        <div className="admin-lead-main space-y-4">
+          <AdminCard
+            title="Actividad"
+            description="Notas y seguimiento del lead. Lo último aparece arriba."
+          >
+            <form action={addTimelineNote} className="flex gap-2">
               <input type="hidden" name="id" value={lead.id} />
               <input type="hidden" name="returnTo" value={detailReturn} />
               <input
                 name="body"
-                placeholder="Añadir nota al timeline…"
-                className="min-w-0 flex-1 rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-mint-300"
+                placeholder="Escribe una nota rápida…"
+                className="min-w-0 flex-1 rounded-xl border border-forest-900/15 bg-cream/40 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-mint-300"
               />
-              <button
-                type="submit"
-                className="shrink-0 rounded-full bg-forest-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-forest-800"
-              >
+              <button type="submit" className="admin-btn-primary shrink-0 px-4 py-2">
                 Añadir
               </button>
             </form>
-            <ul className="mt-5 space-y-0 divide-y divide-forest-900/5">
-              {activities.length === 0 ? (
-                <li className="py-6 text-center text-sm text-forest-800/50">
-                  Sin actividad registrada aún.
-                </li>
-              ) : (
-                activities.map((a) => (
-                  <li key={a.id} className="flex gap-3 py-3">
-                    <div className="mt-0.5 w-20 shrink-0 text-xs text-forest-800/45">
-                      {new Date(a.created_at).toLocaleString("es-ES", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                        {ACTIVITY_LABELS[a.type] ?? a.type}
-                      </span>
-                      <p className="mt-0.5 text-sm text-forest-900">
-                        {activityText(a)}
-                      </p>
-                    </div>
+
+            <div className="admin-timeline-scroll mt-4">
+              <ul className="admin-timeline">
+                {activities.length === 0 ? (
+                  <li className="py-8 text-center text-sm text-forest-800/50">
+                    Sin actividad registrada.
                   </li>
-                ))
-              )}
-            </ul>
-          </section>
+                ) : (
+                  activities.map((a) => (
+                    <li key={a.id} className="admin-timeline-item">
+                      <time
+                        className="admin-timeline-time"
+                        dateTime={a.created_at}
+                      >
+                        {new Date(a.created_at).toLocaleString("es-ES", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </time>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="admin-timeline-dot" aria-hidden="true" />
+                          <span className="admin-timeline-type">
+                            {ACTIVITY_LABELS[a.type] ?? a.type}
+                          </span>
+                        </div>
+                        <p className="admin-timeline-body">{activityText(a)}</p>
+                      </div>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+          </AdminCard>
         </div>
 
-        <div className="space-y-6">
-          {/* Datos de contacto */}
-          <section className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card">
-            <h2 className="font-bold text-forest-950">Contacto</h2>
-            <dl className="mt-4 space-y-3 text-sm">
+        <aside className="admin-lead-aside">
+          <AdminCard title="Ficha">
+            <div className="admin-fact-grid">
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                  Teléfono
-                </dt>
-                <dd className="font-medium text-forest-950">
-                  {lead.phone ?? "—"}
-                </dd>
+                <p className="admin-fact-label">Teléfono</p>
+                <p className="admin-fact-value">{lead.phone ?? "—"}</p>
               </div>
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                  Email
-                </dt>
-                <dd className="font-medium text-forest-950">
-                  {lead.email ?? "—"}
-                </dd>
+                <p className="admin-fact-label">Email</p>
+                <p className="admin-fact-value">{lead.email ?? "—"}</p>
               </div>
               <div>
-                <dt className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                  Asistencia
-                </dt>
-                <dd className="font-medium text-forest-950">
+                <p className="admin-fact-label">Asistencia</p>
+                <p className="admin-fact-value">
                   {PARTY_LABELS[lead.party_type ?? ""] ?? `${lead.guests} pers.`}
-                </dd>
+                </p>
               </div>
               {lead.preferred_date && (
                 <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                    Fecha solicitada
-                  </dt>
-                  <dd className="font-medium text-forest-950">
-                    {lead.preferred_date}
-                  </dd>
+                  <p className="admin-fact-label">Fecha solicitada</p>
+                  <p className="admin-fact-value">{lead.preferred_date}</p>
                 </div>
               )}
-            </dl>
-          </section>
-
-          {/* Evento */}
-          <section className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card">
-            <h2 className="font-bold text-forest-950">Evento</h2>
-            {landing ? (
-              <dl className="mt-4 space-y-3 text-sm">
+              {landing ? (
+                <>
+                  <div>
+                    <p className="admin-fact-label">Evento</p>
+                    <p className="admin-fact-value">
+                      <Link
+                        href={`/${landing.slug}`}
+                        target="_blank"
+                        className="font-semibold text-forest-700 hover:underline"
+                      >
+                        {landing.name} ↗
+                      </Link>
+                    </p>
+                  </div>
+                  {landing.city && (
+                    <div>
+                      <p className="admin-fact-label">Ciudad</p>
+                      <p className="admin-fact-value">{landing.city}</p>
+                    </div>
+                  )}
+                  {landing.event_date && (
+                    <div>
+                      <p className="admin-fact-label">Fecha evento</p>
+                      <p className="admin-fact-value">
+                        {formatAdminEventDate(landing.event_date)}
+                      </p>
+                    </div>
+                  )}
+                </>
+              ) : (
                 <div>
-                  <dt className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                    Landing
-                  </dt>
-                  <dd>
-                    <Link
-                      href={`/${landing.slug}`}
-                      target="_blank"
-                      className="font-medium text-forest-700 hover:underline"
-                    >
-                      {landing.name} ↗
-                    </Link>
-                  </dd>
+                  <p className="admin-fact-label">Evento</p>
+                  <p className="admin-fact-value font-normal text-forest-800/50">
+                    Sin vincular
+                  </p>
                 </div>
-                {landing.city && (
-                  <div>
-                    <dt className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                      Ciudad
-                    </dt>
-                    <dd className="font-medium text-forest-950">{landing.city}</dd>
-                  </div>
-                )}
-                {landing.event_date && (
-                  <div>
-                    <dt className="text-xs font-semibold uppercase tracking-wide text-forest-800/45">
-                      Fecha evento
-                    </dt>
-                    <dd className="font-medium text-forest-950">
-                      {formatAdminEventDate(landing.event_date)}
-                    </dd>
-                  </div>
-                )}
-              </dl>
-            ) : (
-              <p className="mt-3 text-sm text-forest-800/50">Sin evento vinculado.</p>
-            )}
-          </section>
+              )}
+            </div>
+          </AdminCard>
 
-          {/* Etiquetas */}
-          <section className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card">
-            <h2 className="font-bold text-forest-950">Etiquetas</h2>
-            <div className="mt-3 flex flex-wrap gap-2">
+          <AdminCard title="Etiquetas">
+            <div className="flex flex-wrap gap-1.5">
               {SUGGESTED_LEAD_TAGS.map((tag) => {
                 const active = tags.includes(tag);
                 return (
@@ -307,11 +270,7 @@ export function LeadDetailView({
                     <input type="hidden" name="returnTo" value={detailReturn} />
                     <button
                       type="submit"
-                      className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                        active
-                          ? "bg-forest-900 text-mint-300"
-                          : "border border-forest-900/15 bg-cream/40 text-forest-800 hover:bg-cream"
-                      }`}
+                      className={`admin-tag-btn ${active ? "admin-tag-btn--on" : "admin-tag-btn--off"}`}
                     >
                       {tag}
                     </button>
@@ -319,63 +278,29 @@ export function LeadDetailView({
                 );
               })}
             </div>
-            {tags.filter((t) => !SUGGESTED_LEAD_TAGS.includes(t as (typeof SUGGESTED_LEAD_TAGS)[number])).length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {tags
-                  .filter(
-                    (t) =>
-                      !SUGGESTED_LEAD_TAGS.includes(
-                        t as (typeof SUGGESTED_LEAD_TAGS)[number]
-                      )
-                  )
-                  .map((tag) => (
-                    <form key={tag} action={toggleLeadTag}>
-                      <input type="hidden" name="id" value={lead.id} />
-                      <input type="hidden" name="tag" value={tag} />
-                      <input type="hidden" name="returnTo" value={detailReturn} />
-                      <button
-                        type="submit"
-                        className="rounded-full bg-forest-900 px-3 py-1 text-xs font-semibold text-mint-300"
-                      >
-                        {tag} ×
-                      </button>
-                    </form>
-                  ))}
-              </div>
-            )}
-          </section>
+          </AdminCard>
 
-          {/* Notas internas */}
-          <section className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card">
-            <h2 className="font-bold text-forest-950">Notas internas</h2>
-            <p className="mt-1 text-xs text-forest-800/50">
-              Solo visibles en el backoffice. Al guardar, se añade al timeline si hay cambio.
-            </p>
-            <form action={updateLeadNotes} className="mt-3">
+          <AdminCard title="Notas internas" description="Solo visibles aquí.">
+            <form action={updateLeadNotes}>
               <input type="hidden" name="id" value={lead.id} />
               <input type="hidden" name="returnTo" value={detailReturn} />
               <textarea
                 name="notes"
                 defaultValue={lead.notes ?? ""}
-                rows={5}
-                placeholder="Ej. prefiere mesa tranquila, confirmó por teléfono el martes…"
-                className="w-full rounded-xl border border-forest-900/15 bg-cream/40 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-mint-300"
+                rows={4}
+                placeholder="Ej. confirmó por teléfono…"
+                className="w-full rounded-xl border border-forest-900/15 bg-cream/40 px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-mint-300"
               />
-              <button
-                type="submit"
-                className="mt-3 w-full rounded-full bg-forest-900 py-2.5 text-sm font-semibold text-white hover:bg-forest-800"
-              >
-                Guardar notas
+              <button type="submit" className="admin-btn-primary mt-2 w-full py-2">
+                Guardar
               </button>
             </form>
-          </section>
+          </AdminCard>
 
-          {/* UTM / consents */}
           {(Object.keys(lead.utm ?? {}).length > 0 || lead.consents) && (
-            <section className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card">
-              <h2 className="font-bold text-forest-950">Atribución</h2>
+            <AdminCard title="Atribución">
               {Object.keys(lead.utm ?? {}).length > 0 && (
-                <dl className="mt-3 space-y-1 text-xs text-forest-800/70">
+                <dl className="space-y-1 text-xs text-forest-800/70">
                   {Object.entries(lead.utm).map(([k, v]) => (
                     <div key={k} className="flex justify-between gap-2">
                       <dt className="font-medium">{k}</dt>
@@ -385,16 +310,18 @@ export function LeadDetailView({
                 </dl>
               )}
               {lead.consents && (
-                <p className="mt-3 text-xs text-forest-800/50">
-                  Consentimiento registrado{" "}
+                <p className="mt-2 text-xs text-forest-800/50">
+                  Consentimiento{" "}
                   {lead.consents.submitted_at
-                    ? new Date(String(lead.consents.submitted_at)).toLocaleString("es-ES")
+                    ? new Date(String(lead.consents.submitted_at)).toLocaleString(
+                        "es-ES"
+                      )
                     : ""}
                 </p>
               )}
-            </section>
+            </AdminCard>
           )}
-        </div>
+        </aside>
       </div>
     </div>
   );

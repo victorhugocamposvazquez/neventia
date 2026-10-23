@@ -1167,6 +1167,46 @@
   gap: 6px;
   min-height: 0;
 }
+.nv-site .chat-confirm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 0.75rem;
+  margin: 0;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--cream);
+}
+.nv-site .chat-confirm-grid-item dt {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+}
+.nv-site .chat-confirm-grid-item dd {
+  margin: 0.1rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.nv-site .chat-legal-details {
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+.nv-site .chat-legal-details summary {
+  cursor: pointer;
+  list-style: none;
+  text-decoration: underline;
+  opacity: 0.85;
+}
+.nv-site .chat-legal-details summary::-webkit-details-marker {
+  display: none;
+}
+.nv-site .chat-legal-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+}
 .nv-site .chat-submit {
   width: 100%;
   font-family: inherit;

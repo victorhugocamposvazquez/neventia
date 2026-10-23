@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
 import { SourceBadge } from "@/components/admin/Badges";
 import { LeadStatusSelect } from "@/components/admin/LeadStatusSelect";
+import { AdminAlert, AdminPageHeader } from "@/components/admin/admin-shell";
+import { createClient } from "@/lib/supabase/server";
 import type { Landing, Lead, LeadSource, LeadStatus } from "@/lib/types";
 
 type Search = {
@@ -53,34 +54,26 @@ export default async function LeadsPage({
   const returnTo = `/admin/leads${exportParams.toString() ? `?${exportParams}` : ""}`;
 
   return (
-    <div className="space-y-6">
-      {sp.error && (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-          {sp.error}
-        </p>
-      )}
+    <div>
+      {sp.error && <AdminAlert variant="error">{sp.error}</AdminAlert>}
       {sp.deleted && (
-        <p className="rounded-xl bg-mint-200 px-4 py-3 text-sm font-medium text-forest-800">
-          Lead eliminado correctamente.
-        </p>
+        <AdminAlert variant="success">Lead eliminado correctamente.</AdminAlert>
       )}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold text-forest-950">Leads</h1>
-          <p className="mt-1 text-forest-800/70">
-            {leads.length} resultado{leads.length === 1 ? "" : "s"}
-          </p>
-        </div>
-        <a
-          href={`/admin/leads/export?${exportParams.toString()}`}
-          className="rounded-full bg-forest-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-forest-800"
-        >
-          Exportar CSV
-        </a>
-      </div>
 
-      {/* Filtros */}
-      <form className="flex flex-wrap items-end gap-3 rounded-2xl border border-forest-900/10 bg-white p-4 shadow-card">
+      <AdminPageHeader
+        title="Leads"
+        description={`${leads.length} resultado${leads.length === 1 ? "" : "s"}`}
+        actions={
+          <a
+            href={`/admin/leads/export?${exportParams.toString()}`}
+            className="admin-btn-primary"
+          >
+            Exportar CSV
+          </a>
+        }
+      />
+
+      <form className="admin-filters mb-5">
         <Filter label="Origen" name="source" value={sp.source}>
           <option value="">Todos</option>
           <option value="landing">Landing</option>
@@ -104,21 +97,15 @@ export default async function LeadsPage({
             </option>
           ))}
         </Filter>
-        <button
-          type="submit"
-          className="rounded-full bg-forest-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-forest-800"
-        >
+        <button type="submit" className="admin-btn-primary py-2">
           Filtrar
         </button>
-        <Link
-          href="/admin/leads"
-          className="rounded-full px-4 py-2.5 text-sm font-medium text-forest-700 hover:underline"
-        >
+        <Link href="/admin/leads" className="admin-btn-ghost pb-2">
           Limpiar
         </Link>
       </form>
 
-      <div className="overflow-x-auto rounded-2xl border border-forest-900/10 bg-white shadow-card">
+      <div className="admin-table-wrap">
         {leads.length === 0 ? (
           <p className="px-6 py-12 text-center text-forest-800/60">
             {sp.source || sp.status || sp.landing
@@ -126,23 +113,23 @@ export default async function LeadsPage({
               : "Aún no hay leads. Envía el formulario desde una landing publicada (p. ej. /a-coruna) y recarga esta página."}
           </p>
         ) : (
-          <table className="w-full min-w-[760px] text-left text-sm">
-            <thead className="border-b border-forest-900/10 bg-cream/50 text-xs uppercase tracking-wide text-forest-800/60">
+          <table className="admin-table">
+            <thead>
               <tr>
-                <th className="px-5 py-3">Nombre</th>
-                <th className="px-5 py-3">Contacto</th>
-                <th className="px-5 py-3">Reserva</th>
-                <th className="px-5 py-3">Evento</th>
-                <th className="px-5 py-3">Origen</th>
-                <th className="px-5 py-3">Estado</th>
-                <th className="px-5 py-3">Fecha</th>
-                <th className="px-5 py-3"></th>
+                <th>Nombre</th>
+                <th>Contacto</th>
+                <th>Reserva</th>
+                <th>Evento</th>
+                <th>Origen</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-forest-900/5">
+            <tbody>
               {leads.map((lead) => (
-                <tr key={lead.id} className="align-middle hover:bg-cream/30">
-                  <td className="px-5 py-3 font-semibold text-forest-950">
+                <tr key={lead.id}>
+                  <td className="font-semibold text-forest-950">
                     <Link
                       href={`/admin/leads/${lead.id}`}
                       className="hover:text-forest-700 hover:underline"
@@ -150,7 +137,7 @@ export default async function LeadsPage({
                       {lead.full_name}
                     </Link>
                   </td>
-                  <td className="px-5 py-3 text-forest-800/80">
+                  <td className="text-forest-800/80">
                     {lead.phone && <div>{lead.phone}</div>}
                     {lead.email && (
                       <div className="text-xs text-forest-800/50">
@@ -158,7 +145,7 @@ export default async function LeadsPage({
                       </div>
                     )}
                   </td>
-                  <td className="px-5 py-3 text-forest-800/80">
+                  <td className="text-forest-800/80">
                     {lead.preferred_date && (
                       <div className="text-sm">{lead.preferred_date}</div>
                     )}
@@ -167,21 +154,21 @@ export default async function LeadsPage({
                         `${lead.guests} pers.`}
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-forest-800/80">
+                  <td className="text-forest-800/80">
                     {lead.landing_id
                       ? (landingMap.get(lead.landing_id) ?? "—")
                       : "—"}
                   </td>
-                  <td className="px-5 py-3">
+                  <td>
                     <SourceBadge source={lead.source as LeadSource} />
                   </td>
-                  <td className="px-5 py-3">
+                  <td>
                     <LeadStatusSelect
                       id={lead.id}
                       status={lead.status as LeadStatus}
                     />
                   </td>
-                  <td className="px-5 py-3 text-xs text-forest-800/50">
+                  <td className="text-xs text-forest-800/50">
                     {new Date(lead.created_at).toLocaleString("es-ES", {
                       day: "2-digit",
                       month: "2-digit",
@@ -189,7 +176,7 @@ export default async function LeadsPage({
                       minute: "2-digit",
                     })}
                   </td>
-                  <td className="px-5 py-3 text-right">
+                  <td className="text-right">
                     <Link
                       href={`/admin/leads/${lead.id}`}
                       className="text-xs font-semibold text-forest-700 hover:underline"
@@ -219,15 +206,9 @@ function Filter({
   children: React.ReactNode;
 }) {
   return (
-    <label className="flex flex-col gap-1">
-      <span className="text-xs font-semibold uppercase tracking-wide text-forest-800/50">
-        {label}
-      </span>
-      <select
-        name={name}
-        defaultValue={value ?? ""}
-        className="rounded-lg border border-forest-900/15 bg-cream/40 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-mint-300"
-      >
+    <label className="admin-filter">
+      <span>{label}</span>
+      <select name={name} defaultValue={value ?? ""}>
         {children}
       </select>
     </label>

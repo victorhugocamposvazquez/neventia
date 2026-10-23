@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { LeadStatusBadge, SourceBadge } from "@/components/admin/Badges";
+import { AdminCard, AdminPageHeader } from "@/components/admin/admin-shell";
 import { createClient } from "@/lib/supabase/server";
 import type { Lead } from "@/lib/types";
-import { LeadStatusBadge, SourceBadge } from "@/components/admin/Badges";
 
 function weekAgoISO() {
   return new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
@@ -59,40 +60,37 @@ export default async function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-extrabold text-forest-950">Resumen</h1>
-        <p className="mt-1 text-forest-800/70">
-          Vista general de tus eventos y la captación de asistentes.
-        </p>
-      </div>
+    <div>
+      <AdminPageHeader
+        title="Resumen"
+        description="Vista general de tus eventos y la captación de asistentes."
+      />
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-6">
+      <div className="admin-stat-grid mb-6">
         {stats.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-2xl border border-forest-900/10 bg-white p-5 shadow-card"
-          >
-            <p className="text-3xl font-extrabold text-forest-950">{s.value}</p>
-            <p className="mt-1 text-xs font-medium text-forest-800/60">
-              {s.label}
-            </p>
+          <div key={s.label} className="admin-stat">
+            <p className="admin-stat-value">{s.value}</p>
+            <p className="admin-stat-label">{s.label}</p>
           </div>
         ))}
       </div>
 
-      <div className="rounded-2xl border border-forest-900/10 bg-white shadow-card">
-        <div className="flex items-center justify-between border-b border-forest-900/10 px-6 py-4">
-          <h2 className="font-bold text-forest-950">Últimos leads</h2>
-          <Link
-            href="/admin/leads"
-            className="text-sm font-semibold text-forest-700 hover:underline"
-          >
+      <AdminCard
+        title="Últimos leads"
+        noPadding
+        bodyClassName=""
+        className="overflow-hidden"
+      >
+        <div className="flex items-center justify-between border-b border-forest-900/10 px-5 py-3">
+          <span className="text-xs font-medium text-forest-800/50">
+            Actividad reciente
+          </span>
+          <Link href="/admin/leads" className="admin-btn-ghost text-sm">
             Ver todos →
           </Link>
         </div>
         {recent.length === 0 ? (
-          <p className="px-6 py-10 text-center text-forest-800/60">
+          <p className="px-5 py-10 text-center text-forest-800/60">
             Aún no hay leads. Comparte tu landing para empezar a recibirlos.
           </p>
         ) : (
@@ -100,7 +98,7 @@ export default async function AdminDashboard() {
             {recent.map((lead) => (
               <li
                 key={lead.id}
-                className="flex flex-wrap items-center justify-between gap-3 px-6 py-3.5"
+                className="flex flex-wrap items-center justify-between gap-3 px-5 py-3"
               >
                 <div>
                   <Link
@@ -124,7 +122,7 @@ export default async function AdminDashboard() {
             ))}
           </ul>
         )}
-      </div>
+      </AdminCard>
     </div>
   );
 }

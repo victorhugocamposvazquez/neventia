@@ -24,15 +24,21 @@ export function LeadContactButtons({
     router.refresh();
   }
 
+  if (!tel && !whatsapp && !email) {
+    return (
+      <p className="text-sm text-forest-800/50">Sin datos de contacto.</p>
+    );
+  }
+
   return (
     <div className="flex flex-wrap gap-2">
       {tel && (
         <a
           href={tel}
           onClick={() => void track("call")}
-          className="inline-flex items-center gap-2 rounded-full bg-forest-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-forest-800"
+          className="admin-btn-primary py-2"
         >
-          📞 Llamar
+          Llamar
         </a>
       )}
       {whatsapp && (
@@ -41,7 +47,7 @@ export function LeadContactButtons({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => void track("whatsapp")}
-          className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
         >
           WhatsApp
         </a>
@@ -50,9 +56,9 @@ export function LeadContactButtons({
         <a
           href={`mailto:${email}`}
           onClick={() => void track("email")}
-          className="inline-flex items-center gap-2 rounded-full border border-forest-900/15 bg-white px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-cream"
+          className="inline-flex items-center justify-center rounded-full border border-forest-900/15 bg-white px-4 py-2 text-sm font-semibold text-forest-900 transition hover:bg-cream"
         >
-          ✉️ Email
+          Email
         </a>
       )}
     </div>
