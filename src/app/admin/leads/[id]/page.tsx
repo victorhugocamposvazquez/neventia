@@ -8,7 +8,7 @@ export default async function LeadDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ saved?: string; error?: string }>;
+  searchParams: Promise<{ saved?: string; error?: string; from?: string }>;
 }) {
   const { id } = await params;
   const sp = await searchParams;
@@ -50,7 +50,6 @@ export default async function LeadDetailPage({
 
   const activities = (activitiesData as LeadActivity[]) ?? [];
 
-  // Si no hay actividades pero el lead existe, mostrar al menos la fecha de alta.
   if (activities.length === 0) {
     activities.push({
       id: "synthetic-created",
@@ -62,8 +61,9 @@ export default async function LeadDetailPage({
     });
   }
 
-  const returnParams = new URLSearchParams();
-  const returnTo = `/admin/leads`;
+  const from = sp.from?.trim();
+  const returnTo =
+    from && from.startsWith("/admin/leads") ? from : "/admin/leads";
 
   return (
     <LeadDetailView

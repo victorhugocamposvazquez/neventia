@@ -1008,3 +1008,393 @@
 .admin-nav-link--horizontal.admin-nav-link--idle:hover {
   background: color-mix(in srgb, var(--color-forest-900) 5%, transparent);
 }
+
+/* —— Leads list & detail polish —— */
+
+.admin-search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-forest-900) 10%, transparent);
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+.admin-search-field {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 12rem;
+  align-items: center;
+}
+
+.admin-search-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: color-mix(in srgb, var(--color-forest-800) 45%, transparent);
+  pointer-events: none;
+}
+
+.admin-search-field input {
+  width: 100%;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--color-forest-900) 14%, transparent);
+  background: color-mix(in srgb, var(--color-cream) 45%, white);
+  padding: 0.65rem 1rem 0.65rem 2.5rem;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.admin-search-field input:focus {
+  border-color: var(--color-forest-700);
+  box-shadow: 0 0 0 2px var(--color-mint-300);
+}
+
+.admin-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  margin-left: 0.35rem;
+  border-radius: 9999px;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--color-forest-900) 8%, transparent);
+  color: inherit;
+}
+
+.admin-chip--active .admin-chip-count {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.admin-list-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.admin-list-contact-btn {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  color: var(--color-forest-900);
+  background: color-mix(in srgb, var(--color-cream) 70%, white);
+  border: 1px solid color-mix(in srgb, var(--color-forest-900) 12%, transparent);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-list-contact-btn:hover {
+  background: var(--color-forest-900);
+  color: #fff;
+}
+
+.admin-list-contact-btn--wa:hover {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
+}
+
+.admin-table-row--new td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-mint-500);
+}
+
+.admin-lead-card--row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0;
+  overflow: hidden;
+}
+
+.admin-lead-card-main {
+  flex: 1;
+  min-width: 0;
+  padding: 0.9rem 0.35rem 0.9rem 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.admin-lead-card--row > .admin-list-contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.65rem 0.75rem 0.65rem 0;
+}
+
+.admin-lead-page {
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-lead-page {
+    padding-bottom: 0;
+  }
+}
+
+.admin-lead-identity {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-top: 0.35rem;
+}
+
+.admin-lead-avatar {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  background: var(--color-forest-900);
+  color: var(--color-mint-300);
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.admin-lead-hero-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-pipeline {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-forest-900) 8%, transparent);
+}
+
+@media (max-width: 640px) {
+  .admin-pipeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.admin-pipeline-step {
+  min-width: 0;
+}
+
+.admin-pipeline-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-forest-900) 12%, transparent);
+  background: color-mix(in srgb, var(--color-cream) 55%, white);
+  padding: 0.55rem 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-forest-800);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-pipeline-btn:hover {
+  background: var(--color-cream);
+}
+
+.admin-pipeline-btn--done {
+  background: var(--color-mint-200);
+  border-color: color-mix(in srgb, var(--color-mint-500) 35%, transparent);
+  color: var(--color-forest-900);
+}
+
+.admin-pipeline-btn--active {
+  background: var(--color-forest-900);
+  border-color: var(--color-forest-900);
+  color: #fff;
+}
+
+.admin-pipeline-index {
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.admin-contact-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.admin-contact-btns--compact {
+  width: 100%;
+}
+
+.admin-contact-btns--compact .admin-contact-btn {
+  flex: 1;
+  justify-content: center;
+}
+
+.admin-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 9999px;
+  padding: 0.55rem 0.95rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.admin-contact-btn--call {
+  background: var(--color-forest-900);
+  color: #fff;
+}
+
+.admin-contact-btn--call:hover {
+  background: var(--color-forest-800);
+}
+
+.admin-contact-btn--wa {
+  background: #25d366;
+  color: #fff;
+}
+
+.admin-contact-btn--wa:hover {
+  opacity: 0.92;
+}
+
+.admin-contact-btn--mail {
+  background: #fff;
+  color: var(--color-forest-900);
+  border: 1px solid color-mix(in srgb, var(--color-forest-900) 14%, transparent);
+}
+
+.admin-contact-btn--mail:hover {
+  background: var(--color-cream);
+}
+
+.admin-fact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.admin-fact-link {
+  color: var(--color-forest-700);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.admin-fact-link:hover {
+  text-decoration: underline;
+}
+
+.admin-copy-btn {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--color-forest-900) 12%, transparent);
+  background: color-mix(in srgb, var(--color-cream) 60%, white);
+  padding: 0.15rem 0.55rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--color-forest-800);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-copy-btn:hover {
+  background: var(--color-cream);
+}
+
+.admin-note-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-note-input,
+.admin-note-textarea {
+  width: 100%;
+  min-width: 0;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-forest-900) 14%, transparent);
+  background: color-mix(in srgb, var(--color-cream) 45%, white);
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.admin-note-input:focus,
+.admin-note-textarea:focus {
+  border-color: var(--color-forest-700);
+  box-shadow: 0 0 0 2px var(--color-mint-300);
+}
+
+.admin-timeline-dot--mint {
+  background: var(--color-mint-500);
+  box-shadow: 0 0 0 3px var(--color-mint-200);
+}
+
+.admin-timeline-dot--blue {
+  background: #3b82f6;
+  box-shadow: 0 0 0 3px #dbeafe;
+}
+
+.admin-timeline-dot--amber {
+  background: #d97706;
+  box-shadow: 0 0 0 3px #fef3c7;
+}
+
+.admin-timeline-dot--forest {
+  background: var(--color-forest-900);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-forest-900) 15%, white);
+}
+
+.admin-timeline-dot--wa {
+  background: #25d366;
+  box-shadow: 0 0 0 3px #dcfce7;
+}
+
+.admin-timeline-dot--zinc {
+  background: #a1a1aa;
+  box-shadow: 0 0 0 3px #f4f4f5;
+}
+
+.admin-lead-mobile-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+  border-top: 1px solid color-mix(in srgb, var(--color-forest-900) 10%, transparent);
+  background: color-mix(in srgb, var(--color-cream) 88%, white);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 -10px 30px -18px rgba(20, 46, 35, 0.35);
+}
+
+@media (min-width: 1024px) {
+  .admin-lead-mobile-cta {
+    display: none;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
