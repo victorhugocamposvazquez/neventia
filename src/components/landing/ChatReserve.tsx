@@ -229,7 +229,7 @@ export function ChatReserve({
     await botSay('Y para terminar: ¿cómo vienes? <b>Las parejas tienen preferencia</b> para entrar.');
     const party = await askChips(PARTY);
 
-    await botSay("Revisa tu solicitud y pulsa <b>Enviar solicitud</b> para confirmar.");
+    await botSay("¿Todo correcto? Confirma abajo.");
     const ok = await askConfirm({ name, phone, party });
 
     if (!ok) {
@@ -388,34 +388,36 @@ export function ChatReserve({
         )}
 
         {mode.kind === "confirm" && (
-          <div className="chat-confirm">
-            <div className="chat-confirm-summary">
+          <div className="chat-confirm chat-confirm--compact">
+            <p className="chat-confirm-summary chat-confirm-summary--inline">
               <strong>{mode.draft.name}</strong>
-              <span>{mode.draft.phone}</span>
-              <span>
-                {mode.draft.party.label} · {dateLabel}
+              <span className="chat-confirm-dot" aria-hidden="true">
+                ·
               </span>
-            </div>
-            <p className="chat-confirm-legal">
-              Al pulsar <strong>Enviar solicitud</strong>, declaras tener{" "}
-              <strong>45 años cumplidos o más</strong>, haber leído la{" "}
+              {mode.draft.phone}
+              <span className="chat-confirm-dot" aria-hidden="true">
+                ·
+              </span>
+              {mode.draft.party.label}
+              <span className="chat-confirm-dot" aria-hidden="true">
+                ·
+              </span>
+              {dateLabel}
+            </p>
+            <p className="chat-confirm-legal chat-confirm-legal--compact">
+              Confirmo ser <strong>mayor de 45 años</strong> y acepto la{" "}
               <button
                 type="button"
                 className="chat-legal-link"
                 onClick={() => setLegalOpen(true)}
               >
-                política de privacidad
-              </button>
-              , <strong>aceptar el ofrecimiento de productos y servicios</strong>{" "}
-              de Neventia y de empresas colaboradoras, así como recibir{" "}
-              <strong>llamadas comerciales y/o citas presenciales</strong>, y
-              entender que el evento es <strong>gratuito</strong> e incluye una
-              presentación informativa de productos de salud y bienestar,{" "}
-              <strong>sin obligación de compra</strong>.
+                privacidad
+              </button>{" "}
+              y condiciones del evento gratuito.
             </p>
             <button
               type="button"
-              className="chat-submit"
+              className="chat-submit chat-submit--compact"
               disabled={sending}
               onClick={handleConfirmSubmit}
             >

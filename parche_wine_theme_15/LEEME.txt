@@ -1,0 +1,55 @@
+PARCHE wine_theme_15 (TEMA PADRE ACTIVO) — Recargo de equivalencia
+===================================================================
+
+NO actives el child theme. Este parche va sobre el tema padre wine_theme_15,
+que se queda como tema activo. Si el child está en el servidor, puedes
+borrarlo (themes/child_wine_theme_15/) o dejarlo desactivado.
+
+
+PASO 1 — SUSTITUIR LA PLANTILLA ROTA DEL MINI-CARRITO
+-----------------------------------------------------
+Por FTP, sube este archivo (sobrescribe el existente):
+
+  ORIGEN:  modules/ps_shoppingcart/ps_shoppingcart.tpl  (de este parche)
+  DESTINO: themes/wine_theme_15/modules/ps_shoppingcart/ps_shoppingcart.tpl
+
+Es la plantilla original de FieldThemes (demo15) con el desglose del
+recargo integrado. No depende de ningún otro archivo.
+
+Si existe themes/wine_theme_15/modules/ps_shoppingcart/modal.tpl y NO es
+de FieldThemes (lo creó el módulo antiguo), bórralo.
+
+
+PASO 2 — DESGLOSE EN CARRITO Y CHECKOUT
+---------------------------------------
+En Módulos > Recargo de equivalencia > Configurar:
+  - Pulsa "Aplicar parche al tema"
+
+Esto inserta UNA línea (el include del desglose) en las plantillas de
+checkout del tema. No sustituye ninguna plantilla.
+
+
+PASO 3 — VACIAR CACHÉ
+---------------------
+Parámetros avanzados > Rendimiento > Vaciar caché
+(o borra var/cache/prod/* por FTP)
+Recarga la tienda con Ctrl+F5 (o Cmd+Shift+R).
+
+
+PASO 4 — COMPROBAR
+------------------
+Con un cliente del grupo "Recargo de equivalencia" y dirección en España:
+
+- Mini-carrito con el diseño original (foto, precios con €, VER CARRITO)
+- Líneas de IVA 21% y Recargo 5,2% entre Transporte y el total
+- 1 ud. de 7,04 € sin IVA → total 8,88 € impuestos incluidos
+
+Con clientes normales (sin recargo) el carrito se ve igual que siempre,
+sin líneas extra.
+
+
+NOTA
+----
+Si algún día actualizas el tema wine_theme_15 desde el ZIP de FieldThemes,
+esta plantilla se sobrescribirá: guarda una copia de este parche para
+volver a subirla.

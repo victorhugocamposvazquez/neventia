@@ -1,0 +1,60 @@
+CHILD THEME child_wine_theme_15 — Recargo de equivalencia (choivavinos)
+=======================================================================
+
+Este child theme restaura el mini-carrito de wine_theme_15 (FieldThemes demo15)
+y añade el desglose IVA + recargo de equivalencia sin tocar el tema padre.
+
+
+CONTENIDO
+---------
+- modules/ps_shoppingcart/ps_shoppingcart.tpl  → carrito lateral original + desglose
+- modules/ps_shoppingcart/ps_shoppingcart.js     → JS del tema (actualiza #popup-cart-content)
+- templates/checkout/_partials/...               → desglose en carrito y checkout
+- modules/recargoequivalencia/.../receq-*.tpl    → fragmentos de impuestos adaptados al tema
+
+
+PASO 1 — BORRAR PLANTILLAS ROTAS DEL TEMA PADRE (IMPORTANTE)
+------------------------------------------------------------
+Por FTP, BORRA si existen (en el tema PADRE wine_theme_15, no en el child):
+
+  themes/wine_theme_15/modules/ps_shoppingcart/ps_shoppingcart.tpl
+  themes/wine_theme_15/modules/ps_shoppingcart/modal.tpl
+
+O pulsa "Restaurar mini-carrito" en Módulos > Recargo de equivalencia.
+
+
+PASO 2 — SUBIR E INSTALAR EL CHILD THEME
+----------------------------------------
+Opción A (recomendada si falla la importación por ZIP):
+1. Descomprime child_wine_theme_15.zip en tu PC
+2. Sube la carpeta child_wine_theme_15 por FTP a themes/
+3. Diseño > Tema > Activa "Child wine_theme_15 Recargo equivalencia"
+
+Opción B (importar ZIP en back office):
+1. Diseño > Tema > Añadir nuevo tema > Importar
+2. Sube child_wine_theme_15.zip (sin descomprimir)
+3. Si falla, usa la Opción A por FTP
+
+
+PASO 3 — MÓDULO recargoequivalencia v1.2.1
+------------------------------------------
+1. Sube modules/recargoequivalencia/ (versión 1.2.1)
+2. Módulos > Actualizar
+3. En Diagnóstico debe salir verde: hookActionTaxManager OK
+
+
+PASO 4 — VACIAR CACHÉ
+---------------------
+Parámetros avanzados > Rendimiento > Vaciar caché
+(o borra var/cache/prod/* y var/cache/dev/* por FTP)
+
+
+PASO 5 — COMPROBAR
+------------------
+Con un cliente del grupo "Recargo de equivalencia" y dirección en España:
+
+- Mini-carrito: diseño FieldThemes (foto producto, €, VER CARRITO)
+- Entre Transporte y totales: líneas IVA 21% y Recargo 5,2%
+- Producto 7,04 € sin IVA → total 8,88 € con impuestos
+
+Si el carrito sigue mal, vacía caché y recarga con Ctrl+F5.

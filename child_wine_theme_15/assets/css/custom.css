@@ -1,0 +1,10 @@
+/* Recargo de equivalencia — líneas en mini-carrito y checkout */
+.receq-tax-line .label-top,
+.receq-tax-line .value-top {
+  font-size: inherit;
+}
+
+.cart-summary-line.receq-tax-line .label,
+.cart-summary-line.receq-tax-line .value {
+  font-size: inherit;
+}

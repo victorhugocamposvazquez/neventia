@@ -1,0 +1,67 @@
+parent: wine_theme_15
+name: child_wine_theme_15
+display_name: Child wine_theme_15 Recargo equivalencia
+version: 1.1.0
+author:
+  name: "Choiva Vinos"
+  email: "info@choivavinos.com"
+  url: "https://choivavinos.com"
+
+meta:
+  compatibility:
+    from: 1.7.0.0
+    to: ~
+  available_layouts:
+    layout-full-width:
+      name: Full Width
+      description: Sin columnas laterales
+    layout-both-columns:
+      name: Three Columns
+      description: Tres columnas
+    layout-left-column:
+      name: Two Columns, small left column
+      description: Columna izquierda
+    layout-right-column:
+      name: Two Columns, small right column
+      description: Columna derecha
+
+assets:
+  use_parent_assets: true
+
+global_settings:
+  configuration: {}
+  modules:
+    to_enable: []
+    to_disable: []
+    to_reset: []
+  hooks:
+    custom_hooks: []
+    modules_to_hook: {}
+  image_types:
+    cart_default:
+      width: 100
+      height: 100
+      scope: [products]
+    small_default:
+      width: 100
+      height: 100
+      scope: [products, categories, manufacturers, suppliers]
+    medium_default:
+      width: 210
+      height: 210
+      scope: [products, manufacturers, suppliers]
+    home_default:
+      width: 270
+      height: 270
+      scope: [products]
+    large_default:
+      width: 800
+      height: 800
+      scope: [products, manufacturers, suppliers]
+    category_default:
+      width: 141
+      height: 180
+      scope: [categories]
+
+theme_settings:
+  default_layout: layout-full-width

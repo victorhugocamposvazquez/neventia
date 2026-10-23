@@ -1098,6 +1098,9 @@
   flex-direction: column;
   gap: 12px;
 }
+.nv-site .chat-confirm--compact {
+  gap: 6px;
+}
 .nv-site .chat-confirm-summary {
   display: flex;
   flex-direction: column;
@@ -1109,6 +1112,22 @@
   font-size: 14px;
   color: var(--ink);
 }
+.nv-site .chat-confirm-summary--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 4px;
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.nv-site .chat-confirm-summary--inline strong {
+  font-size: 13px;
+}
+.nv-site .chat-confirm-dot {
+  opacity: 0.45;
+}
 .nv-site .chat-confirm-summary strong {
   font-size: 15px;
 }
@@ -1117,6 +1136,11 @@
   font-size: 12px;
   line-height: 1.5;
   color: var(--ink-soft);
+}
+.nv-site .chat-confirm-legal--compact {
+  font-size: 10.5px;
+  line-height: 1.35;
+  opacity: 0.85;
 }
 .nv-site .chat-confirm-legal a,
 .nv-site .chat-legal-link {
@@ -1133,6 +1157,15 @@
 }
 .nv-site .chat-legal-link:hover {
   color: var(--ink);
+}
+.nv-site .chat-submit--compact {
+  padding: 11px 14px;
+  font-size: 15px;
+}
+.nv-site .chat-input:has(.chat-confirm--compact) {
+  padding: 8px 10px;
+  gap: 6px;
+  min-height: 0;
 }
 .nv-site .chat-submit {
   width: 100%;

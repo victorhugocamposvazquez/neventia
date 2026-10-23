@@ -1,0 +1,10 @@
+/* Child theme — recargo de equivalencia */
+.receq-tax-line .label-top,
+.receq-tax-line .value-top {
+  font-size: inherit;
+}
+
+.cart-summary-line.receq-tax-line .label,
+.cart-summary-line.receq-tax-line .value {
+  font-size: inherit;
+}
