@@ -19,45 +19,45 @@ export default async function AdminLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <div className="flex min-h-screen bg-cream">
-      <aside className="hidden w-[17.5rem] shrink-0 flex-col justify-between border-r border-white/5 bg-forest-950 p-6 text-white lg:flex">
+    <div className="admin-shell">
+      <aside className="admin-sidebar">
         <div>
-          <Link href="/admin" className="mb-10 block">
+          <Link href="/admin" className="admin-sidebar-brand">
             <Logo variant="light" />
+            <span className="admin-sidebar-badge">Backoffice</span>
           </Link>
           <AdminNav />
         </div>
-        <div className="border-t border-white/10 pt-4">
+        <div className="admin-sidebar-foot">
           <AdminLegalFooter />
-          <p className="mt-4 truncate text-xs text-white/40">{user?.email}</p>
-          <form action={logout}>
-            <button
-              type="submit"
-              className="mt-2 text-sm text-white/70 transition hover:text-white"
-            >
-              Cerrar sesión
-            </button>
-          </form>
+          <div className="admin-sidebar-user">
+            <p className="admin-sidebar-email" title={user?.email ?? undefined}>
+              {user?.email}
+            </p>
+            <form action={logout}>
+              <button type="submit" className="admin-sidebar-logout">
+                Cerrar sesión
+              </button>
+            </form>
+          </div>
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-forest-900/10 bg-white px-6 py-4 lg:hidden">
+      <div className="admin-content">
+        <header className="admin-mobile-bar">
           <Logo />
           <form action={logout}>
-            <button type="submit" className="text-sm text-forest-700">
+            <button type="submit" className="admin-btn-ghost">
               Salir
             </button>
           </form>
         </header>
-        <div className="lg:hidden">
-          <div className="border-b border-forest-900/10 bg-white px-4 py-2">
-            <AdminNav variant="horizontal" />
-          </div>
+        <div className="admin-mobile-nav">
+          <AdminNav variant="horizontal" />
         </div>
-        <main className="admin-main flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">
+        <main className="admin-main">
           {children}
-          <div className="mt-10 border-t border-forest-900/10 pt-6 lg:hidden">
+          <div className="admin-mobile-legal">
             <AdminLegalFooter variant="mobile" />
           </div>
         </main>

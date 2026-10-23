@@ -33,6 +33,7 @@ export function AdminPageHeader({
 export function AdminCard({
   title,
   description,
+  action,
   children,
   className = "",
   bodyClassName = "",
@@ -40,6 +41,7 @@ export function AdminCard({
 }: {
   title?: string;
   description?: ReactNode;
+  action?: ReactNode;
   children: ReactNode;
   className?: string;
   bodyClassName?: string;
@@ -47,10 +49,15 @@ export function AdminCard({
 }) {
   return (
     <section className={`admin-card ${className}`.trim()}>
-      {(title || description) && (
+      {(title || description || action) && (
         <div className="admin-card-head">
-          {title && <h2 className="admin-card-title">{title}</h2>}
-          {description && <p className="admin-card-desc">{description}</p>}
+          <div className="admin-card-head-row">
+            <div className="min-w-0">
+              {title && <h2 className="admin-card-title">{title}</h2>}
+              {description && <p className="admin-card-desc">{description}</p>}
+            </div>
+            {action && <div className="shrink-0">{action}</div>}
+          </div>
         </div>
       )}
       <div
@@ -81,4 +88,42 @@ export function AdminAlert({
 
 export function AdminToolbar({ children }: { children: ReactNode }) {
   return <div className="admin-toolbar">{children}</div>;
+}
+
+export function AdminEmpty({
+  title,
+  description,
+  action,
+}: {
+  title: string;
+  description?: string;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="admin-empty">
+      <p className="admin-empty-title">{title}</p>
+      {description && <p className="admin-empty-desc">{description}</p>}
+      {action && <div className="admin-empty-action">{action}</div>}
+    </div>
+  );
+}
+
+export function AdminStatLink({
+  href,
+  label,
+  value,
+  hint,
+}: {
+  href: string;
+  label: string;
+  value: number | string;
+  hint?: string;
+}) {
+  return (
+    <Link href={href} className="admin-stat admin-stat--link">
+      <p className="admin-stat-value">{value}</p>
+      <p className="admin-stat-label">{label}</p>
+      {hint && <p className="admin-stat-hint">{hint}</p>}
+    </Link>
+  );
 }

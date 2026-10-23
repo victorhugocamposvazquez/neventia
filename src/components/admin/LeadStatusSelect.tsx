@@ -12,13 +12,14 @@ export function LeadStatusSelect({
   status: LeadStatus;
 }) {
   return (
-    <form action={updateLeadStatus}>
+    <form action={updateLeadStatus} onClick={(e) => e.stopPropagation()}>
       <input type="hidden" name="id" value={id} />
       <select
         name="status"
         defaultValue={status}
         onChange={(e) => e.currentTarget.form?.requestSubmit()}
-        className="rounded-lg border border-forest-900/15 bg-white px-2 py-1 text-xs font-semibold text-forest-900 outline-none focus:ring-2 focus:ring-mint-300"
+        className="admin-status-select"
+        aria-label="Cambiar estado del lead"
       >
         {(Object.keys(LEAD_STATUS_LABELS) as LeadStatus[]).map((s) => (
           <option key={s} value={s}>
